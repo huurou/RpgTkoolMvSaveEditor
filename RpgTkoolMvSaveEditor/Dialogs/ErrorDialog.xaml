@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="ErrorDialog" Width="400" Height="250">
+        Title="ErrorDialog" Width="400" Height="250" WindowStartupLocation="CenterOwner">
     <Grid>
         <TextBlock x:Name="TextBlock_Message" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="20" TextWrapping="Wrap">message</TextBlock>
     </Grid>
