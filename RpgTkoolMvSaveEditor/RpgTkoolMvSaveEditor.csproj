@@ -5,19 +5,20 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <EnableDefaultApplicationDefinition>true</EnableDefaultApplicationDefinition>
   </PropertyGroup>
 
   <ItemGroup>
-    <Page Remove="App.xaml" />
+    <None Remove="Dialogs\ErrorDialog.xaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml" />
+    <AdditionalFiles Include="App.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.10.2" />
   </ItemGroup>
 
   <ItemGroup>

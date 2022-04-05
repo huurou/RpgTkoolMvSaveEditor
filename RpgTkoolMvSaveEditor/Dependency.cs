@@ -5,13 +5,15 @@ namespace RpgTkoolMvSaveEditor;
 
 internal static class Dependency
 {
-    public static ApplicationService App { get; }
+    internal static ApplicationService App { get; }
 
     static Dependency()
     {
         var services = new ServiceCollection();
 
+        services.AddSingleton<ApplicationService>();
+
         using var provider = services.BuildServiceProvider();
-        App = provider.GetService<ApplicationService>() ?? throw new Exception();
+        App = provider.GetRequiredService<ApplicationService>();
     }
 }
