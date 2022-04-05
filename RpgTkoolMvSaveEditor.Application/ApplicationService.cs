@@ -6,13 +6,13 @@ namespace RpgTkoolMvSaveEditor.Application;
 
 public class ApplicationService
 {
-    public event EventHandler<string>? ErrorOcuured;
-
-    private const string WWW_DIR = "www";
+    public event EventHandler<string>? ErrorOccurred;
+    public event EventHandler<(SystemData, CommonData)>? CommonDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
 
+    private DataService dataService_ = new();
     private SystemData? systemData_;
     private CommonData? commonData_;
 
@@ -21,6 +21,8 @@ public class ApplicationService
     {
         gameDataLoader_ = gameDataLoader;
         commonDataLoader_ = commonDataLoader;
+
+        dataService_.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
     }
 
     /// <summary>
@@ -32,42 +34,32 @@ public class ApplicationService
     /// wwwフォルダ直下に必要なフォルダ、ファイルがない場合失敗</returns>
     public bool LoadDirectory(string dirPath)
     {
-        if (!TryParseDirectory(dirPath, out var wwwDir)) return false;
+        if (!dataService_.SearchWwwDirectory(dirPath)) return false;
         try
         {
-            LoadWwwDir(wwwDir);
+            LoadData();
         }
         catch (Exception ex)
         {
-            ErrorOcuured?.Invoke(this, ex.Message);
+            ErrorOccurred?.Invoke(this, ex.Message);
             return false;
         }
         return true;
     }
 
-    private bool TryParseDirectory(string dirPath, out string wwwDir)
+    public void SetSwitch(int id, bool value)
     {
-        wwwDir = "";
-        if (!Directory.Exists(dirPath))
-        {
-            ErrorOcuured?.Invoke(this, $"{dirPath}は存在しないかフォルダではありません。");
-            return false;
-        }
-        var dirInfo = new DirectoryInfo(dirPath);
-        wwwDir = dirInfo.Name == WWW_DIR ? dirPath
-            : dirInfo.EnumerateDirectories().Any(x => x.Name == WWW_DIR) ? Path.Combine(dirPath, WWW_DIR)
-            : "";
-        if (string.IsNullOrEmpty(wwwDir))
-        {
-            ErrorOcuured?.Invoke(this, "ゲームフォルダかwwwフォルダを指定してください。");
-            return false;
-        }
-        return true;
+        if (commonData_ is not null) commonData_.GameSwitches[id] = value;
     }
 
-    private void LoadWwwDir(string wwwDir)
+    public void SetVariable(int id, int value)
     {
-        systemData_ = gameDataLoader_.Load<SystemData>(Path.Combine(wwwDir, "data", "System.json"));
-        commonData_ = commonDataLoader_.Load(Path.Combine(wwwDir, "save", "common.rpgsave"));
+        if (commonData_ is not null) commonData_.GameVariables[id] = value;
+    }
+
+    private void LoadData()
+    {
+        if (File.Exists(dataService_.SystemDataPath)) systemData_ = gameDataLoader_.Load<SystemData>(dataService_.SystemDataPath);
+        if (File.Exists(dataService_.CommonDataPath)) commonData_ = commonDataLoader_.Load(dataService_.CommonDataPath);
     }
 }

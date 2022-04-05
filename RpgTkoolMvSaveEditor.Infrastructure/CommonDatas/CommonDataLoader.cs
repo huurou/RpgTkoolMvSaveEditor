@@ -8,16 +8,16 @@ public class CommonDataLoader : ICommonDataLoader
     private const string GAME_SWITCHES = "gameSwitches";
     private const string GAME_VARIABLES = "gameVariables";
 
-    private readonly ISaveDataConverter converter_;
+    private readonly ISaveDataSerializer serializer_;
 
-    public CommonDataLoader(ISaveDataConverter saveDataConverter)
+    public CommonDataLoader(ISaveDataSerializer saveDataSerializer)
     {
-        converter_ = saveDataConverter;
+        serializer_ = saveDataSerializer;
     }
 
     public CommonData Load(string path)
     {
-        var rootNode = converter_.ToJsonNode(path);
+        var rootNode = serializer_.Deserialize(path);
         var switchesNode = rootNode[GAME_SWITCHES];
         var variablesNode = rootNode[GAME_VARIABLES];
         if (switchesNode is null) throw new InvalidOperationException($"{GAME_SWITCHES}の取得に失敗しました。");
@@ -27,12 +27,12 @@ public class CommonDataLoader : ICommonDataLoader
         commonData.GameSwitches.PropertyChanged += (s, prop) =>
         {
             switchesNode[prop.Key.ToString()] = prop.Value;
-            converter_.FronJsonNode(path, rootNode);
+            serializer_.Serialize(path, rootNode);
         };
         commonData.GameVariables.PropertyChanged += (s, prop) =>
         {
             variablesNode[prop.Key.ToString()] = prop.Value;
-            converter_.FronJsonNode(path, rootNode);
+            serializer_.Serialize(path, rootNode);
         };
 
         return commonData;

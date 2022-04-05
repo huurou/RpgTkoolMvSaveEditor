@@ -1,11 +1,11 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using RpgTkoolMvSaveEditor.Dialogs;
-using System.Windows;
 
 namespace RpgTkoolMvSaveEditor.Windows;
 
 internal class MainWindowVM : NotifycationObject
 {
+    public event EventHandler<string>? ErrorOccurred;
+
     #region Binding Command
 
     private DelegateCommand? openDirCmd_;
@@ -13,9 +13,9 @@ internal class MainWindowVM : NotifycationObject
 
     #endregion Binding Command
 
-    public MainWindowVM(Window window)
+    public MainWindowVM()
     {
-        Dependency.App.ErrorOcuured += (s, message) => new ErrorDialog(message) { Owner = window }.ShowDialog();
+        Dependency.App.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
     }
 
     private void OpenDirectory()

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using RpgTkoolMvSaveEditor.Dialogs;
+using System.Windows;
 
 namespace RpgTkoolMvSaveEditor.Windows;
 
@@ -7,10 +8,13 @@ namespace RpgTkoolMvSaveEditor.Windows;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private readonly MainWindowVM vm_ = new();
     public MainWindow()
     {
         InitializeComponent();
 
-        DataContext = new MainWindowVM(this);
+        vm_.ErrorOccurred+= (s, message) => new ErrorDialog(message) { Owner = this}.ShowDialog();
+
+        DataContext = vm_;
     }
 }
