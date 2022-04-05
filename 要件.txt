@@ -1,0 +1,7 @@
+RPGツクールMVセーブエディタ
+
+common.rpgsave file*.rpgsaveを編集する
+
+System.json Items.json等を参照して名前を対応づける
+
+各ファイルをタブで開く
