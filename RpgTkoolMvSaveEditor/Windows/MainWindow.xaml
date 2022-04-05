@@ -9,13 +9,13 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        
+
         <Menu Grid.Row="0">
             <MenuItem Header="ファイル(_F)">
-                <MenuItem Header="フォルダを開く(_O)" Command="{Binding OpenDirCmd}"/>
+                <MenuItem Header="フォルダを開く(_O)" Command="{Binding OpenDirCmd}" />
             </MenuItem>
         </Menu>
     </Grid>

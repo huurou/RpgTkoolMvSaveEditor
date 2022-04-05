@@ -1,4 +1,4 @@
-﻿namespace RpgTkoolMvSaveEditor.Domain;
+﻿namespace RpgTkoolMvSaveEditor.Domain.GameDatas;
 
 public class SystemData : GameData
 {

@@ -1,6 +1,7 @@
 ﻿using RpgTkoolMvSaveEditor.Domain;
+using RpgTkoolMvSaveEditor.Domain.GameDatas;
 
-namespace RpgTkoolMvSaveEditor.Infrastructure;
+namespace RpgTkoolMvSaveEditor.Infrastructure.GameDatas;
 
 public class GameDataLoader : IGameDataLoader
 {

@@ -1,4 +1,6 @@
-﻿namespace RpgTkoolMvSaveEditor.Domain;
+﻿using RpgTkoolMvSaveEditor.Domain.GameDatas;
+
+namespace RpgTkoolMvSaveEditor.Domain;
 
 public interface IGameDataLoader
 {
