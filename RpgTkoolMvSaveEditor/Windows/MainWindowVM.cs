@@ -18,6 +18,14 @@ internal class MainWindowVM : NotifycationObject
         Dependency.App.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
     }
 
+    public void OnLoaded()
+    {
+        if (App.CommandArgs.Length > 0)
+        {
+            Dependency.App.LoadDirectory(App.CommandArgs[0]);
+        }
+    }
+
     private void OpenDirectory()
     {
         var dialog = new CommonOpenFileDialog
