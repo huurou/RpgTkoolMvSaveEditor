@@ -7,4 +7,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RpgTkoolMvSaveEditor.Application\RpgTkoolMvSaveEditor.Application.csproj" />
+    <ProjectReference Include="..\RpgTkoolMvSaveEditor.Domain\RpgTkoolMvSaveEditor.Domain.csproj" />
+    <ProjectReference Include="..\RpgTkoolMvSaveEditor.Infrastructure\RpgTkoolMvSaveEditor.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
