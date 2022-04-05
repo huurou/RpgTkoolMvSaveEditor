@@ -22,21 +22,21 @@ internal class CommonDataControlVM : NotifycationObject
     private DelegateCommand? setSelectedFalseCmd_;
 
     public DelegateCommand SetSelectedTrueCmd => setSelectedTrueCmd_ ??= new DelegateCommand(() =>
-           SetValueSelectedSwitches?.Invoke(this, ((switches, value) =>
-           {
-               foreach (var sw in switches)
-               {
-                   sw.Value = value;
-               }
-           }, true)));
+            SetValueSelectedSwitches?.Invoke(this, ((switches, value) =>
+            {
+                foreach (var sw in switches)
+                {
+                    sw.Value = value;
+                }
+            }, true)));
     public DelegateCommand SetSelectedFalseCmd => setSelectedFalseCmd_ ??= new DelegateCommand(() =>
-           SetValueSelectedSwitches?.Invoke(this, ((switches, value) =>
-           {
-               foreach (var sw in switches)
-               {
-                   sw.Value = value;
-               }
-           }, false)));
+            SetValueSelectedSwitches?.Invoke(this, ((switches, value) =>
+            {
+                foreach (var sw in switches)
+                {
+                    sw.Value = value;
+                }
+            }, false)));
 
     #endregion Binding Command
 
@@ -65,7 +65,7 @@ internal class Switch : NotifycationObject
         get => value_;
         set
         {
-            Dependency.App.SetSwitch(Id, value);
+            Dependency.App.SetCommonDataSwitch(Id, value);
             SetProperty(ref value_, value);
         }
     }
@@ -90,7 +90,15 @@ internal class Variable : NotifycationObject
 
     public int Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
-    public int Value { get => value_; set => SetProperty(ref value_, value); }
+    public int Value
+    {
+        get => value_;
+        set
+        {
+            Dependency.App.SetCommonDataVariable(Id, value);
+            SetProperty(ref value_, value);
+        }
+    }
 
     #endregion Binding Property
 

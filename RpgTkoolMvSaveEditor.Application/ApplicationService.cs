@@ -63,12 +63,12 @@ public class ApplicationService
         return true;
     }
 
-    public void SetSwitch(int id, bool value)
+    public void SetCommonDataSwitch(int id, bool value)
     {
         if (commonData_ is not null) commonData_.GameSwitches[id] = value;
     }
 
-    public void SetVariable(int id, int value)
+    public void SetCommonDataVariable(int id, int value)
     {
         if (commonData_ is not null) commonData_.GameVariables[id] = value;
     }
