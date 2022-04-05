@@ -5,12 +5,19 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RpgTkoolMvSaveEditor.Application\RpgTkoolMvSaveEditor.Application.csproj" />
     <ProjectReference Include="..\RpgTkoolMvSaveEditor.Domain\RpgTkoolMvSaveEditor.Domain.csproj" />
     <ProjectReference Include="..\RpgTkoolMvSaveEditor.Infrastructure\RpgTkoolMvSaveEditor.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
 
 </Project>
