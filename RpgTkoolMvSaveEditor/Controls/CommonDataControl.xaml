@@ -16,9 +16,11 @@
                 </Grid.ColumnDefinitions>
 
                 <GroupBox Grid.Column="0" Header="Switches">
-                    <DataGrid ItemsSource="{Binding Switches}">
+                    <DataGrid ItemsSource="{Binding Switches}" AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn IsReadOnly="True" Header="Switch">
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                            <DataGridTemplateColumn IsReadOnly="True" Header="Value">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

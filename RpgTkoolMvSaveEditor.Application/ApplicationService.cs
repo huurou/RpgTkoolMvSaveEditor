@@ -1,18 +1,34 @@
 ﻿using RpgTkoolMvSaveEditor.Domain;
 using RpgTkoolMvSaveEditor.Domain.CommonDatas;
 using RpgTkoolMvSaveEditor.Domain.GameDatas;
+using System.Diagnostics;
 
 namespace RpgTkoolMvSaveEditor.Application;
+
+public class Switch
+{
+    public int Id { get; init; }
+    public string Name { get; init; } = "";
+    public bool Value { get; init; }
+}
+
+public class Variable
+{
+    public int Id { get; }
+    public string Name { get; } = "";
+    public int Value { get; }
+}
 
 public class ApplicationService
 {
     public event EventHandler<string>? ErrorOccurred;
-    public event EventHandler<(SystemData, CommonData)>? CommonDataLoaded;
+    public event EventHandler<(IEnumerable<(int id, string name, bool value)> switches,
+                               IEnumerable<(int id, string name, int value)> variables)>? CommonDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
 
-    private DataService dataService_ = new();
+    private readonly DataService dataService_ = new();
     private SystemData? systemData_;
     private CommonData? commonData_;
 
@@ -35,9 +51,9 @@ public class ApplicationService
     public bool LoadDirectory(string dirPath)
     {
         if (!dataService_.SearchWwwDirectory(dirPath)) return false;
+            LoadData();
         try
         {
-            LoadData();
         }
         catch (Exception ex)
         {
@@ -61,5 +77,23 @@ public class ApplicationService
     {
         if (File.Exists(dataService_.SystemDataPath)) systemData_ = gameDataLoader_.Load<SystemData>(dataService_.SystemDataPath);
         if (File.Exists(dataService_.CommonDataPath)) commonData_ = commonDataLoader_.Load(dataService_.CommonDataPath);
+
+        NotifyCommonData();
+    }
+
+    private void NotifyCommonData()
+    {
+        if (systemData_ is null || commonData_ is null) return;
+        foreach (var x in commonData_.GameSwitches)
+        {
+            Debug.WriteLine($"id:{x.Key} name:{systemData_.Switches[x.Key]} value:{x.Value}");
+        }
+        var switches = commonData_.GameSwitches.Select(x => (x.Key, systemData_.Switches[x.Key], x.Value));
+        var variables = commonData_.GameVariables.Select(x => (x.Key, systemData_.Variables[x.Key], x.Value));
+        foreach (var item in variables)
+        {
+            Debug.WriteLine(item);
+        }
+        CommonDataLoaded?.Invoke(this, (switches, variables));
     }
 }

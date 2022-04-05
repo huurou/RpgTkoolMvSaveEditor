@@ -19,7 +19,7 @@ internal static class Dependency
         services.AddTransient<IGameDataLoader, GameDataLoader>();
         services.AddTransient<ICommonDataLoader, CommonDataLoader>();
         services.AddTransient<IJsonCtrl, JsonCtrl>();
-        services.AddTransient<ISaveDataSerializer, SaveDataSerializer>();
+        services.AddTransient<ISaveDataCtrl, SaveDataCtrl>();
 
         using var provider = services.BuildServiceProvider();
         App = provider.GetRequiredService<ApplicationService>();
