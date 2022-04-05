@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RpgTkoolMvSaveEditor;
+namespace RpgTkoolMvSaveEditor.Windows;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
