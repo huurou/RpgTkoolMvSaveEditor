@@ -13,4 +13,9 @@ public partial class ErrorDialog : Window
 
         TextBlock_Message.Text = message;
     }
+
+    private void Button_OK_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
 }

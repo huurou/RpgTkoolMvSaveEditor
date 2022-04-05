@@ -6,8 +6,9 @@
         xmlns:windows="clr-namespace:RpgTkoolMvSaveEditor.Windows"
         xmlns:controls="clr-namespace:RpgTkoolMvSaveEditor.Controls"
         d:DataContext="{d:DesignInstance Type=windows:MainWindowVM}"
+        d:Width="800" d:Height="450"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />

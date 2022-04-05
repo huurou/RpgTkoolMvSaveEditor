@@ -4,6 +4,8 @@ namespace RpgTkoolMvSaveEditor.Controls;
 
 internal class CommonDataControlVM : NotifycationObject
 {
+    public event EventHandler<(Action<IEnumerable<Switch>, bool> action, bool value)>? SetValueSelectedSwitches;
+
     #region Binding Property
 
     private ObservableCollection<Switch> switches_ = new();
@@ -13,6 +15,30 @@ internal class CommonDataControlVM : NotifycationObject
     public ObservableCollection<Variable> Variables { get => variables_; set => SetProperty(ref variables_, value); }
 
     #endregion Binding Property
+
+    #region Binding Command
+
+    private DelegateCommand? setSelectedTrueCmd_;
+    private DelegateCommand? setSelectedFalseCmd_;
+
+    public DelegateCommand SetSelectedTrueCmd => setSelectedTrueCmd_ ??= new DelegateCommand(() =>
+           SetValueSelectedSwitches?.Invoke(this, ((switches, value) =>
+           {
+               foreach (var sw in switches)
+               {
+                   sw.Value = value;
+               }
+           }, true)));
+    public DelegateCommand SetSelectedFalseCmd => setSelectedFalseCmd_ ??= new DelegateCommand(() =>
+           SetValueSelectedSwitches?.Invoke(this, ((switches, value) =>
+           {
+               foreach (var sw in switches)
+               {
+                   sw.Value = value;
+               }
+           }, false)));
+
+    #endregion Binding Command
 
     public CommonDataControlVM()
     {
@@ -34,7 +60,15 @@ internal class Switch : NotifycationObject
 
     public int Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
-    public bool Value { get => value_; set => SetProperty(ref value_, value); }
+    public bool Value
+    {
+        get => value_;
+        set
+        {
+            Dependency.App.SetSwitch(Id, value);
+            SetProperty(ref value_, value);
+        }
+    }
 
     public Switch(int id, string name, bool value)
     {
