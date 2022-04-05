@@ -9,6 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Page Remove="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RpgTkoolMvSaveEditor.Application\RpgTkoolMvSaveEditor.Application.csproj" />
     <ProjectReference Include="..\RpgTkoolMvSaveEditor.Domain\RpgTkoolMvSaveEditor.Domain.csproj" />
     <ProjectReference Include="..\RpgTkoolMvSaveEditor.Infrastructure\RpgTkoolMvSaveEditor.Infrastructure.csproj" />
