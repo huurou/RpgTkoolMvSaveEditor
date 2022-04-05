@@ -3,8 +3,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:windows="clr-namespace:RpgTkoolMvSaveEditor.Windows"
+        d:DataContext="{d:DesignInstance Type=windows:MainWindowVM}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <windows:MainWindowVM/>
+    </Window.DataContext>
     <Grid>
     </Grid>
 </Window>

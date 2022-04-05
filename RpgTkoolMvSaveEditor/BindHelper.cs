@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace NameSpace;
+namespace RpgTkoolMvSaveEditor;
 
 internal abstract class NotifycationObject : INotifyPropertyChanged
 {
