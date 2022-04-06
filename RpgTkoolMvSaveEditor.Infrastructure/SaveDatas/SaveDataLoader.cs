@@ -43,16 +43,14 @@ public class SaveDataLoader : ISaveDataLoader
         {
             variablesNode[prop.index] = prop.value switch
             {
-                string str => int.TryParse(str, out var i) ? (JsonNode)i
-                    : double.TryParse(str, out var d) ? (JsonNode)d
-                    : (JsonNode?)str,
+                string str => int.TryParse(str, out var i) ? i
+                    : double.TryParse(str, out var d) ? d
+                    : str,
                 int num => num,
                 double dou => dou,
                 bool b => b,
                 _ => null,
             };
-            saveDataCtrl_.Save(path, rootNode);
-            variablesNode[prop.index] = (JsonNode?)prop.value;
             saveDataCtrl_.Save(path, rootNode);
         };
 

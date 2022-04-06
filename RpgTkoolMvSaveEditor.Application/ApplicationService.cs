@@ -1,7 +1,7 @@
 ﻿using RpgTkoolMvSaveEditor.Domain;
 using RpgTkoolMvSaveEditor.Domain.CommonDatas;
 using RpgTkoolMvSaveEditor.Domain.GameDatas;
-using System.Diagnostics;
+using RpgTkoolMvSaveEditor.Domain.SaveDatas;
 
 namespace RpgTkoolMvSaveEditor.Application;
 
@@ -22,21 +22,25 @@ public class Variable
 public class ApplicationService
 {
     public event EventHandler<string>? ErrorOccurred;
-    public event EventHandler<(IEnumerable<(int id, string name, bool value)> switches,
-                               IEnumerable<(int id, string name, int value)> variables)>? CommonDataLoaded;
+    public event EventHandler<(IEnumerable<(string id, string name, bool? value)> switches,
+                               IEnumerable<(string id, string name, object? value)> variables)>? CommonDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
+    private readonly ISaveDataLoader saveDataLoader_;
 
     private readonly DataService dataService_ = new();
     private SystemData? systemData_;
     private CommonData? commonData_;
+    private List<SaveData>? saveDataList_;
 
     public ApplicationService(IGameDataLoader gameDataLoader,
-                              ICommonDataLoader commonDataLoader)
+                              ICommonDataLoader commonDataLoader,
+                              ISaveDataLoader saveDataLoader)
     {
         gameDataLoader_ = gameDataLoader;
         commonDataLoader_ = commonDataLoader;
+        saveDataLoader_ = saveDataLoader;
 
         dataService_.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
     }
@@ -51,7 +55,7 @@ public class ApplicationService
     public bool LoadDirectory(string dirPath)
     {
         if (!dataService_.SearchWwwDirectory(dirPath)) return false;
-            LoadData();
+        LoadData();
         try
         {
         }
@@ -63,12 +67,12 @@ public class ApplicationService
         return true;
     }
 
-    public void SetCommonDataSwitch(int id, bool value)
+    public void SetCommonDataSwitch(string id, bool? value)
     {
         if (commonData_ is not null) commonData_.GameSwitches[id] = value;
     }
 
-    public void SetCommonDataVariable(int id, int value)
+    public void SetCommonDataVariable(string id, object? value)
     {
         if (commonData_ is not null) commonData_.GameVariables[id] = value;
     }
@@ -77,23 +81,30 @@ public class ApplicationService
     {
         if (File.Exists(dataService_.SystemDataPath)) systemData_ = gameDataLoader_.Load<SystemData>(dataService_.SystemDataPath);
         if (File.Exists(dataService_.CommonDataPath)) commonData_ = commonDataLoader_.Load(dataService_.CommonDataPath);
+        saveDataList_ = dataService_.SaveDataPathes.Where(File.Exists).Select(saveDataLoader_.Load).ToList();
 
-        NotifyCommonData();
-    }
+        CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
 
-    private void NotifyCommonData()
-    {
-        if (systemData_ is null || commonData_ is null) return;
-        foreach (var x in commonData_.GameSwitches)
+        IEnumerable<(string id, string name, bool? value)> GetGameSwitches()
         {
-            Debug.WriteLine($"id:{x.Key} name:{systemData_.Switches[x.Key]} value:{x.Value}");
+            if (systemData_ is null || commonData_ is null) yield break;
+            foreach (var sw in commonData_.GameSwitches)
+            {
+                if (!int.TryParse(sw.Key, out var index)) continue;
+                if (string.IsNullOrEmpty(systemData_.Switches[index])) continue;
+                yield return (sw.Key, systemData_.Switches[index], sw.Value);
+            }
         }
-        var switches = commonData_.GameSwitches.Select(x => (x.Key, systemData_.Switches[x.Key], x.Value));
-        var variables = commonData_.GameVariables.Select(x => (x.Key, systemData_.Variables[x.Key], x.Value));
-        foreach (var item in variables)
+
+        IEnumerable<(string id, string name, object? value)> GetGameVariables()
         {
-            Debug.WriteLine(item);
+            if (systemData_ is null || commonData_ is null) yield break;
+            foreach (var va in commonData_.GameVariables)
+            {
+                if (!int.TryParse(va.Key, out var index)) continue;
+                if (string.IsNullOrEmpty(systemData_.Variables[index])) continue;
+                yield return (va.Key, systemData_.Variables[index], va.Value);
+            }
         }
-        CommonDataLoaded?.Invoke(this, (switches, variables));
     }
 }

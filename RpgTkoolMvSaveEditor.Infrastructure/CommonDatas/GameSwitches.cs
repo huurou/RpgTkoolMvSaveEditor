@@ -6,17 +6,11 @@ namespace RpgTkoolMvSaveEditor.Infrastructure.CommonDatas;
 
 public class GameSwitches : IGameSwitches
 {
-    public event EventHandler<KeyValuePair<int, bool>>? PropertyChanged;
+    public event EventHandler<KeyValuePair<string, bool?>>? PropertyChanged;
 
-    private readonly Dictionary<int, bool> dict_ = new();
+    private readonly Dictionary<string, bool?> dict_ = new();
 
-    public List<int> Keys => dict_.Keys.ToList();
-
-    public List<bool> Values => dict_.Values.ToList();
-
-    public int Count => dict_.Count;
-
-    public bool this[int key]
+    public bool? this[string key]
     {
         get => dict_[key];
         set
@@ -32,37 +26,11 @@ public class GameSwitches : IGameSwitches
         foreach (var prop in node.AsObject().AsEnumerable())
         {
             // "@1"のような@から始まる組を省く
-            if (!int.TryParse(prop.Key, out var num)) continue;
-            dict_[num] = prop.Value!.GetValue<bool>();
+            if (int.TryParse(prop.Key, out _)) dict_[prop.Key] = prop.Value?.GetValue<bool?>();
         }
     }
 
-    public bool ContainsKey(int key)
-    {
-        return dict_.ContainsKey(key);
-    }
-
-    public bool TryGetValue(int key, out bool value)
-    {
-        return dict_.TryGetValue(key, out value);
-    }
-
-    public bool TrySetValue(int key, bool value)
-    {
-        if (ContainsKey(key))
-        {
-            this[key] = value;
-            return true;
-        }
-        else return false;
-    }
-
-    public bool Contains(KeyValuePair<int, bool> item)
-    {
-        return dict_.Contains(item);
-    }
-
-    public IEnumerator<KeyValuePair<int, bool>> GetEnumerator()
+    public IEnumerator<KeyValuePair<string, bool?>> GetEnumerator()
     {
         return dict_.GetEnumerator();
     }

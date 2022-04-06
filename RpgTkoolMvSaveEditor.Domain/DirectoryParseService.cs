@@ -9,11 +9,15 @@ public class DataService
     private const string SAVE_DIR_NAME = "save";
     private const string SYSTEM_JSON_NAME = "System.json";
     private const string COMMON_RPGSAVE_NAME = "common.rpgsave";
+    private const string SAVE_RPGSAVE_NAME = "file*.rpgsave";
 
     private string? wwwDirPath_;
 
-    public string? SystemDataPath => string.IsNullOrEmpty(wwwDirPath_) ? null : Path.Combine(wwwDirPath_, DATA_DIR_NAME, SYSTEM_JSON_NAME);
-    public string? CommonDataPath => string.IsNullOrEmpty(wwwDirPath_) ? null : Path.Combine(wwwDirPath_, SAVE_DIR_NAME, COMMON_RPGSAVE_NAME);
+    public string SystemDataPath => string.IsNullOrEmpty(wwwDirPath_) ? "" : Path.Combine(wwwDirPath_, DATA_DIR_NAME, SYSTEM_JSON_NAME);
+    public string CommonDataPath => string.IsNullOrEmpty(wwwDirPath_) ? "" : Path.Combine(wwwDirPath_, SAVE_DIR_NAME, COMMON_RPGSAVE_NAME);
+    public List<string> SaveDataPathes => string.IsNullOrEmpty(wwwDirPath_)
+        ? new()
+        : new DirectoryInfo(Path.Combine(wwwDirPath_, SAVE_DIR_NAME)).GetFiles(SAVE_RPGSAVE_NAME).Select(x => x.FullName).ToList();
 
     public bool SearchWwwDirectory(string dirPath)
     {

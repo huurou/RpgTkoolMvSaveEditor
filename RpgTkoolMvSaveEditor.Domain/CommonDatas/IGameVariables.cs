@@ -1,19 +1,8 @@
 ﻿namespace RpgTkoolMvSaveEditor.Domain.CommonDatas;
 
-public interface IGameVariables : IEnumerable<KeyValuePair<int, int>>
+public interface IGameVariables : IEnumerable<KeyValuePair<string, object?>>
 {
-    event EventHandler<KeyValuePair<int, int>>? PropertyChanged;
+    event EventHandler<KeyValuePair<string, object?>>? PropertyChanged;
 
-    List<int> Keys { get; }
-    List<int> Values { get; }
-    int Count { get; }
-    int this[int key] { get; set; }
-
-    bool ContainsKey(int key);
-
-    bool TryGetValue(int key, out int value);
-
-    bool TrySetValue(int key, int value);
-
-    bool Contains(KeyValuePair<int, int> item);
+    object? this[string key] { get; set; }
 }

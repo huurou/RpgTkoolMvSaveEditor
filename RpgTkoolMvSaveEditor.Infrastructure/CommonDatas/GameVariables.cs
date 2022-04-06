@@ -6,17 +6,11 @@ namespace RpgTkoolMvSaveEditor.Infrastructure.CommonDatas;
 
 public class GameVariables : IGameVariables
 {
-    public event EventHandler<KeyValuePair<int, int>>? PropertyChanged;
+    public event EventHandler<KeyValuePair<string, object?>>? PropertyChanged;
 
-    private readonly Dictionary<int, int> dict_ = new();
+    private readonly Dictionary<string, object?> dict_ = new();
 
-    public List<int> Keys => dict_.Keys.ToList();
-
-    public List<int> Values => dict_.Values.ToList();
-
-    public int Count => dict_.Count;
-
-    public int this[int key]
+    public object? this[string key]
     {
         get => dict_[key];
         set
@@ -32,37 +26,11 @@ public class GameVariables : IGameVariables
         foreach (var prop in node.AsObject().AsEnumerable())
         {
             // "@1"のような@から始まる組を省く
-            if (!int.TryParse(prop.Key, out var num)) continue;
-            dict_[num] = (int)prop.Value!;
+            if (int.TryParse(prop.Key, out _)) dict_[prop.Key] = prop.Value;
         }
     }
 
-    public bool ContainsKey(int key)
-    {
-        return dict_.ContainsKey(key);
-    }
-
-    public bool TryGetValue(int key, out int value)
-    {
-        return dict_.TryGetValue(key, out value);
-    }
-
-    public bool TrySetValue(int key, int value)
-    {
-        if (ContainsKey(key))
-        {
-            this[key] = value;
-            return true;
-        }
-        else return false;
-    }
-
-    public bool Contains(KeyValuePair<int, int> item)
-    {
-        return dict_.Contains(item);
-    }
-
-    public IEnumerator<KeyValuePair<int, int>> GetEnumerator()
+    public IEnumerator<KeyValuePair<string, object?>> GetEnumerator()
     {
         return dict_.GetEnumerator();
     }

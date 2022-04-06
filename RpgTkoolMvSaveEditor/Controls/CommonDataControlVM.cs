@@ -54,13 +54,13 @@ internal class Switch : NotifycationObject
 {
     #region Binding Property
 
-    private int id_;
-    private string name_ = "";
-    private bool value_;
+    private string id_;
+    private string name_;
+    private bool? value_;
 
-    public int Id { get => id_; set => SetProperty(ref id_, value); }
+    public string Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
-    public bool Value
+    public bool? Value
     {
         get => value_;
         set
@@ -70,11 +70,11 @@ internal class Switch : NotifycationObject
         }
     }
 
-    public Switch(int id, string name, bool value)
+    public Switch(string id, string name, bool? value)
     {
-        Id = id;
-        Name = name;
-        Value = value;
+        id_ = id;
+        name_ = name;
+        value_ = value;
     }
 
     #endregion Binding Property
@@ -84,13 +84,13 @@ internal class Variable : NotifycationObject
 {
     #region Binding Property
 
-    private int id_;
-    private string name_ = "";
-    private int value_;
+    private string id_;
+    private string name_;
+    private object? value_;
 
-    public int Id { get => id_; set => SetProperty(ref id_, value); }
+    public string Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
-    public int Value
+    public object? Value
     {
         get => value_;
         set
@@ -102,10 +102,10 @@ internal class Variable : NotifycationObject
 
     #endregion Binding Property
 
-    public Variable(int id, string name, int value)
+    public Variable(string id, string name, object? value)
     {
-        Id = id;
-        Name = name;
-        Value = value;
+        id_ = id;
+        name_ = name;
+        value_ = value;
     }
 }
