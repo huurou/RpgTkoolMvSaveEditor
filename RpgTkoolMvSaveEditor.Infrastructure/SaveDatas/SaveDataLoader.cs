@@ -1,0 +1,61 @@
+﻿using RpgTkoolMvSaveEditor.Domain;
+using RpgTkoolMvSaveEditor.Domain.SaveDatas;
+using System.Text.Json.Nodes;
+
+namespace RpgTkoolMvSaveEditor.Infrastructure.SaveDatas;
+
+public class SaveDataLoader : ISaveDataLoader
+{
+    private readonly ISaveDataCtrl saveDataCtrl_;
+
+    public SaveDataLoader(ISaveDataCtrl saveDataCtrl)
+    {
+        saveDataCtrl_ = saveDataCtrl;
+    }
+
+    public SaveData Load(string path)
+    {
+        var rootNode = saveDataCtrl_.Load(path);
+
+        var switchesNode = rootNode["switches"];
+        if (switchesNode is null) throw new InvalidOperationException("switchesの取得に失敗しました。");
+        switchesNode = switchesNode["_data"];
+        if (switchesNode is null) throw new InvalidOperationException("switches::_dataの取得に失敗しました。");
+        switchesNode = switchesNode["@a"];
+        if (switchesNode is null) throw new InvalidOperationException("switches::_data::@aの取得に失敗しました。");
+
+        var variablesNode = rootNode["variables"];
+        if (variablesNode is null) throw new InvalidOperationException("variablesの取得に失敗しました。");
+        variablesNode = variablesNode["_data"];
+        if (variablesNode is null) throw new InvalidOperationException("variables::_dataの取得に失敗しました。");
+        variablesNode = variablesNode["@a"];
+        if (variablesNode is null) throw new InvalidOperationException("variables::_data::@aの取得に失敗しました。");
+
+        var saveData = new SaveData(new Switches(switchesNode), new Variables(variablesNode));
+
+        saveData.Swiches.PropertyChanged += (s, prop) =>
+        {
+            switchesNode[prop.index] = prop.value;
+            saveDataCtrl_.Save(path, rootNode);
+        };
+
+        saveData.Variables.PropertyChanged += (s, prop) =>
+        {
+            variablesNode[prop.index] = prop.value switch
+            {
+                string str => int.TryParse(str, out var i) ? (JsonNode)i
+                    : double.TryParse(str, out var d) ? (JsonNode)d
+                    : (JsonNode?)str,
+                int num => num,
+                double dou => dou,
+                bool b => b,
+                _ => null,
+            };
+            saveDataCtrl_.Save(path, rootNode);
+            variablesNode[prop.index] = (JsonNode?)prop.value;
+            saveDataCtrl_.Save(path, rootNode);
+        };
+
+        return saveData;
+    }
+}
