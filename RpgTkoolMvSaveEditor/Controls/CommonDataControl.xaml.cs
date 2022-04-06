@@ -10,7 +10,7 @@ public partial class CommonDataEditorControl : UserControl
 {
     private readonly CommonDataControlVM vm_ = new();
 
-    private IEnumerable<Switch> SelectedItems => DataGrid_Switches.SelectedItems.Select(x => (Switch)x);
+    private IEnumerable<GameSwitchVM> SelectedItems => DataGrid_Switches.SelectedItems.Select(x => (GameSwitchVM)x);
 
     public CommonDataEditorControl()
     {

@@ -5,25 +5,10 @@ using RpgTkoolMvSaveEditor.Domain.SaveDatas;
 
 namespace RpgTkoolMvSaveEditor.Application;
 
-public class Switch
-{
-    public int Id { get; init; }
-    public string Name { get; init; } = "";
-    public bool Value { get; init; }
-}
-
-public class Variable
-{
-    public int Id { get; }
-    public string Name { get; } = "";
-    public int Value { get; }
-}
-
 public class ApplicationService
 {
     public event EventHandler<string>? ErrorOccurred;
-    public event EventHandler<(IEnumerable<(string id, string name, bool? value)> switches,
-                               IEnumerable<(string id, string name, object? value)> variables)>? CommonDataLoaded;
+    public event EventHandler<(IEnumerable<GameSwitch> switches, IEnumerable<GameVariable> variables)>? CommonDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
@@ -85,25 +70,25 @@ public class ApplicationService
 
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
 
-        IEnumerable<(string id, string name, bool? value)> GetGameSwitches()
+        IEnumerable<GameSwitch> GetGameSwitches()
         {
             if (systemData_ is null || commonData_ is null) yield break;
             foreach (var sw in commonData_.GameSwitches)
             {
                 if (!int.TryParse(sw.Key, out var index)) continue;
                 if (string.IsNullOrEmpty(systemData_.Switches[index])) continue;
-                yield return (sw.Key, systemData_.Switches[index], sw.Value);
+                yield return new(sw.Key, systemData_.Switches[index], sw.Value);
             }
         }
 
-        IEnumerable<(string id, string name, object? value)> GetGameVariables()
+        IEnumerable<GameVariable> GetGameVariables()
         {
             if (systemData_ is null || commonData_ is null) yield break;
             foreach (var va in commonData_.GameVariables)
             {
                 if (!int.TryParse(va.Key, out var index)) continue;
                 if (string.IsNullOrEmpty(systemData_.Variables[index])) continue;
-                yield return (va.Key, systemData_.Variables[index], va.Value);
+                yield return new(va.Key, systemData_.Variables[index], va.Value);
             }
         }
     }
