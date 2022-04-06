@@ -15,28 +15,7 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <GroupBox Grid.Column="0" Header="Switches">
-                    <DataGrid x:Name="DataGrid_Switches" ItemsSource="{Binding Switches}" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Id}"  IsReadOnly="True" />
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}"  IsReadOnly="True" />
-                            <DataGridTemplateColumn Header="Value" IsReadOnly="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                  HorizontalAlignment="Center" VerticalContentAlignment="Center" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                        <DataGrid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="選択行をTrueにする" Command="{Binding SetSelectedTrueCmd}" />
-                                <MenuItem Header="選択行をFalseにする"  Command="{Binding SetSelectedFalseCmd}" />
-                            </ContextMenu>
-                        </DataGrid.ContextMenu>
-                    </DataGrid>
-                </GroupBox>
+                <controls:SwitchesControl Grid.Row="0" Source="{Binding Switches}"/>
                 <GroupBox Grid.Column="1" Header="Variables">
                     <DataGrid ItemsSource="{Binding Variables}" AutoGenerateColumns="False">
                         <DataGrid.Columns>
