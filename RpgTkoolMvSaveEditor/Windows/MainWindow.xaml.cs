@@ -9,11 +9,12 @@ namespace RpgTkoolMvSaveEditor.Windows;
 public partial class MainWindow : Window
 {
     private readonly MainWindowVM vm_ = new();
+
     public MainWindow()
     {
         InitializeComponent();
 
-        vm_.ErrorOccurred+= (s, message) => new ErrorDialog(message) { Owner = this}.ShowDialog();
+        vm_.ErrorOccurred += (s, message) => new ErrorDialog(message) { Owner = this }.ShowDialog();
 
         DataContext = vm_;
     }

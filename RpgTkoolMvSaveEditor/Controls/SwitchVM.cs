@@ -22,7 +22,7 @@ internal class SwitchVM : NotifycationObject
         }
     }
 
-    public SwitchVM(GameSwitch data)
+    public SwitchVM(Switch data)
     {
         id_ = data.Id;
         name_ = data.Name;

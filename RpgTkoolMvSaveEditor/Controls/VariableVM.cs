@@ -24,7 +24,7 @@ internal class VariableVM : NotifycationObject
 
     #endregion Binding Property
 
-    public VariableVM(GameVariable variable)
+    public VariableVM(Variable variable)
     {
         id_ = variable.Id;
         name_ = variable.Name;

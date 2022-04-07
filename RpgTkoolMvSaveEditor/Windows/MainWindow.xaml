@@ -22,11 +22,11 @@
         </Menu>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <controls:CommonDataEditorControl Grid.Column="0"/>
+            <controls:CommonDataEditorControl Grid.Column="0" />
         </Grid>
     </Grid>
 </Window>

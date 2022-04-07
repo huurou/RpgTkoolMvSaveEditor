@@ -7,10 +7,10 @@
         Title="ErrorDialog" Width="400" Height="250" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        
+
         <TextBlock x:Name="TextBlock_Message" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="20" TextWrapping="Wrap">message</TextBlock>
         <Button x:Name="Button_OK" Grid.Row="1" Margin="20" Click="Button_OK_Click" Width="80" FontSize="20">OK</Button>
     </Grid>

@@ -8,7 +8,7 @@ namespace RpgTkoolMvSaveEditor.Application;
 public class ApplicationService
 {
     public event EventHandler<string>? ErrorOccurred;
-    public event EventHandler<(IEnumerable<GameSwitch> switches, IEnumerable<GameVariable> variables)>? CommonDataLoaded;
+    public event EventHandler<(IEnumerable<Switch> switches, IEnumerable<Variable> variables)>? CommonDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
@@ -70,7 +70,7 @@ public class ApplicationService
 
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
 
-        IEnumerable<GameSwitch> GetGameSwitches()
+        IEnumerable<Switch> GetGameSwitches()
         {
             if (systemData_ is null || commonData_ is null) yield break;
             foreach (var sw in commonData_.GameSwitches)
@@ -81,7 +81,7 @@ public class ApplicationService
             }
         }
 
-        IEnumerable<GameVariable> GetGameVariables()
+        IEnumerable<Variable> GetGameVariables()
         {
             if (systemData_ is null || commonData_ is null) yield break;
             foreach (var va in commonData_.GameVariables)
