@@ -21,5 +21,6 @@ internal class CommonDataControlVM : NotifycationObject
             Switches = new ObservableCollection<SwitchVM>(e.switches.Select(x => new SwitchVM(x)));
             Variables = new ObservableCollection<VariableVM>(e.variables.Select(x => new VariableVM(x)));
         };
+
     }
 }

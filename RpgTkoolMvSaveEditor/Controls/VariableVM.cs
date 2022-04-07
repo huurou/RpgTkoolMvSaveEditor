@@ -6,18 +6,18 @@ internal class VariableVM : NotifycationObject
 {
     #region Binding Property
 
-    private string id_;
+    private int id_;
     private string name_;
     private object? value_;
 
-    public string Id { get => id_; set => SetProperty(ref id_, value); }
+    public int Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
     public object? Value
     {
         get => value_;
         set
         {
-            Dependency.App.SetCommonDataVariable(Id, value);
+            Dependency.App.SetCommonDataVariable(Id.ToString(), value);
             SetProperty(ref value_, value);
         }
     }

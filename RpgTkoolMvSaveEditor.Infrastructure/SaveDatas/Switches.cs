@@ -10,9 +10,10 @@ public class Switches : ISwitches
 
     public bool? this[int index]
     {
-        get => list_[index];
+        get => index < list_.Count ? list_[index] : null;
         set
         {
+            if (index >= list_.Count) return;
             if (list_[index] == value) return;
             list_[index] = value;
             PropertyChanged?.Invoke(this, (index, value));

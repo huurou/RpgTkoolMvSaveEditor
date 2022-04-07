@@ -2,13 +2,14 @@
 
 public class SaveData
 {
-    public ISwitches Swiches { get; }
-
+    public string FileName { get; }
+    public ISwitches Switches { get; }
     public IVariables Variables { get; }
 
-    public SaveData(ISwitches swiches, IVariables variables)
+    public SaveData(string fileName, ISwitches swiches, IVariables variables)
     {
-        Swiches = swiches;
+        FileName = fileName;
+        Switches = swiches;
         Variables = variables;
     }
 }

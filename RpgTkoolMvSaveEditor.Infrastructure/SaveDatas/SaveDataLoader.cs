@@ -30,9 +30,9 @@ public class SaveDataLoader : ISaveDataLoader
         variablesNode = variablesNode["@a"];
         if (variablesNode is null) throw new InvalidOperationException("variables::_data::@aの取得に失敗しました。");
 
-        var saveData = new SaveData(new Switches(switchesNode), new Variables(variablesNode));
+        var saveData = new SaveData(Path.GetFileNameWithoutExtension(path), new Switches(switchesNode), new Variables(variablesNode));
 
-        saveData.Swiches.PropertyChanged += (s, prop) =>
+        saveData.Switches.PropertyChanged += (s, prop) =>
         {
             switchesNode[prop.index] = prop.value;
             saveDataCtrl_.Save(path, rootNode);

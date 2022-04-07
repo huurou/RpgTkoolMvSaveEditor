@@ -6,18 +6,18 @@ internal class SwitchVM : NotifycationObject
 {
     #region Binding Property
 
-    private string id_;
+    private int id_;
     private string name_;
     private bool? value_;
 
-    public string Id { get => id_; set => SetProperty(ref id_, value); }
+    public int Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
     public bool? Value
     {
         get => value_;
         set
         {
-            Dependency.App.SetCommonDataSwitch(Id, value);
+            Dependency.App.SetCommonDataSwitch(Id.ToString(), value);
             SetProperty(ref value_, value);
         }
     }

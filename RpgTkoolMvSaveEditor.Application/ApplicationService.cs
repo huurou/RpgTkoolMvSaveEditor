@@ -9,6 +9,9 @@ public class ApplicationService
 {
     public event EventHandler<string>? ErrorOccurred;
     public event EventHandler<(IEnumerable<Switch> switches, IEnumerable<Variable> variables)>? CommonDataLoaded;
+    public event EventHandler<IEnumerable<(string fileName,
+                                           IEnumerable<Switch> switches,
+                                           IEnumerable<Variable> variables)>>? SaveDataListLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
@@ -61,6 +64,16 @@ public class ApplicationService
     {
         if (commonData_ is not null) commonData_.GameVariables[id] = value;
     }
+    
+    public void SetSaveDataSwitch(int index,int id, bool? value)
+    {
+        if(saveDataList_ is not null) saveDataList_[index].Switches[id] = value;
+    }
+
+    public void SetSaveDataVariable(int index, int id, object? value)
+    {
+        if(saveDataList_ is not null) saveDataList_[index].Variables[id] = value;
+    }
 
     private void LoadData()
     {
@@ -69,6 +82,7 @@ public class ApplicationService
         saveDataList_ = dataService_.SaveDataPathes.Where(File.Exists).Select(saveDataLoader_.Load).ToList();
 
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
+        SaveDataListLoaded?.Invoke(this, saveDataList_.Select(x => (x.FileName, GetSwitches(x), GetVariables(x))));
 
         IEnumerable<Switch> GetGameSwitches()
         {
@@ -77,7 +91,7 @@ public class ApplicationService
             {
                 if (!int.TryParse(sw.Key, out var index)) continue;
                 if (string.IsNullOrEmpty(systemData_.Switches[index])) continue;
-                yield return new(sw.Key, systemData_.Switches[index], sw.Value);
+                yield return new(index, systemData_.Switches[index], sw.Value);
             }
         }
 
@@ -88,7 +102,27 @@ public class ApplicationService
             {
                 if (!int.TryParse(va.Key, out var index)) continue;
                 if (string.IsNullOrEmpty(systemData_.Variables[index])) continue;
-                yield return new(va.Key, systemData_.Variables[index], va.Value);
+                yield return new(int.Parse(va.Key), systemData_.Variables[index], va.Value);
+            }
+        }
+
+        IEnumerable<Switch> GetSwitches(SaveData saveData)
+        {
+            if (systemData_ is null) yield break;
+            for (var i = 0; i < systemData_.Switches.Count; i++)
+            {
+                if (string.IsNullOrEmpty(systemData_.Switches[i])) continue;
+                yield return new(i, systemData_.Switches[i], saveData.Switches[i]);
+            }
+        }
+
+        IEnumerable<Variable> GetVariables(SaveData saveData)
+        {
+            if (systemData_ is null) yield break;
+            for (var i = 0; i < systemData_.Variables.Count; i++)
+            {
+                if (string.IsNullOrEmpty(systemData_.Variables[i])) continue;
+                yield return new(i, systemData_.Variables[i], saveData.Variables[i]);
             }
         }
     }
