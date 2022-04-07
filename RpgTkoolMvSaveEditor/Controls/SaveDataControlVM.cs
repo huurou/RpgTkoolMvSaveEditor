@@ -7,17 +7,17 @@ internal class SaveDataControlVM : NotifycationObject
 {
     #region Binding Property
 
-    private ObservableCollection<SwitchVM> switches_ = new();
-    public ObservableCollection<SwitchVM> Switches { get => switches_; set => SetProperty(ref switches_, value); }
+    private ObservableCollection<GameSwitchVM> switches_ = new();
+    public ObservableCollection<GameSwitchVM> Switches { get => switches_; set => SetProperty(ref switches_, value); }
 
-    private ObservableCollection<VariableVM> variables_ = new();
-    public ObservableCollection<VariableVM> Variables { get => variables_; set => SetProperty(ref variables_, value); }
+    private ObservableCollection<GameVariableVM> variables_ = new();
+    public ObservableCollection<GameVariableVM> Variables { get => variables_; set => SetProperty(ref variables_, value); }
 
     #endregion Binding Property
 
-    public SaveDataControlVM(IEnumerable<Switch> switches, IEnumerable<Variable> variables)
+    public SaveDataControlVM(IEnumerable<GameSwitch> switches, IEnumerable<GameVariable> variables)
     {
-        Switches = new(switches.Select(sw => new SwitchVM(sw)));
-        Variables = new(variables.Select(va => new VariableVM(va)));
+        Switches = new(switches.Select(sw => new GameSwitchVM(sw)));
+        Variables = new(variables.Select(va => new GameVariableVM(va)));
     }
 }

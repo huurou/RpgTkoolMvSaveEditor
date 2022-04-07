@@ -15,8 +15,8 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <controls:SwitchesControl Grid.Column="0" Source="{Binding Switches}" />
-                <controls:VariablesControl Grid.Column="1" Source="{Binding Variables}" />
+                <controls:GameSwitchesControl Grid.Column="0" Source="{Binding Switches}" />
+                <controls:GameVariablesControl Grid.Column="1" Source="{Binding Variables}" />
             </Grid>
         </TabItem>
     </TabControl>

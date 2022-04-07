@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel Orientation="Horizontal">
-        <controls:SwitchesControl Source="{Binding Switches}" />
-        <controls:VariablesControl Source="{Binding Variables}" />
+        <controls:GameSwitchesControl Source="{Binding Switches}" />
+        <controls:GameVariablesControl Source="{Binding Variables}" />
     </StackPanel>
 </UserControl>

@@ -8,10 +8,10 @@ namespace RpgTkoolMvSaveEditor.Application;
 public class ApplicationService
 {
     public event EventHandler<string>? ErrorOccurred;
-    public event EventHandler<(IEnumerable<Switch> switches, IEnumerable<Variable> variables)>? CommonDataLoaded;
+    public event EventHandler<(IEnumerable<GameSwitch> switches, IEnumerable<GameVariable> variables)>? CommonDataLoaded;
     public event EventHandler<IEnumerable<(string fileName,
-                                           IEnumerable<Switch> switches,
-                                           IEnumerable<Variable> variables)>>? SaveDataListLoaded;
+                                           IEnumerable<GameSwitch> switches,
+                                           IEnumerable<GameVariable> variables)>>? SaveDataListLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
@@ -84,7 +84,7 @@ public class ApplicationService
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
         SaveDataListLoaded?.Invoke(this, saveDataList_.Select(x => (x.FileName, GetSwitches(x), GetVariables(x))));
 
-        IEnumerable<Switch> GetGameSwitches()
+        IEnumerable<GameSwitch> GetGameSwitches()
         {
             if (systemData_ is null || commonData_ is null) yield break;
             foreach (var sw in commonData_.GameSwitches)
@@ -95,7 +95,7 @@ public class ApplicationService
             }
         }
 
-        IEnumerable<Variable> GetGameVariables()
+        IEnumerable<GameVariable> GetGameVariables()
         {
             if (systemData_ is null || commonData_ is null) yield break;
             foreach (var va in commonData_.GameVariables)
@@ -106,7 +106,7 @@ public class ApplicationService
             }
         }
 
-        IEnumerable<Switch> GetSwitches(SaveData saveData)
+        IEnumerable<GameSwitch> GetSwitches(SaveData saveData)
         {
             if (systemData_ is null) yield break;
             for (var i = 0; i < systemData_.Switches.Count; i++)
@@ -116,7 +116,7 @@ public class ApplicationService
             }
         }
 
-        IEnumerable<Variable> GetVariables(SaveData saveData)
+        IEnumerable<GameVariable> GetVariables(SaveData saveData)
         {
             if (systemData_ is null) yield break;
             for (var i = 0; i < systemData_.Variables.Count; i++)

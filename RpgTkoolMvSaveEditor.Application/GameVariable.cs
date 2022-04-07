@@ -1,12 +1,12 @@
 ﻿namespace RpgTkoolMvSaveEditor.Application;
 
-public class Switch
+public class GameVariable
 {
-    public int Id { get; }
+    public string Id { get; }
     public string Name { get; }
-    public bool? Value { get; }
+    public object? Value { get; }
 
-    public Switch(int id, string name, bool? value)
+    public GameVariable(int id, string name, object? value)
     {
         Id = id;
         Name = name;

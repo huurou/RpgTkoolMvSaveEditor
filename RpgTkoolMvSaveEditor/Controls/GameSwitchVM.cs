@@ -2,27 +2,27 @@
 
 namespace RpgTkoolMvSaveEditor.Controls;
 
-internal class SwitchVM : NotifycationObject
+internal class GameSwitchVM : NotifycationObject
 {
     #region Binding Property
 
-    private int id_;
+    private string id_;
     private string name_;
     private bool? value_;
 
-    public int Id { get => id_; set => SetProperty(ref id_, value); }
+    public string Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
     public bool? Value
     {
         get => value_;
         set
         {
-            Dependency.App.SetCommonDataSwitch(Id.ToString(), value);
+            Dependency.App.SetCommonDataSwitch(Id, value);
             SetProperty(ref value_, value);
         }
     }
 
-    public SwitchVM(Switch data)
+    public GameSwitchVM(GameSwitch data)
     {
         id_ = data.Id;
         name_ = data.Name;
