@@ -4,15 +4,15 @@ namespace RpgTkoolMvSaveEditor.Controls;
 
 internal class CommonDataControlVM : NotifycationObject
 {
-    public event EventHandler<(Action<IEnumerable<GameSwitchVM>, bool> action, bool value)>? SetValueSelectedSwitches;
+    public event EventHandler<(Action<IEnumerable<SwitchVM>, bool> action, bool value)>? SetValueSelectedSwitches;
 
     #region Binding Property
 
-    private ObservableCollection<GameSwitchVM> switches_ = new();
-    private ObservableCollection<GameVariableVM> variables_ = new();
+    private ObservableCollection<SwitchVM>? switches_;
+    private ObservableCollection<VariableVM>? variables_;
 
-    public ObservableCollection<GameSwitchVM> Switches { get => switches_; set => SetProperty(ref switches_, value); }
-    public ObservableCollection<GameVariableVM> Variables { get => variables_; set => SetProperty(ref variables_, value); }
+    public ObservableCollection<SwitchVM>? Switches { get => switches_; set => SetProperty(ref switches_, value); }
+    public ObservableCollection<VariableVM>? Variables { get => variables_; set => SetProperty(ref variables_, value); }
 
     #endregion Binding Property
 
@@ -44,8 +44,8 @@ internal class CommonDataControlVM : NotifycationObject
     {
         Dependency.App.CommonDataLoaded += (s, e) =>
         {
-            Switches = new ObservableCollection<GameSwitchVM>(e.switches.Select(x => new GameSwitchVM(x)));
-            Variables = new ObservableCollection<GameVariableVM>(e.variables.Select(x => new GameVariableVM(x)));
+            Switches = new ObservableCollection<SwitchVM>(e.switches.Select(x => new SwitchVM(x)));
+            Variables = new ObservableCollection<VariableVM>(e.variables.Select(x => new VariableVM(x)));
         };
     }
 }

@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="RpgTkoolMvSaveEditor.Controls.SwitchesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800" x:Name="root">
+    <GroupBox Header="Switches">
+        <DataGrid x:Name="DataGrid_Switches" ItemsSource="{Binding Source, ElementName=root}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}"  IsReadOnly="True" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"  IsReadOnly="True" />
+                <DataGridTemplateColumn Header="Value" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  HorizontalAlignment="Center" VerticalContentAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="MenuItem_SetTrue" Header="選択行をTrueにする" Click="MenuItem_SetTrue_Click" />
+                    <MenuItem x:Name="MenuItem_SetFalse" Header="選択行をFalseにする" Click="MenuItem_SetFalse_Click" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </GroupBox>
+</UserControl>

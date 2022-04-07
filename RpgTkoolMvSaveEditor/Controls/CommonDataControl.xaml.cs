@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using WinCopies.Linq;
 
 namespace RpgTkoolMvSaveEditor.Controls;
 
@@ -10,14 +9,10 @@ public partial class CommonDataEditorControl : UserControl
 {
     private readonly CommonDataControlVM vm_ = new();
 
-    private IEnumerable<GameSwitchVM> SelectedItems => DataGrid_Switches.SelectedItems.Select(x => (GameSwitchVM)x);
-
     public CommonDataEditorControl()
     {
         InitializeComponent();
 
         DataContext = vm_;
-
-        vm_.SetValueSelectedSwitches += (s, e) => e.action(SelectedItems, e.value);
     }
 }
