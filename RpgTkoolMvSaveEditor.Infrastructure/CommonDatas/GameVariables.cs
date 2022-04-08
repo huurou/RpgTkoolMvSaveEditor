@@ -10,14 +10,14 @@ public class GameVariables : IGameVariables
 
     private readonly Dictionary<string, object?> dict_ = new();
 
-    public object? this[string key]
+    public object? this[string id]
     {
-        get => dict_[key];
+        get => dict_[id];
         set
         {
-            if (dict_[key] == value) return;
-            dict_[key] = value;
-            PropertyChanged?.Invoke(this, new(key, value));
+            if (dict_.ContainsKey(id) && dict_[id] == value) return;
+            dict_[id] = value;
+            PropertyChanged?.Invoke(this, new(id, value));
         }
     }
 

@@ -30,17 +30,17 @@ public partial class SwitchesControl : UserControl
 
     private void MenuItem_SetTrue_Click(object sender, RoutedEventArgs e)
     {
-        foreach (SwitchVM sw in DataGrid_Switches.SelectedItems)
+        foreach (SwitchVM @switch in DataGrid_Switches.SelectedItems)
         {
-            sw.Value = true;
+            @switch.Value = true;
         }
     }
 
     private void MenuItem_SetFalse_Click(object sender, RoutedEventArgs e)
     {
-        foreach (SwitchVM sw in DataGrid_Switches.SelectedItems)
+        foreach (SwitchVM @switch in DataGrid_Switches.SelectedItems)
         {
-            sw.Value = false;
+            @switch.Value = false;
         }
     }
 }

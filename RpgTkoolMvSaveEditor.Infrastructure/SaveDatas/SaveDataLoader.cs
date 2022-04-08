@@ -32,7 +32,20 @@ public class SaveDataLoader : ISaveDataLoader
         variablesNode = variablesNode["@a"];
         if (variablesNode is null) throw new InvalidOperationException("variables::_data::@aの取得に失敗しました。");
 
-        var saveData = new SaveData(Path.GetFileNameWithoutExtension(path), new Switches(switchesNode), new Variables(variablesNode));
+        var itemsNode = rootNode["party"];
+        if (itemsNode is null) throw new InvalidOperationException("partyの取得に失敗しました。");
+        itemsNode = itemsNode["_items"];
+        if (itemsNode is null) throw new InvalidOperationException("party::_itemsの取得に失敗しました。");
+
+        var armorsNode = rootNode["party"];
+        if (armorsNode is null) throw new InvalidOperationException("partyの取得に失敗しました。");
+        armorsNode = armorsNode["_armors"];
+        if (armorsNode is null) throw new InvalidOperationException("party::_armorsの取得に失敗しました。");
+
+        var saveData = new SaveData(new Switches(switchesNode),
+                                    new Variables(variablesNode),
+                                    new Items(itemsNode),
+                                    new Armors(armorsNode));
 
         saveData.Switches.PropertyChanged += (s, prop) =>
         {
@@ -52,6 +65,18 @@ public class SaveDataLoader : ISaveDataLoader
                 bool b => b,
                 _ => null,
             };
+            saveDataCtrl_.Save(path, rootNode);
+        };
+
+        saveData.Items.PropertyChanged += (s, prop) =>
+        {
+            itemsNode[prop.id] = prop.value;
+            saveDataCtrl_.Save(path, rootNode);
+        };
+
+        saveData.Armors.PropertyChanged += (s, prop) =>
+        {
+            armorsNode[prop.id] = prop.value;
             saveDataCtrl_.Save(path, rootNode);
         };
 

@@ -4,5 +4,5 @@ public interface IGameSwitches : IEnumerable<KeyValuePair<string, bool?>>
 {
     event EventHandler<KeyValuePair<string, bool?>>? PropertyChanged;
 
-    bool? this[string key] { get; set; }
+    bool? this[string id] { get; set; }
 }

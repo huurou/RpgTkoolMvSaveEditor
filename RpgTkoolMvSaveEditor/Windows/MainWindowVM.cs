@@ -6,6 +6,15 @@ internal class MainWindowVM : NotifycationObject
 {
     public event EventHandler<string>? ErrorOccurred;
 
+    private const string TITLE = "RPGツクールMVセーブエディタ";
+
+    #region Binding Property
+
+    private string title_ = TITLE;
+    public string Title { get => title_; set => SetProperty(ref title_, value); }
+
+    #endregion Binding Property
+
     #region Binding Command
 
     private DelegateCommand? openDirCmd_;
@@ -16,6 +25,7 @@ internal class MainWindowVM : NotifycationObject
     public MainWindowVM()
     {
         Dependency.App.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
+        Dependency.App.DataLoaded += (s, e) => Title = $"{e}-{TITLE}";
     }
 
     public void OnLoaded()

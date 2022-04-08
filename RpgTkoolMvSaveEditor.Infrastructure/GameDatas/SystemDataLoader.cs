@@ -12,8 +12,8 @@ public class GameDataLoader : IGameDataLoader
         jsonCtrl_ = jsonCtrl;
     }
 
-    public TGameData? Load<TGameData>(string path) where TGameData : GameData
+    public TGameData? Load<TGameData>(string path)
     {
-        return jsonCtrl_.ReadFile<TGameData>(path);
+        return File.Exists(path) ? jsonCtrl_.ReadFile<TGameData>(path) : default;
     }
 }

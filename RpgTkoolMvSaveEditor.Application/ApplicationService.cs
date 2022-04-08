@@ -8,16 +8,21 @@ namespace RpgTkoolMvSaveEditor.Application;
 public class ApplicationService
 {
     public event EventHandler<string>? ErrorOccurred;
+    public event EventHandler<string>? DataLoaded;
     public event EventHandler<(IEnumerable<GameSwitch> switches, IEnumerable<GameVariable> variables)>? CommonDataLoaded;
     public event EventHandler<(IEnumerable<Switch> switches,
-                               IEnumerable<Variable> variables)>? SaveDataLoaded;
+                               IEnumerable<Variable> variables,
+                               IEnumerable<Item> items,
+                               IEnumerable<Armor> armors)>? SaveDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
     private readonly ISaveDataLoader saveDataLoader_;
 
-    private readonly DataService dataService_ = new();
+    private readonly DataPathService dataService_ = new();
     private SystemData? systemData_;
+    private List<ItemData?>? itemsData_;
+    private List<ArmorData?>? armorsData_;
     private CommonData? commonData_;
     private SaveData? saveData_;
 
@@ -43,14 +48,6 @@ public class ApplicationService
     {
         if (!dataService_.SearchWwwDirectory(dirPath)) return false;
         LoadData();
-        try
-        {
-        }
-        catch (Exception ex)
-        {
-            ErrorOccurred?.Invoke(this, ex.Message);
-            return false;
-        }
         return true;
     }
 
@@ -74,14 +71,27 @@ public class ApplicationService
         if (saveData_ is not null) saveData_.Variables[id] = value;
     }
 
+    public void SetSaveDataItem(string id, int count)
+    {
+        if (saveData_ is not null) saveData_.Items[id] = count;
+    }
+
+    public void SetSaveDataArmor(string id, int count)
+    {
+        if (saveData_ is not null) saveData_.Armors[id] = count;
+    }
+
     private void LoadData()
     {
-        if (File.Exists(dataService_.SystemDataPath)) systemData_ = gameDataLoader_.Load<SystemData>(dataService_.SystemDataPath);
-        if (File.Exists(dataService_.CommonDataPath)) commonData_ = commonDataLoader_.Load(dataService_.CommonDataPath);
-        if (File.Exists(dataService_.SaveDataPath)) saveData_ = saveDataLoader_.Load(dataService_.SaveDataPath);
+        systemData_ = gameDataLoader_.Load<SystemData>(dataService_.SystemDataPath);
+        itemsData_ = gameDataLoader_.Load<List<ItemData?>>(dataService_.ItemsDataPath);
+        armorsData_ = gameDataLoader_.Load<List<ArmorData?>>(dataService_.ArmorsDataPath);
+        commonData_ = commonDataLoader_.Load(dataService_.CommonDataPath);
+        saveData_ = saveDataLoader_.Load(dataService_.SaveDataPath);
 
+        DataLoaded?.Invoke(this, systemData_?.GameTitle ?? "");
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
-        SaveDataLoaded?.Invoke(this, (GetSwitches(), GetVariables()));
+        SaveDataLoaded?.Invoke(this, (GetSwitches(), GetVariables(), GetItems(), GetArmors()));
 
         IEnumerable<GameSwitch> GetGameSwitches()
         {
@@ -124,6 +134,27 @@ public class ApplicationService
                 if (string.IsNullOrEmpty(systemData_.Variables[i])) continue;
                 if (i >= saveData_.Variables.Count) continue;
                 yield return new(i, systemData_.Variables[i], saveData_.Variables[i]);
+            }
+        }
+
+        IEnumerable<Item> GetItems()
+        {
+            if (itemsData_ is null || saveData_ is null) yield break;
+            for (var i = 0; i < itemsData_.Count; i++)
+            {
+                if (string.IsNullOrEmpty(itemsData_[i]?.Name)) continue;
+                if (!saveData_.Items.TryGetValue(i.ToString(), out var count)) count = 0;
+                yield return new(i, itemsData_[i]?.Name ?? "", itemsData_[i]?.Description ?? "", count);
+            }
+        }
+        IEnumerable<Armor> GetArmors()
+        {
+            if (armorsData_ is null || saveData_ is null) yield break;
+            for (var i = 0; i < armorsData_.Count; i++)
+            {
+                if (string.IsNullOrEmpty(armorsData_[i]?.Name)) continue;
+                if (!saveData_.Armors.TryGetValue(i.ToString(), out var count)) count = 0;
+                yield return new(i, armorsData_[i]?.Name ?? "", armorsData_[i]?.Description ?? "", count);
             }
         }
     }

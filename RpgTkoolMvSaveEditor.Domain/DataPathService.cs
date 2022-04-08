@@ -1,6 +1,6 @@
 ﻿namespace RpgTkoolMvSaveEditor.Domain;
 
-public class DataService
+public class DataPathService
 {
     public event EventHandler<string>? ErrorOccurred;
 
@@ -8,14 +8,18 @@ public class DataService
     private const string DATA_DIR_NAME = "data";
     private const string SAVE_DIR_NAME = "save";
     private const string SYSTEM_JSON_NAME = "System.json";
+    private const string ITEMS_JSON_NAME = "Items.json";
+    private const string ARMORS_JSON_NAME = "Armors.json";
     private const string COMMON_RPGSAVE_NAME = "common.rpgsave";
     private const string SAVE_RPGSAVE_NAME = "file1.rpgsave";
 
     private string? wwwDirPath_;
 
-    public string SystemDataPath => string.IsNullOrEmpty(wwwDirPath_) ? "" : Path.Combine(wwwDirPath_, DATA_DIR_NAME, SYSTEM_JSON_NAME);
-    public string CommonDataPath => string.IsNullOrEmpty(wwwDirPath_) ? "" : Path.Combine(wwwDirPath_, SAVE_DIR_NAME, COMMON_RPGSAVE_NAME);
-    public string SaveDataPath => string.IsNullOrEmpty(wwwDirPath_) ? "" : Path.Combine(wwwDirPath_, SAVE_DIR_NAME, SAVE_RPGSAVE_NAME);
+    public string SystemDataPath => Path.Combine(wwwDirPath_ ?? "", DATA_DIR_NAME, SYSTEM_JSON_NAME);
+    public string ItemsDataPath => Path.Combine(wwwDirPath_ ?? "", DATA_DIR_NAME, ITEMS_JSON_NAME);
+    public string ArmorsDataPath => Path.Combine(wwwDirPath_ ?? "", DATA_DIR_NAME, ARMORS_JSON_NAME);
+    public string CommonDataPath => Path.Combine(wwwDirPath_ ?? "", SAVE_DIR_NAME, COMMON_RPGSAVE_NAME);
+    public string SaveDataPath => Path.Combine(wwwDirPath_ ?? "", SAVE_DIR_NAME, SAVE_RPGSAVE_NAME);
 
     public bool SearchWwwDirectory(string dirPath)
     {

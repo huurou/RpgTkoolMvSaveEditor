@@ -12,8 +12,10 @@ public class CommonDataLoader : ICommonDataLoader
         saveDataCtrl_ = saveDataCtrl;
     }
 
-    public CommonData Load(string path)
+    public CommonData? Load(string path)
     {
+        if (!File.Exists(path)) return null;
+
         var rootNode = saveDataCtrl_.Load(path);
 
         var switchesNode = rootNode["gameSwitches"];

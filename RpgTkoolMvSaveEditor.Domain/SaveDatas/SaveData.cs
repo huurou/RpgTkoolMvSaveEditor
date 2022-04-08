@@ -2,14 +2,16 @@
 
 public class SaveData
 {
-    public string FileName { get; }
     public ISwitches Switches { get; }
     public IVariables Variables { get; }
+    public IItems Items { get; }
+    public IArmors Armors { get; }
 
-    public SaveData(string fileName, ISwitches swiches, IVariables variables)
+    public SaveData(ISwitches switches, IVariables variables, IItems items, IArmors armors)
     {
-        FileName = fileName;
-        Switches = swiches;
+        Switches = switches;
         Variables = variables;
+        Items = items;
+        Armors = armors;
     }
 }

@@ -1,8 +1,6 @@
-﻿using RpgTkoolMvSaveEditor.Domain.GameDatas;
-
-namespace RpgTkoolMvSaveEditor.Domain;
+﻿namespace RpgTkoolMvSaveEditor.Domain;
 
 public interface IGameDataLoader
 {
-    TGameData? Load<TGameData>(string path) where TGameData : GameData;
+    TGameData? Load<TGameData>(string path);
 }
