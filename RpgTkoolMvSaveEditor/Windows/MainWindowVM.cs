@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System.IO;
 
 namespace RpgTkoolMvSaveEditor.Windows;
 
@@ -20,7 +21,16 @@ internal class MainWindowVM : NotifycationObject
     private DelegateCommand? openDirCmd_;
     public DelegateCommand OpenDirCmd => openDirCmd_ ??= new DelegateCommand(OpenDirectory);
 
+    private DelegateCommand? reloadCmd_;
+    public DelegateCommand ReloadCmd => reloadCmd_ ??= new DelegateCommand(
+        () =>
+        {
+            if (Directory.Exists(dirPath_) && !Dependency.App.LoadDirectory(dirPath_)) dirPath_ = null;
+        });
+
     #endregion Binding Command
+
+    private string? dirPath_;
 
     public MainWindowVM()
     {
@@ -30,10 +40,7 @@ internal class MainWindowVM : NotifycationObject
 
     public void OnLoaded()
     {
-        if (App.CommandArgs.Length > 0)
-        {
-            Dependency.App.LoadDirectory(App.CommandArgs[0]);
-        }
+        if (App.CommandArgs.Length > 0) Dependency.App.LoadDirectory(App.CommandArgs[0]);
     }
 
     private void OpenDirectory()
@@ -47,6 +54,7 @@ internal class MainWindowVM : NotifycationObject
             Title = "ゲームフォルダかwwwフォルダを選択してください"
         };
         if (dialog.ShowDialog() != CommonFileDialogResult.Ok) return;
-        Dependency.App.LoadDirectory(dialog.FileName);
+        dirPath_ = dialog.FileName;
+        if (!Dependency.App.LoadDirectory(dirPath_)) dirPath_ = null;
     }
 }

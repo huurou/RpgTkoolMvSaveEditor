@@ -16,9 +16,8 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0">
-            <MenuItem Header="ファイル(_F)">
-                <MenuItem Header="フォルダを開く(_O)" Command="{Binding OpenDirCmd}" />
-            </MenuItem>
+            <MenuItem Header="フォルダを開く(_O)" Command="{Binding OpenDirCmd}" />
+            <MenuItem Header="再読み込み(_F5)" Command="{Binding ReloadCmd}" />
         </Menu>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <controls:CommonDataControl />
