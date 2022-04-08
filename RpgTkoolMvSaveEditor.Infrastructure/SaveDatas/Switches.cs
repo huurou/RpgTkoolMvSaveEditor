@@ -10,10 +10,9 @@ public class Switches : ISwitches
 
     public bool? this[int index]
     {
-        get => index < list_.Count ? list_[index] : null;
+        get => list_[index];
         set
         {
-            if (index >= list_.Count) return;
             if (list_[index] == value) return;
             list_[index] = value;
             PropertyChanged?.Invoke(this, (index, value));
@@ -21,6 +20,8 @@ public class Switches : ISwitches
     }
 
     private readonly List<bool?> list_ = new();
+
+    public int Count => list_.Count;
 
     public Switches(JsonNode node)
     {

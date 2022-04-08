@@ -5,27 +5,26 @@ using System.Windows.Controls;
 namespace RpgTkoolMvSaveEditor.Controls;
 
 /// <summary>
-/// GameVariablesControl.xaml の相互作用ロジック
+/// VariablesControl.xaml の相互作用ロジック
 /// </summary>
-public partial class GameVariablesControl : UserControl
+public partial class VariablesControl : UserControl
 {
     #region Dependency Property
 
-    internal ObservableCollection<GameVariableVM> Source
+    internal ObservableCollection<VariableVM> Source
     {
-        get => (ObservableCollection<GameVariableVM>)GetValue(SourceProperty);
+        get => (ObservableCollection<VariableVM>)GetValue(SourceProperty);
         set => SetValue(SourceProperty, value);
     }
 
     // Using a DependencyProperty as the backing store for Source.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
-        "Source", typeof(ObservableCollection<GameVariableVM>), typeof(GameVariablesControl), new FrameworkPropertyMetadata(default(ObservableCollection<GameVariableVM>)));
+        "Source", typeof(ObservableCollection<VariableVM>), typeof(VariablesControl), new FrameworkPropertyMetadata(default(ObservableCollection<VariableVM>)));
 
     #endregion Dependency Property
 
-    public GameVariablesControl()
+    public VariablesControl()
     {
         InitializeComponent();
     }
-
 }

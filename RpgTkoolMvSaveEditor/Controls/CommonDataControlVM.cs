@@ -18,9 +18,8 @@ internal class CommonDataControlVM : NotifycationObject
     {
         Dependency.App.CommonDataLoaded += (s, e) =>
         {
-            Switches = new ObservableCollection<GameSwitchVM>(e.switches.Select(x => new GameSwitchVM(x)));
-            Variables = new ObservableCollection<GameVariableVM>(e.variables.Select(x => new GameVariableVM(x)));
+            Switches = new(e.switches.Select(x => new GameSwitchVM(x)));
+            Variables = new(e.variables.Select(x => new GameVariableVM(x)));
         };
-
     }
 }

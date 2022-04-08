@@ -12,8 +12,10 @@ public class SaveDataLoader : ISaveDataLoader
         saveDataCtrl_ = saveDataCtrl;
     }
 
-    public SaveData Load(string path)
+    public SaveData? Load(string path)
     {
+        if (!File.Exists(path)) return null;
+
         var rootNode = saveDataCtrl_.Load(path);
 
         var switchesNode = rootNode["switches"];

@@ -2,5 +2,5 @@
 
 public interface ISaveDataLoader
 {
-    SaveData Load(string path);
+    SaveData? Load(string path);
 }

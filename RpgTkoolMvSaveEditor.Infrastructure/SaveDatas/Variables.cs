@@ -10,7 +10,7 @@ public class Variables : IVariables
 
     public object? this[int index]
     {
-        get => index < list_.Count ? list_[index] : null;
+        get => list_[index];
         set
         {
             if (index >= list_.Count) return;
@@ -21,6 +21,8 @@ public class Variables : IVariables
     }
 
     private readonly List<object?> list_ = new();
+
+    public int Count => list_.Count;
 
     public Variables(JsonNode node)
     {

@@ -26,8 +26,8 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <controls:CommonDataEditorControl Grid.Column="0" />
-            <controls:SaveDataTabControl Grid.Column="1" />
+            <controls:CommonDataControl Grid.Column="0" />
+            <controls:SaveDataControl Grid.Column="1" />
         </Grid>
     </Grid>
 </Window>

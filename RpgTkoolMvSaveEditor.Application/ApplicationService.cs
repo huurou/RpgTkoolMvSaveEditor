@@ -9,9 +9,8 @@ public class ApplicationService
 {
     public event EventHandler<string>? ErrorOccurred;
     public event EventHandler<(IEnumerable<GameSwitch> switches, IEnumerable<GameVariable> variables)>? CommonDataLoaded;
-    public event EventHandler<IEnumerable<(string fileName,
-                                           IEnumerable<GameSwitch> switches,
-                                           IEnumerable<GameVariable> variables)>>? SaveDataListLoaded;
+    public event EventHandler<(IEnumerable<Switch> switches,
+                               IEnumerable<Variable> variables)>? SaveDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
@@ -20,7 +19,7 @@ public class ApplicationService
     private readonly DataService dataService_ = new();
     private SystemData? systemData_;
     private CommonData? commonData_;
-    private List<SaveData>? saveDataList_;
+    private SaveData? saveData_;
 
     public ApplicationService(IGameDataLoader gameDataLoader,
                               ICommonDataLoader commonDataLoader,
@@ -64,25 +63,25 @@ public class ApplicationService
     {
         if (commonData_ is not null) commonData_.GameVariables[id] = value;
     }
-    
-    public void SetSaveDataSwitch(int index,int id, bool? value)
+
+    public void SetSaveDataSwitch(int id, bool? value)
     {
-        if(saveDataList_ is not null) saveDataList_[index].Switches[id] = value;
+        if (saveData_ is not null) saveData_.Switches[id] = value;
     }
 
-    public void SetSaveDataVariable(int index, int id, object? value)
+    public void SetSaveDataVariable(int id, object? value)
     {
-        if(saveDataList_ is not null) saveDataList_[index].Variables[id] = value;
+        if (saveData_ is not null) saveData_.Variables[id] = value;
     }
 
     private void LoadData()
     {
         if (File.Exists(dataService_.SystemDataPath)) systemData_ = gameDataLoader_.Load<SystemData>(dataService_.SystemDataPath);
         if (File.Exists(dataService_.CommonDataPath)) commonData_ = commonDataLoader_.Load(dataService_.CommonDataPath);
-        saveDataList_ = dataService_.SaveDataPathes.Where(File.Exists).Select(saveDataLoader_.Load).ToList();
+        if (File.Exists(dataService_.SaveDataPath)) saveData_ = saveDataLoader_.Load(dataService_.SaveDataPath);
 
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
-        SaveDataListLoaded?.Invoke(this, saveDataList_.Select(x => (x.FileName, GetSwitches(x), GetVariables(x))));
+        SaveDataLoaded?.Invoke(this, (GetSwitches(), GetVariables()));
 
         IEnumerable<GameSwitch> GetGameSwitches()
         {
@@ -91,7 +90,7 @@ public class ApplicationService
             {
                 if (!int.TryParse(sw.Key, out var index)) continue;
                 if (string.IsNullOrEmpty(systemData_.Switches[index])) continue;
-                yield return new(index, systemData_.Switches[index], sw.Value);
+                yield return new(sw.Key, systemData_.Switches[index], sw.Value);
             }
         }
 
@@ -102,27 +101,29 @@ public class ApplicationService
             {
                 if (!int.TryParse(va.Key, out var index)) continue;
                 if (string.IsNullOrEmpty(systemData_.Variables[index])) continue;
-                yield return new(int.Parse(va.Key), systemData_.Variables[index], va.Value);
+                yield return new(va.Key, systemData_.Variables[index], va.Value);
             }
         }
 
-        IEnumerable<GameSwitch> GetSwitches(SaveData saveData)
+        IEnumerable<Switch> GetSwitches()
         {
-            if (systemData_ is null) yield break;
+            if (systemData_ is null || saveData_ is null) yield break;
             for (var i = 0; i < systemData_.Switches.Count; i++)
             {
                 if (string.IsNullOrEmpty(systemData_.Switches[i])) continue;
-                yield return new(i, systemData_.Switches[i], saveData.Switches[i]);
+                if (i >= saveData_.Switches.Count) continue;
+                yield return new(i, systemData_.Switches[i], saveData_.Switches[i]);
             }
         }
 
-        IEnumerable<GameVariable> GetVariables(SaveData saveData)
+        IEnumerable<Variable> GetVariables()
         {
-            if (systemData_ is null) yield break;
+            if (systemData_ is null || saveData_ is null) yield break;
             for (var i = 0; i < systemData_.Variables.Count; i++)
             {
                 if (string.IsNullOrEmpty(systemData_.Variables[i])) continue;
-                yield return new(i, systemData_.Variables[i], saveData.Variables[i]);
+                if (i >= saveData_.Variables.Count) continue;
+                yield return new(i, systemData_.Variables[i], saveData_.Variables[i]);
             }
         }
     }
