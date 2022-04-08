@@ -13,7 +13,14 @@ public class Variables : IVariables
         get => list_[index];
         set
         {
-            if (index >= list_.Count) return;
+            var count = list_.Count;
+            if (index >= count)
+            {
+                for (var i = 0; i < index - count + 1; i++)
+                {
+                    list_.Add(null);
+                }
+            }
             if (list_[index] == value) return;
             list_[index] = value;
             PropertyChanged?.Invoke(this, (index, value));

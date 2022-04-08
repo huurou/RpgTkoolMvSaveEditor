@@ -121,8 +121,7 @@ public class ApplicationService
             for (var i = 0; i < systemData_.Switches.Count; i++)
             {
                 if (string.IsNullOrEmpty(systemData_.Switches[i])) continue;
-                if (i >= saveData_.Switches.Count) continue;
-                yield return new(i, systemData_.Switches[i], saveData_.Switches[i]);
+                yield return new(i, systemData_.Switches[i], i < saveData_.Switches.Count ? saveData_.Switches[i] : null);
             }
         }
 
@@ -132,8 +131,7 @@ public class ApplicationService
             for (var i = 0; i < systemData_.Variables.Count; i++)
             {
                 if (string.IsNullOrEmpty(systemData_.Variables[i])) continue;
-                if (i >= saveData_.Variables.Count) continue;
-                yield return new(i, systemData_.Variables[i], saveData_.Variables[i]);
+                yield return new(i, systemData_.Variables[i], i < saveData_.Variables.Count ? saveData_.Variables[i] : null);
             }
         }
 

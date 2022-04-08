@@ -49,12 +49,30 @@ public class SaveDataLoader : ISaveDataLoader
 
         saveData.Switches.PropertyChanged += (s, prop) =>
         {
-            switchesNode[prop.index] = prop.value;
+            var switchesArray = switchesNode.AsArray();
+            var count = switchesArray.Count;
+            if (prop.index >= count)
+            {
+                for (var i = 0; i < prop.index - count + 1; i++)
+                {
+                    switchesArray.Add(null);
+                }
+            }
+            switchesArray[prop.index] = prop.value;
             saveDataCtrl_.Save(path, rootNode);
         };
 
         saveData.Variables.PropertyChanged += (s, prop) =>
         {
+            var variablesArray = variablesNode.AsArray();
+            var count = variablesArray.Count;
+            if (prop.index >= count)
+            {
+                for (var i = 0; i < prop.index - count + 1; i++)
+                {
+                    variablesArray.Add(null);
+                }
+            }
             variablesNode[prop.index] = prop.value switch
             {
                 string str => int.TryParse(str, out var i) ? i

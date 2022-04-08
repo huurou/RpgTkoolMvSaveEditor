@@ -13,7 +13,14 @@ public class Switches : ISwitches
         get => list_[index];
         set
         {
-            if (list_[index] == value) return;
+            var count = list_.Count;
+            if (index >= count)
+            {
+                for (var i = 0; i < index - count + 1; i++)
+                {
+                    list_.Add(null);
+                }
+            }
             list_[index] = value;
             PropertyChanged?.Invoke(this, (index, value));
         }
