@@ -40,7 +40,9 @@ internal class MainWindowVM : NotifycationObject
 
     public void OnLoaded()
     {
-        if (App.CommandArgs.Length > 0) Dependency.App.LoadDirectory(App.CommandArgs[0]);
+        if (App.CommandArgs.Length == 0) return;
+        dirPath_ = App.CommandArgs[0];
+        if (!Dependency.App.LoadDirectory(dirPath_)) dirPath_ = null;
     }
 
     private void OpenDirectory()
