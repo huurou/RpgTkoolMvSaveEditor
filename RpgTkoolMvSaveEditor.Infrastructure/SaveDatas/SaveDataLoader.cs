@@ -1,5 +1,6 @@
 ﻿using RpgTkoolMvSaveEditor.Domain;
 using RpgTkoolMvSaveEditor.Domain.SaveDatas;
+using System.Text.Json.Nodes;
 
 namespace RpgTkoolMvSaveEditor.Infrastructure.SaveDatas;
 
@@ -19,61 +20,67 @@ public class SaveDataLoader : ISaveDataLoader
         var rootNode = saveDataCtrl_.Load(path);
 
         var switchesNode = rootNode["switches"];
-        if (switchesNode is null) throw new InvalidOperationException("switchesの取得に失敗しました。");
-        switchesNode = switchesNode["_data"];
-        if (switchesNode is null) throw new InvalidOperationException("switches::_dataの取得に失敗しました。");
-        switchesNode = switchesNode["@a"];
-        if (switchesNode is null) throw new InvalidOperationException("switches::_data::@aの取得に失敗しました。");
+        if (switchesNode is not null) switchesNode = switchesNode["_data"];
+        if (switchesNode is not null) switchesNode = switchesNode["@a"];
 
         var variablesNode = rootNode["variables"];
-        if (variablesNode is null) throw new InvalidOperationException("variablesの取得に失敗しました。");
-        variablesNode = variablesNode["_data"];
-        if (variablesNode is null) throw new InvalidOperationException("variables::_dataの取得に失敗しました。");
-        variablesNode = variablesNode["@a"];
-        if (variablesNode is null) throw new InvalidOperationException("variables::_data::@aの取得に失敗しました。");
+        if (variablesNode is not null) variablesNode = variablesNode["_data"];
+        if (variablesNode is not null) variablesNode = variablesNode["@a"];
 
-        var itemsNode = rootNode["party"];
-        if (itemsNode is null) throw new InvalidOperationException("partyの取得に失敗しました。");
-        itemsNode = itemsNode["_items"];
-        if (itemsNode is null) throw new InvalidOperationException("party::_itemsの取得に失敗しました。");
+        var partyNode = rootNode["party"];
 
-        var armorsNode = rootNode["party"];
-        if (armorsNode is null) throw new InvalidOperationException("partyの取得に失敗しました。");
-        armorsNode = armorsNode["_armors"];
-        if (armorsNode is null) throw new InvalidOperationException("party::_armorsの取得に失敗しました。");
+        JsonNode? itemsNode = null;
+        if (partyNode is not null) itemsNode = partyNode["_items"];
 
-        var saveData = new SaveData(new Switches(switchesNode),
+        JsonNode? weaponsNode = null;
+        if (partyNode is not null) weaponsNode = partyNode["_weapons"];
+
+        JsonNode? armorsNode = null;
+        if (partyNode is not null) armorsNode = partyNode["_armors"];
+
+        var saveData = new SaveData(new Parameters(partyNode!["_gold"]),
+                                    new Switches(switchesNode),
                                     new Variables(variablesNode),
                                     new Items(itemsNode),
+                                    new Weapons(weaponsNode),
                                     new Armors(armorsNode));
 
-        saveData.Switches.PropertyChanged += (s, prop) =>
+        saveData.Parameters.GoldChanged += (s, gold) =>
         {
+            if (partyNode is null) return;
+            partyNode["_gold"] = gold;
+            saveDataCtrl_.Save(path, rootNode);
+        };
+
+        saveData.Switches.ValueChanged += (s, e) =>
+        {
+            if (switchesNode is null) return;
             var switchesArray = switchesNode.AsArray();
             var count = switchesArray.Count;
-            if (prop.index >= count)
+            if (e.index >= count)
             {
-                for (var i = 0; i < prop.index - count + 1; i++)
+                for (var i = 0; i < e.index - count + 1; i++)
                 {
                     switchesArray.Add(null);
                 }
             }
-            switchesArray[prop.index] = prop.value;
+            switchesArray[e.index] = e.value;
             saveDataCtrl_.Save(path, rootNode);
         };
 
-        saveData.Variables.PropertyChanged += (s, prop) =>
+        saveData.Variables.ValueChanged += (s, e) =>
         {
+            if (variablesNode is null) return;
             var variablesArray = variablesNode.AsArray();
             var count = variablesArray.Count;
-            if (prop.index >= count)
+            if (e.index >= count)
             {
-                for (var i = 0; i < prop.index - count + 1; i++)
+                for (var i = 0; i < e.index - count + 1; i++)
                 {
                     variablesArray.Add(null);
                 }
             }
-            variablesNode[prop.index] = prop.value switch
+            variablesNode[e.index] = e.value switch
             {
                 string str => int.TryParse(str, out var i) ? i
                     : double.TryParse(str, out var d) ? d
@@ -86,15 +93,24 @@ public class SaveDataLoader : ISaveDataLoader
             saveDataCtrl_.Save(path, rootNode);
         };
 
-        saveData.Items.PropertyChanged += (s, prop) =>
+        saveData.Items.ValueChanged += (s, e) =>
         {
-            itemsNode[prop.id] = prop.value;
+            if (itemsNode is null) return;
+            itemsNode[e.id] = e.value;
             saveDataCtrl_.Save(path, rootNode);
         };
 
-        saveData.Armors.PropertyChanged += (s, prop) =>
+        saveData.Weapons.ValueChanged += (s, e) =>
         {
-            armorsNode[prop.id] = prop.value;
+            if (weaponsNode is null) return;
+            weaponsNode[e.id] = e.value;
+            saveDataCtrl_.Save(path, rootNode);
+        };
+
+        saveData.Armors.ValueChanged += (s, e) =>
+        {
+            if (armorsNode is null) return;
+            armorsNode[e.id] = e.value;
             saveDataCtrl_.Save(path, rootNode);
         };
 

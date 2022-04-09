@@ -9,6 +9,10 @@
         d:Width="800" d:Height="450"
         mc:Ignorable="d"
         Title="{Binding Title}" WindowState="Maximized" Loaded="Window_Loaded">
+    <Window.InputBindings>
+        <KeyBinding Gesture="F5" Command="{Binding ReloadCmd}"/>
+    </Window.InputBindings>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -17,7 +21,7 @@
 
         <Menu Grid.Row="0">
             <MenuItem Header="フォルダを開く(_O)" Command="{Binding OpenDirCmd}" />
-            <MenuItem Header="再読み込み(_F5)" Command="{Binding ReloadCmd}" />
+            <MenuItem Header="再読み込み(F5)" Command="{Binding ReloadCmd}" />
         </Menu>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <controls:CommonDataControl />

@@ -2,7 +2,7 @@
 
 public interface IVariables : IEnumerable<object?>
 {
-    event EventHandler<(int index, object? value)>? PropertyChanged;
+    event EventHandler<(int index, object? value)>? ValueChanged;
 
     object? this[int index] { get; set; }
 

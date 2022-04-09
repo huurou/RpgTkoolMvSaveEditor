@@ -6,7 +6,7 @@ namespace RpgTkoolMvSaveEditor.Infrastructure.SaveDatas;
 
 public class Switches : ISwitches
 {
-    public event EventHandler<(int index, bool? value)>? PropertyChanged;
+    public event EventHandler<(int index, bool? value)>? ValueChanged;
 
     public bool? this[int index]
     {
@@ -22,7 +22,7 @@ public class Switches : ISwitches
                 }
             }
             list_[index] = value;
-            PropertyChanged?.Invoke(this, (index, value));
+            ValueChanged?.Invoke(this, (index, value));
         }
     }
 
@@ -30,8 +30,9 @@ public class Switches : ISwitches
 
     public int Count => list_.Count;
 
-    public Switches(JsonNode node)
+    public Switches(JsonNode? node)
     {
+        if (node is null) return;
         var array = node.AsArray();
         list_.Capacity = array.Count;
         foreach (var item in array)

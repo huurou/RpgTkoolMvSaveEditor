@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="RpgTkoolMvSaveEditor.Controls.WeaponsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignHeight="450" x:Name="root">
+    <GroupBox Header="Weapons">
+        <DataGrid x:Name="DataGrid_Items" ItemsSource="{Binding Source, ElementName=root}" AutoGenerateColumns="False" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="ToolTip" Value="{Binding Description}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Count" Binding="{Binding Count, Mode=TwoWay}" />
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="MenuItem_Set1" Header="選択行を1個にする" Click="MenuItem_Set1_Click" />
+                    <MenuItem x:Name="MenuItem_Set99" Header="選択行を99個にする" Click="MenuItem_Set99_Click" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </GroupBox>
+</UserControl>

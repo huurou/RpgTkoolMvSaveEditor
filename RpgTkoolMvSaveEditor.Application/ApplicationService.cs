@@ -10,18 +10,21 @@ public class ApplicationService
     public event EventHandler<string>? ErrorOccurred;
     public event EventHandler<string>? DataLoaded;
     public event EventHandler<(IEnumerable<GameSwitch> switches, IEnumerable<GameVariable> variables)>? CommonDataLoaded;
-    public event EventHandler<(IEnumerable<Switch> switches,
+    public event EventHandler<(Parameters? parameters,
+                               IEnumerable<Switch> switches,
                                IEnumerable<Variable> variables,
                                IEnumerable<Item> items,
+                               IEnumerable<Weapon> weapons,
                                IEnumerable<Armor> armors)>? SaveDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
     private readonly ISaveDataLoader saveDataLoader_;
 
-    private readonly DataPathService dataService_ = new();
+    private readonly DataPathService dataPathService_ = new();
     private SystemData? systemData_;
     private List<ItemData?>? itemsData_;
+    private List<WeaponData?>? weaponsData_;
     private List<ArmorData?>? armorsData_;
     private CommonData? commonData_;
     private SaveData? saveData_;
@@ -34,7 +37,7 @@ public class ApplicationService
         commonDataLoader_ = commonDataLoader;
         saveDataLoader_ = saveDataLoader;
 
-        dataService_.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
+        dataPathService_.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
     }
 
     /// <summary>
@@ -46,7 +49,7 @@ public class ApplicationService
     /// wwwフォルダ直下に必要なフォルダ、ファイルがない場合失敗</returns>
     public bool LoadDirectory(string dirPath)
     {
-        if (!dataService_.SearchWwwDirectory(dirPath)) return false;
+        if (!dataPathService_.SearchWwwDirectory(dirPath)) return false;
         LoadData();
         return true;
     }
@@ -59,6 +62,11 @@ public class ApplicationService
     public void SetCommonDataVariable(string id, object? value)
     {
         if (commonData_ is not null) commonData_.GameVariables[id] = value;
+    }
+
+    public void SetSaveDataGold(int gold)
+    {
+        if (saveData_ is not null) saveData_.Parameters.Gold = gold;
     }
 
     public void SetSaveDataSwitch(int id, bool? value)
@@ -76,6 +84,11 @@ public class ApplicationService
         if (saveData_ is not null) saveData_.Items[id] = count;
     }
 
+    public void SetSaveDataWeapon(string id, int count)
+    {
+        if (saveData_ is not null) saveData_.Weapons[id] = count;
+    }
+
     public void SetSaveDataArmor(string id, int count)
     {
         if (saveData_ is not null) saveData_.Armors[id] = count;
@@ -83,15 +96,16 @@ public class ApplicationService
 
     private void LoadData()
     {
-        systemData_ = gameDataLoader_.Load<SystemData>(dataService_.SystemDataPath);
-        itemsData_ = gameDataLoader_.Load<List<ItemData?>>(dataService_.ItemsDataPath);
-        armorsData_ = gameDataLoader_.Load<List<ArmorData?>>(dataService_.ArmorsDataPath);
-        commonData_ = commonDataLoader_.Load(dataService_.CommonDataPath);
-        saveData_ = saveDataLoader_.Load(dataService_.SaveDataPath);
+        systemData_ = gameDataLoader_.Load<SystemData>(dataPathService_.SystemDataPath);
+        itemsData_ = gameDataLoader_.Load<List<ItemData?>>(dataPathService_.ItemsDataPath);
+        weaponsData_ = gameDataLoader_.Load<List<WeaponData?>>(dataPathService_.WeaponsDataPath);
+        armorsData_ = gameDataLoader_.Load<List<ArmorData?>>(dataPathService_.ArmorsDataPath);
+        commonData_ = commonDataLoader_.Load(dataPathService_.CommonDataPath);
+        saveData_ = saveDataLoader_.Load(dataPathService_.SaveDataPath);
 
         DataLoaded?.Invoke(this, systemData_?.GameTitle ?? "");
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
-        SaveDataLoaded?.Invoke(this, (GetSwitches(), GetVariables(), GetItems(), GetArmors()));
+        SaveDataLoaded?.Invoke(this, (GetParameters(), GetSwitches(), GetVariables(), GetItems(), GetWeapons(), GetArmors()));
 
         IEnumerable<GameSwitch> GetGameSwitches()
         {
@@ -114,6 +128,8 @@ public class ApplicationService
                 yield return new(va.Key, systemData_.Variables[index], va.Value);
             }
         }
+
+        Parameters? GetParameters() => saveData_ is null ? null : new Parameters(saveData_.Parameters);
 
         IEnumerable<Switch> GetSwitches()
         {
@@ -145,6 +161,18 @@ public class ApplicationService
                 yield return new(i, itemsData_[i]?.Name ?? "", itemsData_[i]?.Description ?? "", count);
             }
         }
+
+        IEnumerable<Weapon> GetWeapons()
+        {
+            if (weaponsData_ is null || saveData_ is null) yield break;
+            for (var i = 0; i < weaponsData_.Count; i++)
+            {
+                if (string.IsNullOrEmpty(weaponsData_[i]?.Name)) continue;
+                if (!saveData_.Weapons.TryGetValue(i.ToString(), out var count)) count = 0;
+                yield return new(i, weaponsData_[i]?.Name ?? "", weaponsData_[i]?.Description ?? "", count);
+            }
+        }
+
         IEnumerable<Armor> GetArmors()
         {
             if (armorsData_ is null || saveData_ is null) yield break;

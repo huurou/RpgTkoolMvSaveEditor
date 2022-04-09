@@ -7,11 +7,20 @@
              d:DataContext="{d:DesignInstance Type=controls:SaveDataControlVM}"
              mc:Ignorable="d" d:DesignHeight="450">
     <GroupBox Header="SaveData">
-        <StackPanel Orientation="Horizontal">
-            <controls:SwitchesControl Source="{Binding Switches}" />
-            <controls:VariablesControl Source="{Binding Variables}" />
-            <controls:ItemsControl Source="{Binding Items}" />
-            <controls:ArmorsControl Source="{Binding Armors}" />
-        </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <controls:ParametersControl Grid.Row="0" Source="{Binding Parameters}" />
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <controls:SwitchesControl Source="{Binding Switches}" />
+                <controls:VariablesControl Source="{Binding Variables}" />
+                <controls:ItemsControl Source="{Binding Items}" />
+                <controls:WeaponsControl Source="{Binding Weapons}"/>
+                <controls:ArmorsControl Source="{Binding Armors}" />
+            </StackPanel>
+        </Grid>
     </GroupBox>
 </UserControl>

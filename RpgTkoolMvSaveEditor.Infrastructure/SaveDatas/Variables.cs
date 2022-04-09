@@ -6,7 +6,7 @@ namespace RpgTkoolMvSaveEditor.Infrastructure.SaveDatas;
 
 public class Variables : IVariables
 {
-    public event EventHandler<(int index, object? value)>? PropertyChanged;
+    public event EventHandler<(int index, object? value)>? ValueChanged;
 
     public object? this[int index]
     {
@@ -23,7 +23,7 @@ public class Variables : IVariables
             }
             if (list_[index] == value) return;
             list_[index] = value;
-            PropertyChanged?.Invoke(this, (index, value));
+            ValueChanged?.Invoke(this, (index, value));
         }
     }
 
@@ -31,8 +31,9 @@ public class Variables : IVariables
 
     public int Count => list_.Count;
 
-    public Variables(JsonNode node)
+    public Variables(JsonNode? node)
     {
+        if (node is null) return;
         var array = node.AsArray();
         list_.Capacity = array.Count;
         foreach (var item in array)

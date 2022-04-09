@@ -1,6 +1,6 @@
 ﻿namespace RpgTkoolMvSaveEditor.Domain.SaveDatas;
 
-public interface IArmors : IEnumerable<KeyValuePair<string, int>>
+public interface IWeapons : IEnumerable<KeyValuePair<string, int>>
 {
     event EventHandler<(string id, int value)>? ValueChanged;
 

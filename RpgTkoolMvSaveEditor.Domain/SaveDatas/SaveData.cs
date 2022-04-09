@@ -2,16 +2,20 @@
 
 public class SaveData
 {
+    public IParameters Parameters { get; }
     public ISwitches Switches { get; }
     public IVariables Variables { get; }
     public IItems Items { get; }
+    public IWeapons Weapons { get; }
     public IArmors Armors { get; }
 
-    public SaveData(ISwitches switches, IVariables variables, IItems items, IArmors armors)
+    public SaveData(IParameters parameters, ISwitches switches, IVariables variables, IItems items, IWeapons weapons, IArmors armors)
     {
+        Parameters = parameters;
         Switches = switches;
         Variables = variables;
         Items = items;
+        Weapons = weapons;
         Armors = armors;
     }
 }

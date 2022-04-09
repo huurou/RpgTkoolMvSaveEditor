@@ -6,7 +6,7 @@ namespace RpgTkoolMvSaveEditor.Infrastructure.SaveDatas;
 
 public class Items : IItems
 {
-    public event EventHandler<(string id, int value)>? PropertyChanged;
+    public event EventHandler<(string id, int value)>? ValueChanged;
 
     private readonly Dictionary<string, int> dict_ = new();
 
@@ -17,12 +17,13 @@ public class Items : IItems
         {
             if (dict_.ContainsKey(id) && dict_[id] == value) return;
             dict_[id] = value;
-            PropertyChanged?.Invoke(this, new(id, value));
+            ValueChanged?.Invoke(this, new(id, value));
         }
     }
 
-    public Items(JsonNode node)
+    public Items(JsonNode? node)
     {
+        if (node is null) return;
         foreach (var prop in node.AsObject().AsEnumerable())
         {
             // "@1"のような@から始まる組を省く
