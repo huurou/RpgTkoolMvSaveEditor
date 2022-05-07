@@ -1,6 +1,5 @@
 ﻿using RpgTkoolMvSaveEditor.Domain;
 using RpgTkoolMvSaveEditor.Domain.SaveDatas;
-using System.Text.Json.Nodes;
 
 namespace RpgTkoolMvSaveEditor.Infrastructure.SaveDatas;
 
@@ -28,22 +27,19 @@ public class SaveDataLoader : ISaveDataLoader
         if (variablesNode is not null) variablesNode = variablesNode["@a"];
 
         var partyNode = rootNode["party"];
+        var itemsNode = partyNode?["_items"];
+        var weaponsNode = partyNode?["_weapons"];
+        var armorsNode = partyNode?["_armors"];
 
-        JsonNode? itemsNode = null;
-        if (partyNode is not null) itemsNode = partyNode["_items"];
-
-        JsonNode? weaponsNode = null;
-        if (partyNode is not null) weaponsNode = partyNode["_weapons"];
-
-        JsonNode? armorsNode = null;
-        if (partyNode is not null) armorsNode = partyNode["_armors"];
+        var actorsNode = rootNode["actors"];
 
         var saveData = new SaveData(new Parameters(partyNode!["_gold"]),
                                     new Switches(switchesNode),
                                     new Variables(variablesNode),
                                     new Items(itemsNode),
                                     new Weapons(weaponsNode),
-                                    new Armors(armorsNode));
+                                    new Armors(armorsNode),
+                                    new Actors(actorsNode));
 
         saveData.Parameters.GoldChanged += (s, gold) =>
        {

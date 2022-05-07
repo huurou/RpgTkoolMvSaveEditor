@@ -15,7 +15,8 @@ public class ApplicationService
                                IEnumerable<Variable> variables,
                                IEnumerable<Item> items,
                                IEnumerable<Weapon> weapons,
-                               IEnumerable<Armor> armors)>? SaveDataLoaded;
+                               IEnumerable<Armor> armors,
+                               IEnumerable<Actor> actors)>? SaveDataLoaded;
 
     private readonly IGameDataLoader gameDataLoader_;
     private readonly ICommonDataLoader commonDataLoader_;
@@ -105,7 +106,7 @@ public class ApplicationService
 
         DataLoaded?.Invoke(this, systemData_?.GameTitle ?? "");
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));
-        SaveDataLoaded?.Invoke(this, (GetParameters(), GetSwitches(), GetVariables(), GetItems(), GetWeapons(), GetArmors()));
+        SaveDataLoaded?.Invoke(this, (GetParameters(), GetSwitches(), GetVariables(), GetItems(), GetWeapons(), GetArmors(), GetActors()));
 
         IEnumerable<GameSwitch> GetGameSwitches()
         {
@@ -181,6 +182,15 @@ public class ApplicationService
                 if (string.IsNullOrEmpty(armorsData_[i]?.Name)) continue;
                 if (!saveData_.Armors.TryGetValue(i.ToString(), out var count)) count = 0;
                 yield return new(i, armorsData_[i]?.Name ?? "", armorsData_[i]?.Description ?? "", count);
+            }
+        }
+        IEnumerable<Actor> GetActors()
+        {
+            if (saveData_ is null) yield break;
+            foreach (var actorData in saveData_.Actors)
+            {
+                if (actorData is null || string.IsNullOrEmpty(actorData.Name)) continue;
+                yield return new(actorData);
             }
         }
     }

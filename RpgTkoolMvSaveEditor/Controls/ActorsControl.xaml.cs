@@ -25,6 +25,7 @@ namespace RpgTkoolMvSaveEditor.Controls
                 if (d is ActorsControl self &&
                     e.NewValue is ObservableCollection<ActorVM> value)
                 {
+                    if (value.Any()) self.TabContorl_Actors.SelectedIndex = 0;
                 }
             }));
 

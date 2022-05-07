@@ -7,22 +7,20 @@ internal class SaveDataControlVM : NotificationObject
     #region Binding Property
 
     private ParametersVM? parameters_;
-    public ParametersVM? Parameters { get => parameters_; set => SetProperty(ref parameters_, value); }
-
     private ObservableCollection<SwitchVM> switches_ = new();
-    public ObservableCollection<SwitchVM> Switches { get => switches_; set => SetProperty(ref switches_, value); }
-
     private ObservableCollection<VariableVM> variables_ = new();
-    public ObservableCollection<VariableVM> Variables { get => variables_; set => SetProperty(ref variables_, value); }
-
     private ObservableCollection<ItemVM> items_ = new();
-    public ObservableCollection<ItemVM> Items { get => items_; set => SetProperty(ref items_, value); }
-
-    private ObservableCollection<WeaponVM> weapons_=new();
-    public ObservableCollection<WeaponVM> Weapons { get => weapons_; set => SetProperty(ref weapons_, value); }
-
+    private ObservableCollection<WeaponVM> weapons_ = new();
     private ObservableCollection<ArmorVM> armors_ = new();
+    private ObservableCollection<ActorVM> actros_ = new();
+
+    public ParametersVM? Parameters { get => parameters_; set => SetProperty(ref parameters_, value); }
+    public ObservableCollection<SwitchVM> Switches { get => switches_; set => SetProperty(ref switches_, value); }
+    public ObservableCollection<VariableVM> Variables { get => variables_; set => SetProperty(ref variables_, value); }
+    public ObservableCollection<ItemVM> Items { get => items_; set => SetProperty(ref items_, value); }
+    public ObservableCollection<WeaponVM> Weapons { get => weapons_; set => SetProperty(ref weapons_, value); }
     public ObservableCollection<ArmorVM> Armors { get => armors_; set => SetProperty(ref armors_, value); }
+    public ObservableCollection<ActorVM> Actors { get => actros_; set => SetProperty(ref actros_, value); }
 
     #endregion Binding Property
 
@@ -36,6 +34,7 @@ internal class SaveDataControlVM : NotificationObject
             Items = new(e.items.Select(x => new ItemVM(x)));
             Weapons = new(e.weapons.Select(x => new WeaponVM(x)));
             Armors = new(e.armors.Select(x => new ArmorVM(x)));
+            Actors = new(e.actors.Select(x => new ActorVM(x)));
         };
     }
 }

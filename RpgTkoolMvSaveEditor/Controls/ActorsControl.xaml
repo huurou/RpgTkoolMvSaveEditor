@@ -8,16 +8,16 @@
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="root">
     <GroupBox Header="Actors">
-        <TabControl ItemsSource="{Binding Source, ElementName=root}">
+        <TabControl x:Name="TabContorl_Actors" ItemsSource="{Binding Source, ElementName=root}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Header}" />
+                    <TextBlock Text="{Binding Name}" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
 
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <local:ActorsControl />
+                    <local:ActorControl Source="{Binding}"/>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

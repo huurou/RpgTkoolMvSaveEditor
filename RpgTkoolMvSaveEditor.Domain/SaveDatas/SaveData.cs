@@ -8,8 +8,9 @@ public class SaveData
     public IItems Items { get; }
     public IWeapons Weapons { get; }
     public IArmors Armors { get; }
+    public IActors Actors { get; }
 
-    public SaveData(IParameters parameters, ISwitches switches, IVariables variables, IItems items, IWeapons weapons, IArmors armors)
+    public SaveData(IParameters parameters, ISwitches switches, IVariables variables, IItems items, IWeapons weapons, IArmors armors, IActors actors)
     {
         Parameters = parameters;
         Switches = switches;
@@ -17,5 +18,6 @@ public class SaveData
         Items = items;
         Weapons = weapons;
         Armors = armors;
+        Actors = actors;
     }
 }

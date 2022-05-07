@@ -1,4 +1,6 @@
-﻿namespace RpgTkoolMvSaveEditor.Application
+﻿using RpgTkoolMvSaveEditor.Domain.GameDatas;
+
+namespace RpgTkoolMvSaveEditor.Application
 {
     public class Actor
     {
@@ -8,13 +10,13 @@
         public int TP { get; }
         public int Exp { get; }
 
-        public Actor(string name, int hp, int mp, int tp, int exp)
+        public Actor(ActorData actorData)
         {
-            Name = name;
-            HP = hp;
-            MP = mp;
-            TP = tp;
-            Exp = exp;
+            Name = actorData.Name;
+            HP = actorData.HP;
+            MP = actorData.MP;
+            TP = actorData.TP;
+            Exp = actorData.Exp;
         }
     }
 }
