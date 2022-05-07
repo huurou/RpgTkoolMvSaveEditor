@@ -19,8 +19,8 @@ public partial class MainWindow : Window
         DataContext = vm_;
     }
 
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        vm_.OnLoaded();
+        await vm_.OnLoadedAsync();
     }
 }

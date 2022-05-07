@@ -47,10 +47,10 @@ public class ApplicationService
     /// <returns>成功/失敗<para/>
     /// wwwフォルダでない、あるいは直下にwwwフォルダがない場合失敗
     /// wwwフォルダ直下に必要なフォルダ、ファイルがない場合失敗</returns>
-    public bool LoadDirectory(string dirPath)
+    public async Task<bool> LoadDirectoryAsync(string dirPath)
     {
         if (!dataPathService_.SearchWwwDirectory(dirPath)) return false;
-        LoadData();
+        await LoadDataAsync();
         return true;
     }
 
@@ -94,12 +94,12 @@ public class ApplicationService
         if (saveData_ is not null) saveData_.Armors[id] = count;
     }
 
-    private void LoadData()
+    private async Task LoadDataAsync()
     {
-        systemData_ = gameDataLoader_.Load<SystemData>(dataPathService_.SystemDataPath);
-        itemsData_ = gameDataLoader_.Load<List<ItemData?>>(dataPathService_.ItemsDataPath);
-        weaponsData_ = gameDataLoader_.Load<List<WeaponData?>>(dataPathService_.WeaponsDataPath);
-        armorsData_ = gameDataLoader_.Load<List<ArmorData?>>(dataPathService_.ArmorsDataPath);
+        systemData_ = await gameDataLoader_.LoadAsync<SystemData>(dataPathService_.SystemDataPath);
+        itemsData_ = await gameDataLoader_.LoadAsync<List<ItemData?>>(dataPathService_.ItemsDataPath);
+        weaponsData_ = await gameDataLoader_.LoadAsync<List<WeaponData?>>(dataPathService_.WeaponsDataPath);
+        armorsData_ = await gameDataLoader_.LoadAsync<List<ArmorData?>>(dataPathService_.ArmorsDataPath);
         commonData_ = commonDataLoader_.Load(dataPathService_.CommonDataPath);
         saveData_ = saveDataLoader_.Load(dataPathService_.SaveDataPath);
 

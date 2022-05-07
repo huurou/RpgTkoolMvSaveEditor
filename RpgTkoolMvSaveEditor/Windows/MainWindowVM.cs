@@ -19,13 +19,13 @@ internal class MainWindowVM : NotificationObject
     #region Binding Command
 
     private DelegateCommand? openDirCmd_;
-    public DelegateCommand OpenDirCmd => openDirCmd_ ??= new DelegateCommand(OpenDirectory);
+    public DelegateCommand OpenDirCmd => openDirCmd_ ??= new DelegateCommand(async () => await OpenDirectoryAsync());
 
     private DelegateCommand? reloadCmd_;
     public DelegateCommand ReloadCmd => reloadCmd_ ??= new DelegateCommand(
-        () =>
+        async () =>
         {
-            if (Directory.Exists(dirPath_) && !Dependency.App.LoadDirectory(dirPath_)) dirPath_ = null;
+            if (Directory.Exists(dirPath_) && !await Dependency.App.LoadDirectoryAsync(dirPath_)) dirPath_ = null;
         });
 
     #endregion Binding Command
@@ -38,14 +38,14 @@ internal class MainWindowVM : NotificationObject
         Dependency.App.DataLoaded += (s, e) => Title = $"{e}-{TITLE}";
     }
 
-    public void OnLoaded()
+    public async Task OnLoadedAsync()
     {
         if (App.CommandArgs.Length == 0) return;
         dirPath_ = App.CommandArgs[0];
-        if (!Dependency.App.LoadDirectory(dirPath_)) dirPath_ = null;
+        if (!await Dependency.App.LoadDirectoryAsync(dirPath_)) dirPath_ = null;
     }
 
-    private void OpenDirectory()
+    private async Task OpenDirectoryAsync()
     {
         var dialog = new CommonOpenFileDialog
         {
@@ -57,6 +57,6 @@ internal class MainWindowVM : NotificationObject
         };
         if (dialog.ShowDialog() != CommonFileDialogResult.Ok) return;
         dirPath_ = dialog.FileName;
-        if (!Dependency.App.LoadDirectory(dirPath_)) dirPath_ = null;
+        if (!await Dependency.App.LoadDirectoryAsync(dirPath_)) dirPath_ = null;
     }
 }

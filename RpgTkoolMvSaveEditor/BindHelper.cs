@@ -32,9 +32,15 @@ internal class DelegateCommand : ICommand
         canExecute_ = canExecute;
     }
 
-    public void Execute(object? parameter) => execute_?.Invoke();
+    public void Execute(object? parameter)
+    {
+        execute_?.Invoke();
+    }
 
-    public bool CanExecute(object? parameter) => canExecute_?.Invoke() ?? true;
+    public bool CanExecute(object? parameter)
+    {
+        return canExecute_?.Invoke() ?? true;
+    }
 }
 
 internal class DelegateCommand<T> : ICommand
@@ -54,7 +60,13 @@ internal class DelegateCommand<T> : ICommand
         canExecute_ = canExecute;
     }
 
-    public void Execute(object? parameter) => execute_?.Invoke(parameter is T param ? param : throw new ArgumentException(null, nameof(parameter)));
+    public void Execute(object? parameter)
+    {
+        execute_?.Invoke(parameter is T param ? param : throw new ArgumentException(null, nameof(parameter)));
+    }
 
-    public bool CanExecute(object? parameter) => canExecute_?.Invoke(parameter is T param ? param : throw new ArgumentException(null, nameof(parameter))) ?? true;
+    public bool CanExecute(object? parameter)
+    {
+        return canExecute_?.Invoke(parameter is T param ? param : throw new ArgumentException(null, nameof(parameter))) ?? true;
+    }
 }

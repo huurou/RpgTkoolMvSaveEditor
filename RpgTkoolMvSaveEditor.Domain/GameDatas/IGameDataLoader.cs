@@ -2,5 +2,5 @@
 
 public interface IGameDataLoader
 {
-    TGameData? Load<TGameData>(string path);
+    Task<TGameData?> LoadAsync<TGameData>(string path);
 }

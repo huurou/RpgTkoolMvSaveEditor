@@ -11,8 +11,8 @@ public class GameDataLoader : IGameDataLoader
         dataCtrl_ = dataCtrl;
     }
 
-    public TGameData? Load<TGameData>(string path)
+    public async Task<TGameData?> LoadAsync<TGameData>(string path)
     {
-        return File.Exists(path) ? dataCtrl_.ReadFile<TGameData>(path) : default;
+        return File.Exists(path) ? await dataCtrl_.ReadFileAsync<TGameData>(path) : default;
     }
 }
