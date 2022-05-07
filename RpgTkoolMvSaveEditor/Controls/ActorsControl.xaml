@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="RpgTkoolMvSaveEditor.Controls.ActorsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:RpgTkoolMvSaveEditor.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="root">
+    <GroupBox Header="Actors">
+        <TabControl ItemsSource="{Binding Source, ElementName=root}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <local:ActorsControl />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </GroupBox>
+</UserControl>

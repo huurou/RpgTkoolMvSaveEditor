@@ -2,7 +2,7 @@
 
 namespace RpgTkoolMvSaveEditor.Controls;
 
-internal class ArmorVM : NotifycationObject
+internal class ArmorVM : NotificationObject
 {
     #region Binding Property
 

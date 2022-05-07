@@ -6,8 +6,8 @@
         xmlns:controls="clr-namespace:RpgTkoolMvSaveEditor.Controls"
         xmlns:windows="clr-namespace:RpgTkoolMvSaveEditor.Windows"
         d:DataContext="{d:DesignInstance Type=windows:MainWindowVM}"
-        d:Width="800" d:Height="450"
         mc:Ignorable="d"
+        Width="1000" MinWidth="200" Height="500" MinHeight="400"
         Title="{Binding Title}" WindowState="Maximized" Loaded="Window_Loaded">
     <Window.InputBindings>
         <KeyBinding Gesture="F5" Command="{Binding ReloadCmd}"/>

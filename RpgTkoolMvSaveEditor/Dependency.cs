@@ -11,20 +11,20 @@ namespace RpgTkoolMvSaveEditor;
 
 internal static class Dependency
 {
-    internal static ApplicationService App { get; }
+    private static readonly IServiceCollection services_ = new ServiceCollection();
+    private static readonly IServiceProvider provider_;
+
+    internal static ApplicationService App => provider_.GetRequiredService<ApplicationService>();
 
     static Dependency()
     {
-        var services = new ServiceCollection();
+        services_.AddSingleton<ApplicationService>();
+        services_.AddTransient<IGameDataLoader, GameDataLoader>();
+        services_.AddTransient<ICommonDataLoader, CommonDataLoader>();
+        services_.AddTransient<ISaveDataLoader, SaveDataLoader>();
+        services_.AddTransient<IDataCtrl, JsonCtrl>();
+        services_.AddTransient<ISaveDataCtrl, SaveDataCtrl>();
 
-        services.AddSingleton<ApplicationService>();
-        services.AddTransient<IGameDataLoader, GameDataLoader>();
-        services.AddTransient<ICommonDataLoader, CommonDataLoader>();
-        services.AddTransient<ISaveDataLoader, SaveDataLoader>();
-        services.AddTransient<IJsonCtrl, JsonCtrl>();
-        services.AddTransient<ISaveDataCtrl, SaveDataCtrl>();
-
-        using var provider = services.BuildServiceProvider();
-        App = provider.GetRequiredService<ApplicationService>();
+        provider_ = services_.BuildServiceProvider();
     }
 }

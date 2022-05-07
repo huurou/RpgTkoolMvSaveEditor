@@ -3,7 +3,7 @@ using System.IO;
 
 namespace RpgTkoolMvSaveEditor.Windows;
 
-internal class MainWindowVM : NotifycationObject
+internal class MainWindowVM : NotificationObject
 {
     public event EventHandler<string>? ErrorOccurred;
 

@@ -2,7 +2,7 @@
 
 namespace RpgTkoolMvSaveEditor.Controls;
 
-internal class VariableVM : NotifycationObject
+internal class VariableVM : NotificationObject
 {
     #region Binding Property
 

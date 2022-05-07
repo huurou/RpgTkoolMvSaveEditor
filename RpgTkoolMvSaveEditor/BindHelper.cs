@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace RpgTkoolMvSaveEditor;
 
-internal abstract class NotifycationObject : INotifyPropertyChanged
+internal abstract class NotificationObject : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 

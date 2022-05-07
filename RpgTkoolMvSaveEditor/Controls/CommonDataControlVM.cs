@@ -2,7 +2,7 @@
 
 namespace RpgTkoolMvSaveEditor.Controls;
 
-internal class CommonDataControlVM : NotifycationObject
+internal class CommonDataControlVM : NotificationObject
 {
     #region Binding Property
 
