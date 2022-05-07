@@ -4,7 +4,7 @@ namespace RpgTkoolMvSaveEditor.Domain;
 
 public interface ISaveDataCtrl
 {
-    Task SaveAsync(string path, JsonNode jsonNode);
+    void Save(string path, JsonNode jsonNode);
 
     Task<JsonNode> LoadAsync(string path);
 }

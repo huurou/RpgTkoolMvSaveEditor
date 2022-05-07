@@ -26,26 +26,26 @@ public class CommonDataLoader : ICommonDataLoader
 
         var commonData = new CommonData(new GameSwitches(switchesNode), new GameVariables(variablesNode));
 
-        commonData.GameSwitches.PropertyChanged += async (s, prop) =>
-        {
-            switchesNode[prop.Key.ToString()] = prop.Value;
-            await saveDataCtrl_.SaveAsync(path, rootNode);
-        };
+        commonData.GameSwitches.PropertyChanged += (s, prop) =>
+       {
+           switchesNode[prop.Key.ToString()] = prop.Value;
+           saveDataCtrl_.Save(path, rootNode);
+       };
 
-        commonData.GameVariables.PropertyChanged += async (s, prop) =>
-        {
-            variablesNode[prop.Key] = prop.Value switch
-            {
-                string str => int.TryParse(str, out var i) ? i
-                    : double.TryParse(str, out var d) ? d
-                    : str,
-                int num => num,
-                double dou => dou,
-                bool b => b,
-                _ => null,
-            };
-            await saveDataCtrl_.SaveAsync(path, rootNode);
-        };
+        commonData.GameVariables.PropertyChanged += (s, prop) =>
+       {
+           variablesNode[prop.Key] = prop.Value switch
+           {
+               string str => int.TryParse(str, out var i) ? i
+                   : double.TryParse(str, out var d) ? d
+                   : str,
+               int num => num,
+               double dou => dou,
+               bool b => b,
+               _ => null,
+           };
+           saveDataCtrl_.Save(path, rootNode);
+       };
 
         return commonData;
     }

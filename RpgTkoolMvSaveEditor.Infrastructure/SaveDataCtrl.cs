@@ -6,10 +6,26 @@ namespace RpgTkoolMvSaveEditor.Infrastructure;
 
 public class SaveDataCtrl : ISaveDataCtrl
 {
-    public async Task SaveAsync(string path, JsonNode jsonNode)
+    // 保存を遅延させ、連続で保存要求が来た場合直前の保存をキャンセルする
+    private readonly System.Timers.Timer delayTimer_ = new(100) { AutoReset = false };
+    private string path_ = "";
+    private JsonNode? jsonNode_ = null;
+
+    public SaveDataCtrl()
     {
-        var jsonStr = jsonNode.ToJsonString();
-        await File.WriteAllTextAsync(path, LZString.CompressToBase64(jsonStr));
+        delayTimer_.Elapsed += (s, e) => File.WriteAllTextAsync(path_, LZString.CompressToBase64(jsonNode_?.ToJsonString()));
+    }
+
+    public void Save(string path, JsonNode jsonNode)
+    {
+        path_ = path;
+        jsonNode_ = jsonNode;
+        if (delayTimer_.Enabled)
+        {
+            delayTimer_.Stop();
+            delayTimer_.Start();
+        }
+        else delayTimer_.Start();
     }
 
     public async Task<JsonNode> LoadAsync(string path)
