@@ -2,5 +2,5 @@
 
 public interface ISaveDataLoader
 {
-    SaveData? Load(string path);
+    Task<SaveData?> LoadAsync(string path);
 }

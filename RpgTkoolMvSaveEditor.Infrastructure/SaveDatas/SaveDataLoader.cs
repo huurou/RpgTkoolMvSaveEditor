@@ -13,11 +13,11 @@ public class SaveDataLoader : ISaveDataLoader
         saveDataCtrl_ = saveDataCtrl;
     }
 
-    public SaveData? Load(string path)
+    public async Task<SaveData?> LoadAsync(string path)
     {
         if (!File.Exists(path)) return null;
 
-        var rootNode = saveDataCtrl_.Load(path);
+        var rootNode = await saveDataCtrl_.LoadAsync(path);
 
         var switchesNode = rootNode["switches"];
         if (switchesNode is not null) switchesNode = switchesNode["_data"];
@@ -45,14 +45,14 @@ public class SaveDataLoader : ISaveDataLoader
                                     new Weapons(weaponsNode),
                                     new Armors(armorsNode));
 
-        saveData.Parameters.GoldChanged += (s, gold) =>
+        saveData.Parameters.GoldChanged += async (s, gold) =>
         {
             if (partyNode is null) return;
             partyNode["_gold"] = gold;
-            saveDataCtrl_.Save(path, rootNode);
+            await saveDataCtrl_.SaveAsync(path, rootNode);
         };
 
-        saveData.Switches.ValueChanged += (s, e) =>
+        saveData.Switches.ValueChanged += async (s, e) =>
         {
             if (switchesNode is null) return;
             var switchesArray = switchesNode.AsArray();
@@ -65,10 +65,10 @@ public class SaveDataLoader : ISaveDataLoader
                 }
             }
             switchesArray[e.index] = e.value;
-            saveDataCtrl_.Save(path, rootNode);
+            await saveDataCtrl_.SaveAsync(path, rootNode);
         };
 
-        saveData.Variables.ValueChanged += (s, e) =>
+        saveData.Variables.ValueChanged += async (s, e) =>
         {
             if (variablesNode is null) return;
             var variablesArray = variablesNode.AsArray();
@@ -90,28 +90,28 @@ public class SaveDataLoader : ISaveDataLoader
                 bool b => b,
                 _ => null,
             };
-            saveDataCtrl_.Save(path, rootNode);
+            await saveDataCtrl_.SaveAsync(path, rootNode);
         };
 
-        saveData.Items.ValueChanged += (s, e) =>
+        saveData.Items.ValueChanged += async (s, e) =>
         {
             if (itemsNode is null) return;
             itemsNode[e.id] = e.value;
-            saveDataCtrl_.Save(path, rootNode);
+            await saveDataCtrl_.SaveAsync(path, rootNode);
         };
 
-        saveData.Weapons.ValueChanged += (s, e) =>
+        saveData.Weapons.ValueChanged += async (s, e) =>
         {
             if (weaponsNode is null) return;
             weaponsNode[e.id] = e.value;
-            saveDataCtrl_.Save(path, rootNode);
+            await saveDataCtrl_.SaveAsync(path, rootNode);
         };
 
-        saveData.Armors.ValueChanged += (s, e) =>
+        saveData.Armors.ValueChanged += async (s, e) =>
         {
             if (armorsNode is null) return;
             armorsNode[e.id] = e.value;
-            saveDataCtrl_.Save(path, rootNode);
+            await saveDataCtrl_.SaveAsync(path, rootNode);
         };
 
         return saveData;

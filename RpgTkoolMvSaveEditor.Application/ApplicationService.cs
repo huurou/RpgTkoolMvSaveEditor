@@ -100,8 +100,8 @@ public class ApplicationService
         itemsData_ = await gameDataLoader_.LoadAsync<List<ItemData?>>(dataPathService_.ItemsDataPath);
         weaponsData_ = await gameDataLoader_.LoadAsync<List<WeaponData?>>(dataPathService_.WeaponsDataPath);
         armorsData_ = await gameDataLoader_.LoadAsync<List<ArmorData?>>(dataPathService_.ArmorsDataPath);
-        commonData_ = commonDataLoader_.Load(dataPathService_.CommonDataPath);
-        saveData_ = saveDataLoader_.Load(dataPathService_.SaveDataPath);
+        commonData_ = await commonDataLoader_.LoadAsync(dataPathService_.CommonDataPath);
+        saveData_ = await saveDataLoader_.LoadAsync(dataPathService_.SaveDataPath);
 
         DataLoaded?.Invoke(this, systemData_?.GameTitle ?? "");
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));

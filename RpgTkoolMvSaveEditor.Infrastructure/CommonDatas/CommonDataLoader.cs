@@ -12,11 +12,11 @@ public class CommonDataLoader : ICommonDataLoader
         saveDataCtrl_ = saveDataCtrl;
     }
 
-    public CommonData? Load(string path)
+    public async Task<CommonData?> LoadAsync(string path)
     {
         if (!File.Exists(path)) return null;
 
-        var rootNode = saveDataCtrl_.Load(path);
+        var rootNode = await saveDataCtrl_.LoadAsync(path);
 
         var switchesNode = rootNode["gameSwitches"];
         if (switchesNode is null) throw new InvalidOperationException("gameSwitchesの取得に失敗しました。");
@@ -26,13 +26,13 @@ public class CommonDataLoader : ICommonDataLoader
 
         var commonData = new CommonData(new GameSwitches(switchesNode), new GameVariables(variablesNode));
 
-        commonData.GameSwitches.PropertyChanged += (s, prop) =>
+        commonData.GameSwitches.PropertyChanged += async (s, prop) =>
         {
             switchesNode[prop.Key.ToString()] = prop.Value;
-            saveDataCtrl_.Save(path, rootNode);
+            await saveDataCtrl_.SaveAsync(path, rootNode);
         };
 
-        commonData.GameVariables.PropertyChanged += (s, prop) =>
+        commonData.GameVariables.PropertyChanged += async (s, prop) =>
         {
             variablesNode[prop.Key] = prop.Value switch
             {
@@ -44,7 +44,7 @@ public class CommonDataLoader : ICommonDataLoader
                 bool b => b,
                 _ => null,
             };
-            saveDataCtrl_.Save(path, rootNode);
+            await saveDataCtrl_.SaveAsync(path, rootNode);
         };
 
         return commonData;

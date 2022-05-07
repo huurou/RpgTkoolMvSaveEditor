@@ -6,15 +6,15 @@ namespace RpgTkoolMvSaveEditor.Infrastructure;
 
 public class SaveDataCtrl : ISaveDataCtrl
 {
-    public void Save(string path, JsonNode jsonNode)
+    public async Task SaveAsync(string path, JsonNode jsonNode)
     {
         var jsonStr = jsonNode.ToJsonString();
-        File.WriteAllText(path, LZString.CompressToBase64(jsonStr));
+        await File.WriteAllTextAsync(path, LZString.CompressToBase64(jsonStr));
     }
 
-    public JsonNode Load(string path)
+    public async Task<JsonNode> LoadAsync(string path)
     {
         var jsonStr = LZString.DecompressFromBase64(File.ReadAllText(path));
-        return JsonNode.Parse(jsonStr)!;
+        return await Task.Run(() => JsonNode.Parse(jsonStr)!);
     }
 }
