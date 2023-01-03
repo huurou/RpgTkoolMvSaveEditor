@@ -14,7 +14,6 @@
                     <TextBlock Text="{Binding Name}" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
-
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <local:ActorControl Source="{Binding}" />

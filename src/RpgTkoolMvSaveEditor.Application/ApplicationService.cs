@@ -2,6 +2,7 @@
 using RpgTkoolMvSaveEditor.Domain.CommonDatas;
 using RpgTkoolMvSaveEditor.Domain.GameDatas;
 using RpgTkoolMvSaveEditor.Domain.SaveDatas;
+using System.Diagnostics;
 
 namespace RpgTkoolMvSaveEditor.Application;
 
@@ -29,6 +30,7 @@ public class ApplicationService
     private List<ArmorData?>? armorsData_;
     private CommonData? commonData_;
     private SaveData? saveData_;
+    private FileSystemWatcher? watcher_;
 
     public ApplicationService(IGameDataLoader gameDataLoader,
                               ICommonDataLoader commonDataLoader,
@@ -52,6 +54,19 @@ public class ApplicationService
     {
         if (!dataPathService_.SearchWwwDirectory(dirPath)) return false;
         await LoadDataAsync();
+        watcher_?.Dispose();
+        watcher_ = new FileSystemWatcher(dataPathService_.SaveDirPath, Path.GetFileName(dataPathService_.SaveDataPath))
+        {
+            NotifyFilter = NotifyFilters.LastWrite,
+            IncludeSubdirectories = false,
+            EnableRaisingEvents = true
+        };
+        Debug.WriteLine(watcher_.EnableRaisingEvents);
+        watcher_.Changed += async (s, e) =>
+        {
+            Debug.WriteLine($"type:{e.ChangeType} name:{e.Name} path:{e.FullPath}");
+            await LoadDataAsync();
+        };
         return true;
     }
 
@@ -97,12 +112,21 @@ public class ApplicationService
 
     private async Task LoadDataAsync()
     {
-        systemData_ = await gameDataLoader_.LoadAsync<SystemData>(dataPathService_.SystemDataPath);
-        itemsData_ = await gameDataLoader_.LoadAsync<List<ItemData?>>(dataPathService_.ItemsDataPath);
-        weaponsData_ = await gameDataLoader_.LoadAsync<List<WeaponData?>>(dataPathService_.WeaponsDataPath);
-        armorsData_ = await gameDataLoader_.LoadAsync<List<ArmorData?>>(dataPathService_.ArmorsDataPath);
-        commonData_ = await commonDataLoader_.LoadAsync(dataPathService_.CommonDataPath);
-        saveData_ = await saveDataLoader_.LoadAsync(dataPathService_.SaveDataPath);
+        try
+        {
+            Debug.WriteLine($"Load data {dataPathService_.SaveDataPath}");
+            systemData_ = await gameDataLoader_.LoadAsync<SystemData>(dataPathService_.SystemDataPath);
+            itemsData_ = await gameDataLoader_.LoadAsync<List<ItemData?>>(dataPathService_.ItemsDataPath);
+            weaponsData_ = await gameDataLoader_.LoadAsync<List<WeaponData?>>(dataPathService_.WeaponsDataPath);
+            armorsData_ = await gameDataLoader_.LoadAsync<List<ArmorData?>>(dataPathService_.ArmorsDataPath);
+            commonData_ = await commonDataLoader_.LoadAsync(dataPathService_.CommonDataPath);
+            saveData_ = await saveDataLoader_.LoadAsync(dataPathService_.SaveDataPath);
+        }
+        catch (Exception)
+        {
+            // DnD時アクセス競合が起きるので捕まえる
+            return;
+        }
 
         DataLoaded?.Invoke(this, systemData_?.GameTitle ?? "");
         CommonDataLoaded?.Invoke(this, (GetGameSwitches(), GetGameVariables()));

@@ -12,7 +12,6 @@
     <Window.InputBindings>
         <KeyBinding Gesture="F5" Command="{Binding ReloadCmd}" />
     </Window.InputBindings>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />

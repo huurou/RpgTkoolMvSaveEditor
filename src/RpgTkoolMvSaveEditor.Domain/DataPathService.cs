@@ -20,8 +20,9 @@ public class DataPathService
     public string ItemsDataPath => Path.Combine(wwwDirPath_ ?? "", DATA_DIR_NAME, ITEMS_JSON_NAME);
     public string WeaponsDataPath => Path.Combine(wwwDirPath_ ?? "", DATA_DIR_NAME, WEAPONS_JSON_NAME);
     public string ArmorsDataPath => Path.Combine(wwwDirPath_ ?? "", DATA_DIR_NAME, ARMORS_JSON_NAME);
-    public string CommonDataPath => Path.Combine(wwwDirPath_ ?? "", SAVE_DIR_NAME, COMMON_RPGSAVE_NAME);
-    public string SaveDataPath => Path.Combine(wwwDirPath_ ?? "", SAVE_DIR_NAME, SAVE_RPGSAVE_NAME);
+    public string SaveDirPath => Path.Combine(wwwDirPath_ ?? "", SAVE_DIR_NAME);
+    public string CommonDataPath => Path.Combine(SaveDirPath, COMMON_RPGSAVE_NAME);
+    public string SaveDataPath => Path.Combine(SaveDirPath, SAVE_RPGSAVE_NAME);
 
     public bool SearchWwwDirectory(string dirPath)
     {
