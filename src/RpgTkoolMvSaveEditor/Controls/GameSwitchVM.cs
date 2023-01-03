@@ -21,6 +21,7 @@ internal class GameSwitchVM : NotificationObject
             SetProperty(ref value_, value);
         }
     }
+
     #endregion Binding Property
 
     public GameSwitchVM(GameSwitch data)
@@ -29,5 +30,4 @@ internal class GameSwitchVM : NotificationObject
         name_ = data.Name;
         value_ = data.Value;
     }
-
 }

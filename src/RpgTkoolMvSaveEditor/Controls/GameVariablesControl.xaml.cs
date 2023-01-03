@@ -27,5 +27,4 @@ public partial class GameVariablesControl : UserControl
     {
         InitializeComponent();
     }
-
 }

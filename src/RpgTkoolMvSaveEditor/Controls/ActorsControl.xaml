@@ -17,7 +17,7 @@
 
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <local:ActorControl Source="{Binding}"/>
+                    <local:ActorControl Source="{Binding}" />
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

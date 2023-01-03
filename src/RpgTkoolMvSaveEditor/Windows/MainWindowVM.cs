@@ -1,5 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace RpgTkoolMvSaveEditor.Windows;
 

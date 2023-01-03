@@ -18,9 +18,9 @@
                 <controls:SwitchesControl Source="{Binding Switches}" />
                 <controls:VariablesControl Source="{Binding Variables}" />
                 <controls:ItemsControl Source="{Binding Items}" />
-                <controls:WeaponsControl Source="{Binding Weapons}"/>
+                <controls:WeaponsControl Source="{Binding Weapons}" />
                 <controls:ArmorsControl Source="{Binding Armors}" />
-                <controls:ActorsControl Source="{Binding Actors}"/>
+                <controls:ActorsControl Source="{Binding Actors}" />
             </StackPanel>
         </Grid>
     </GroupBox>

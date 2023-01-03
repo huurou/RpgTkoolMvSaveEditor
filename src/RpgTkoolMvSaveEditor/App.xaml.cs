@@ -1,4 +1,6 @@
-﻿namespace RpgTkoolMvSaveEditor;
+﻿using System;
+
+namespace RpgTkoolMvSaveEditor;
 
 /// <summary>
 /// Interaction logic for App.xaml

@@ -46,5 +46,4 @@ public class Weapons : IWeapons
     {
         return GetEnumerator();
     }
-
 }
