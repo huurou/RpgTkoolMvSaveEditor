@@ -12,19 +12,20 @@
     <Window.InputBindings>
         <KeyBinding Gesture="F5" Command="{Binding ReloadCmd}" />
     </Window.InputBindings>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <Menu Grid.Row="0">
-            <MenuItem Header="フォルダを開く(_O)" Command="{Binding OpenDirCmd}" />
-            <MenuItem Header="再読み込み(F5)" Command="{Binding ReloadCmd}" />
-        </Menu>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <controls:CommonDataControl />
-            <controls:SaveDataControl />
-        </StackPanel>
-    </Grid>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Menu Grid.Row="0">
+                <MenuItem Header="フォルダを開く(_O)" Command="{Binding OpenDirCmd}" />
+                <MenuItem Header="再読み込み(F5)" Command="{Binding ReloadCmd}" />
+            </Menu>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <controls:CommonDataControl />
+                <controls:SaveDataControl />
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </Window>
