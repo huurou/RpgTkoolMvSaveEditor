@@ -35,7 +35,7 @@ public class SaveDataLoader : ISaveDataLoader
 
         var saveData = new SaveData(new Parameters(partyNode!["_gold"]),
                                     new Switches(switchesNode),
-                                    new Variables(null),//variablesNode),
+                                    new Variables(variablesNode),
                                     new Items(itemsNode),
                                     new Weapons(weaponsNode),
                                     new Armors(armorsNode),
