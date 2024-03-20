@@ -2,21 +2,12 @@
 
 namespace RpgTkoolMvSaveEditor.Application
 {
-    public class Actor
+    public class Actor(ActorData actorData)
     {
-        public string Name { get; } = "";
-        public int HP { get; }
-        public int MP { get; }
-        public int TP { get; }
-        public int Exp { get; }
-
-        public Actor(ActorData actorData)
-        {
-            Name = actorData.Name;
-            HP = actorData.HP;
-            MP = actorData.MP;
-            TP = actorData.TP;
-            Exp = actorData.Exp;
-        }
+        public string Name { get; } = actorData.Name;
+        public int HP { get; } = actorData.HP;
+        public int MP { get; } = actorData.MP;
+        public int TP { get; } = actorData.TP;
+        public int Exp { get; } = actorData.Exp;
     }
 }

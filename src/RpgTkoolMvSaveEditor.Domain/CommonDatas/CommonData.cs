@@ -1,13 +1,7 @@
 ﻿namespace RpgTkoolMvSaveEditor.Domain.CommonDatas;
 
-public class CommonData
+public class CommonData(IGameSwitches gameSwitches, IGameVariables gameVariables)
 {
-    public IGameSwitches GameSwitches { get; }
-    public IGameVariables GameVariables { get; }
-
-    public CommonData(IGameSwitches gameSwitches, IGameVariables gameVariables)
-    {
-        GameSwitches = gameSwitches;
-        GameVariables = gameVariables;
-    }
+    public IGameSwitches GameSwitches { get; } = gameSwitches;
+    public IGameVariables GameVariables { get; } = gameVariables;
 }

@@ -26,13 +26,17 @@ public class Switches : ISwitches
         }
     }
 
-    private readonly List<bool?> list_ = new();
+    private readonly List<bool?> list_ = [];
 
     public int Count => list_.Count;
 
     public Switches(JsonNode? node)
     {
-        if (node is null) return;
+        if (node is null)
+        {
+            return;
+        }
+
         var array = node.AsArray();
         list_.Capacity = array.Count;
         foreach (var item in array)

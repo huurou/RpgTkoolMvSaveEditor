@@ -2,13 +2,13 @@
 
 namespace RpgTkoolMvSaveEditor.Controls;
 
-internal class SwitchVM : NotificationObject
+internal class SwitchVM(Switch @switch) : NotificationObject
 {
     #region Binding Property
 
-    private int id_;
-    private string name_;
-    private bool? value_;
+    private int id_ = @switch.Id;
+    private string name_ = @switch.Name;
+    private bool? value_ = @switch.Value;
 
     public int Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
@@ -23,11 +23,4 @@ internal class SwitchVM : NotificationObject
     }
 
     #endregion Binding Property
-
-    public SwitchVM(Switch @switch)
-    {
-        id_ = @switch.Id;
-        name_ = @switch.Name;
-        value_ = @switch.Value;
-    }
 }

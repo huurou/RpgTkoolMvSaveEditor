@@ -1,15 +1,8 @@
 ﻿namespace RpgTkoolMvSaveEditor.Application;
 
-public class Variable
+public class Variable(int id, string name, object? value)
 {
-    public int Id { get; }
-    public string Name { get; }
-    public object? Value { get; }
-
-    public Variable(int id, string name, object? value)
-    {
-        Id = id;
-        Name = name;
-        Value = value;
-    }
+    public int Id { get; } = id;
+    public string Name { get; } = name;
+    public object? Value { get; } = value;
 }

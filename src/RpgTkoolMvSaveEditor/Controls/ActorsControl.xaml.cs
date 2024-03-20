@@ -26,7 +26,10 @@ namespace RpgTkoolMvSaveEditor.Controls
                 if (d is ActorsControl self &&
                     e.NewValue is ObservableCollection<ActorVM> value)
                 {
-                    if (value.Any()) self.TabContorl_Actors.SelectedIndex = 0;
+                    if (value.Any())
+                    {
+                        self.TabContorl_Actors.SelectedIndex = 0;
+                    }
                 }
             }));
 
@@ -38,27 +41,18 @@ namespace RpgTkoolMvSaveEditor.Controls
         }
     }
 
-    internal class ActorVM : NotificationObject
+    internal class ActorVM(Actor actor) : NotificationObject
     {
-        private string name_ = "";
-        private int hp_;
-        private int mp_;
-        private int exp_;
-        private int tp_;
+        private string name_ = actor.Name;
+        private int hp_ = actor.HP;
+        private int mp_ = actor.MP;
+        private int exp_ = actor.Exp;
+        private int tp_ = actor.TP;
 
         public string Name { get => name_; set => SetProperty(ref name_, value); }
         public int HP { get => hp_; set => SetProperty(ref hp_, value); }
         public int MP { get => mp_; set => SetProperty(ref mp_, value); }
         public int TP { get => tp_; set => SetProperty(ref tp_, value); }
         public int Exp { get => exp_; set => SetProperty(ref exp_, value); }
-
-        public ActorVM(Actor actor)
-        {
-            name_ = actor.Name;
-            hp_ = actor.HP;
-            mp_ = actor.MP;
-            tp_ = actor.TP;
-            exp_ = actor.Exp;
-        }
     }
 }

@@ -7,7 +7,7 @@ namespace RpgTkoolMvSaveEditor;
 /// </summary>
 public partial class App : System.Windows.Application
 {
-    public static string[] CommandArgs { get; private set; } = Array.Empty<string>();
+    public static string[] CommandArgs { get; private set; } = [];
 
     private void Application_Startup(object sender, System.Windows.StartupEventArgs e)
     {

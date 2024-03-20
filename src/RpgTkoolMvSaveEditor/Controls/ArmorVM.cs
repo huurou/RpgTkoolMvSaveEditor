@@ -2,14 +2,14 @@
 
 namespace RpgTkoolMvSaveEditor.Controls;
 
-internal class ArmorVM : NotificationObject
+internal class ArmorVM(Armor armor) : NotificationObject
 {
     #region Binding Property
 
-    private int id_;
-    private string name_;
-    private string description_;
-    private int count_;
+    private int id_ = armor.Id;
+    private string name_ = armor.Name;
+    private string description_ = armor.Description;
+    private int count_ = armor.Count;
 
     public int Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
@@ -25,12 +25,4 @@ internal class ArmorVM : NotificationObject
     }
 
     #endregion Binding Property
-
-    public ArmorVM(Armor armor)
-    {
-        id_ = armor.Id;
-        name_ = armor.Name;
-        description_ = armor.Description;
-        count_ = armor.Count;
-    }
 }

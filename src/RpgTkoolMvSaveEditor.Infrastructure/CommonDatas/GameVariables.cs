@@ -8,14 +8,18 @@ public class GameVariables : IGameVariables
 {
     public event EventHandler<KeyValuePair<string, object?>>? PropertyChanged;
 
-    private readonly Dictionary<string, object?> dict_ = new();
+    private readonly Dictionary<string, object?> dict_ = [];
 
     public object? this[string id]
     {
         get => dict_[id];
         set
         {
-            if (dict_.ContainsKey(id) && dict_[id] == value) return;
+            if (dict_.TryGetValue(id, out var value1) && value1 == value)
+            {
+                return;
+            }
+
             dict_[id] = value;
             PropertyChanged?.Invoke(this, new(id, value));
         }
@@ -26,7 +30,10 @@ public class GameVariables : IGameVariables
         foreach (var prop in node.AsObject().AsEnumerable())
         {
             // "@1"のような@から始まる組を省く
-            if (int.TryParse(prop.Key, out _)) dict_[prop.Key] = prop.Value;
+            if (int.TryParse(prop.Key, out _))
+            {
+                dict_[prop.Key] = prop.Value;
+            }
         }
     }
 

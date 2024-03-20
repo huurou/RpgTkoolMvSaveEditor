@@ -21,7 +21,11 @@ internal class ParametersVM : NotificationObject
 
     public ParametersVM(Parameters? parameters)
     {
-        if (parameters is null) return;
+        if (parameters is null)
+        {
+            return;
+        }
+
         gold_ = parameters.Gold;
     }
 }

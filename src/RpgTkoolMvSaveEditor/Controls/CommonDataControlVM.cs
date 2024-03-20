@@ -7,8 +7,8 @@ internal class CommonDataControlVM : NotificationObject
 {
     #region Binding Property
 
-    private ObservableCollection<GameSwitchVM> switches_ = new();
-    private ObservableCollection<GameVariableVM> variables_ = new();
+    private ObservableCollection<GameSwitchVM> switches_ = [];
+    private ObservableCollection<GameVariableVM> variables_ = [];
 
     public ObservableCollection<GameSwitchVM> Switches { get => switches_; set => SetProperty(ref switches_, value); }
     public ObservableCollection<GameVariableVM> Variables { get => variables_; set => SetProperty(ref variables_, value); }

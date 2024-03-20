@@ -7,18 +7,24 @@ namespace RpgTkoolMvSaveEditor.Infrastructure.SaveDatas;
 
 public class Actors : IActors
 {
-    public event EventHandler<ActorData>? ValueChanged;
-
-    private readonly List<ActorData> actors_ = new();
+    private readonly List<ActorData> actors_ = [];
 
     public Actors(JsonNode? node)
     {
         var a = (node?["_data"])?["@a"];
-        if (a is null) return;
+        if (a is null)
+        {
+            return;
+        }
+
         var array = a.AsArray();
         foreach (var item in array)
         {
-            if (item is null) continue;
+            if (item is null)
+            {
+                continue;
+            }
+
             actors_.Add(new ActorData
             {
                 Name = item["_name"]?.GetValue<string>() ?? "",
@@ -45,14 +51,18 @@ public class Armors : IArmors
 {
     public event EventHandler<(string id, int value)>? ValueChanged;
 
-    private readonly Dictionary<string, int> dict_ = new();
+    private readonly Dictionary<string, int> dict_ = [];
 
     public int this[string id]
     {
         get => dict_[id];
         set
         {
-            if (dict_.ContainsKey(id) && dict_[id] == value) return;
+            if (dict_.TryGetValue(id, out var value1) && value1 == value)
+            {
+                return;
+            }
+
             dict_[id] = value;
             ValueChanged?.Invoke(this, new(id, value));
         }
@@ -60,11 +70,18 @@ public class Armors : IArmors
 
     public Armors(JsonNode? node)
     {
-        if (node is null) return;
+        if (node is null)
+        {
+            return;
+        }
+
         foreach (var prop in node.AsObject().AsEnumerable())
         {
             // "@1"のような@から始まる組を省く
-            if (int.TryParse(prop.Key, out _) && prop.Value is not null) dict_[prop.Key] = prop.Value.GetValue<int>();
+            if (int.TryParse(prop.Key, out _) && prop.Value is not null)
+            {
+                dict_[prop.Key] = prop.Value.GetValue<int>();
+            }
         }
     }
 

@@ -8,12 +8,12 @@ internal class SaveDataControlVM : NotificationObject
     #region Binding Property
 
     private ParametersVM? parameters_;
-    private ObservableCollection<SwitchVM> switches_ = new();
-    private ObservableCollection<VariableVM> variables_ = new();
-    private ObservableCollection<ItemVM> items_ = new();
-    private ObservableCollection<WeaponVM> weapons_ = new();
-    private ObservableCollection<ArmorVM> armors_ = new();
-    private ObservableCollection<ActorVM> actros_ = new();
+    private ObservableCollection<SwitchVM> switches_ = [];
+    private ObservableCollection<VariableVM> variables_ = [];
+    private ObservableCollection<ItemVM> items_ = [];
+    private ObservableCollection<WeaponVM> weapons_ = [];
+    private ObservableCollection<ArmorVM> armors_ = [];
+    private ObservableCollection<ActorVM> actros_ = [];
 
     public ParametersVM? Parameters { get => parameters_; set => SetProperty(ref parameters_, value); }
     public ObservableCollection<SwitchVM> Switches { get => switches_; set => SetProperty(ref switches_, value); }

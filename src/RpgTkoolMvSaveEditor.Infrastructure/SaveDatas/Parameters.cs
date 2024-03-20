@@ -20,6 +20,9 @@ public class Parameters : IParameters
 
     public Parameters(JsonNode? goldNode)
     {
-        if (goldNode is not null) gold_ = goldNode.GetValue<int>();
+        if (goldNode is not null)
+        {
+            gold_ = goldNode.GetValue<int>();
+        }
     }
 }

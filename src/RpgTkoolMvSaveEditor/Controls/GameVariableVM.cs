@@ -2,13 +2,13 @@
 
 namespace RpgTkoolMvSaveEditor.Controls;
 
-internal class GameVariableVM : NotificationObject
+internal class GameVariableVM(GameVariable variable) : NotificationObject
 {
     #region Binding Property
 
-    private string id_;
-    private string name_;
-    private object? value_;
+    private string id_ = variable.Id;
+    private string name_ = variable.Name;
+    private object? value_ = variable.Value;
 
     public string Id { get => id_; set => SetProperty(ref id_, value); }
     public string Name { get => name_; set => SetProperty(ref name_, value); }
@@ -23,11 +23,4 @@ internal class GameVariableVM : NotificationObject
     }
 
     #endregion Binding Property
-
-    public GameVariableVM(GameVariable variable)
-    {
-        id_ = variable.Id;
-        name_ = variable.Name;
-        value_ = variable.Value;
-    }
 }

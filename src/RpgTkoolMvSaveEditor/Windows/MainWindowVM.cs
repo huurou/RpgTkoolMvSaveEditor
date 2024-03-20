@@ -27,7 +27,10 @@ internal class MainWindowVM : NotificationObject
     public DelegateCommand ReloadCmd => reloadCmd_ ??= new DelegateCommand(
         async () =>
         {
-            if (Directory.Exists(dirPath_) && !await Dependency.App.LoadDirectoryAsync(dirPath_)) dirPath_ = null;
+            if (Directory.Exists(dirPath_) && !await Dependency.App.LoadDirectoryAsync(dirPath_))
+            {
+                dirPath_ = null;
+            }
         });
 
     #endregion Binding Command
@@ -42,14 +45,21 @@ internal class MainWindowVM : NotificationObject
 
     public async Task OnLoadedAsync()
     {
-        if (App.CommandArgs.Length == 0) return;
+        if (App.CommandArgs.Length == 0)
+        {
+            return;
+        }
+
         dirPath_ = App.CommandArgs[0];
-        if (!await Dependency.App.LoadDirectoryAsync(dirPath_)) dirPath_ = null;
+        if (!await Dependency.App.LoadDirectoryAsync(dirPath_))
+        {
+            dirPath_ = null;
+        }
     }
 
     private async Task OpenDirectoryAsync()
     {
-        var dialog = new CommonOpenFileDialog
+        using var dialog = new CommonOpenFileDialog
         {
             // フォルダ選択モードにする
             IsFolderPicker = true,
@@ -57,8 +67,18 @@ internal class MainWindowVM : NotificationObject
             InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
             Title = "ゲームフォルダかwwwフォルダを選択してください"
         };
-        if (dialog.ShowDialog() != CommonFileDialogResult.Ok) return;
-        dirPath_ = dialog.FileName;
-        if (!await Dependency.App.LoadDirectoryAsync(dirPath_)) dirPath_ = null;
+        {
+            if (dialog.ShowDialog() != CommonFileDialogResult.Ok)
+            {
+                return;
+            }
+
+            dirPath_ = dialog.FileName;
+        }
+
+        if (!await Dependency.App.LoadDirectoryAsync(dirPath_))
+        {
+            dirPath_ = null;
+        }
     }
 }

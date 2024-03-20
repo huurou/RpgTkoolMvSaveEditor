@@ -2,12 +2,7 @@
 
 namespace RpgTkoolMvSaveEditor.Application;
 
-public class Parameters
+public class Parameters(IParameters parameters)
 {
-    public int Gold { get; }
-
-    public Parameters(IParameters parameters)
-    {
-        Gold = parameters.Gold;
-    }
+    public int Gold { get; } = parameters.Gold;
 }

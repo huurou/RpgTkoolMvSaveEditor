@@ -52,7 +52,11 @@ public class ApplicationService
     /// wwwフォルダ直下に必要なフォルダ、ファイルがない場合失敗</returns>
     public async Task<bool> LoadDirectoryAsync(string dirPath)
     {
-        if (!dataPathService_.SearchWwwDirectory(dirPath)) return false;
+        if (!dataPathService_.SearchWwwDirectory(dirPath))
+        {
+            return false;
+        }
+
         await LoadDataAsync();
         watcher_?.Dispose();
         watcher_ = new FileSystemWatcher(dataPathService_.SaveDirPath, Path.GetFileName(dataPathService_.SaveDataPath))
@@ -72,42 +76,66 @@ public class ApplicationService
 
     public void SetCommonDataSwitch(string id, bool? value)
     {
-        if (commonData_ is not null) commonData_.GameSwitches[id] = value;
+        if (commonData_ is not null)
+        {
+            commonData_.GameSwitches[id] = value;
+        }
     }
 
     public void SetCommonDataVariable(string id, object? value)
     {
-        if (commonData_ is not null) commonData_.GameVariables[id] = value;
+        if (commonData_ is not null)
+        {
+            commonData_.GameVariables[id] = value;
+        }
     }
 
     public void SetSaveDataGold(int gold)
     {
-        if (saveData_ is not null) saveData_.Parameters.Gold = gold;
+        if (saveData_ is not null)
+        {
+            saveData_.Parameters.Gold = gold;
+        }
     }
 
     public void SetSaveDataSwitch(int id, bool? value)
     {
-        if (saveData_ is not null) saveData_.Switches[id] = value;
+        if (saveData_ is not null)
+        {
+            saveData_.Switches[id] = value;
+        }
     }
 
     public void SetSaveDataVariable(int id, object? value)
     {
-        if (saveData_ is not null) saveData_.Variables[id] = value;
+        if (saveData_ is not null)
+        {
+            saveData_.Variables[id] = value;
+        }
     }
 
     public void SetSaveDataItem(string id, int count)
     {
-        if (saveData_ is not null) saveData_.Items[id] = count;
+        if (saveData_ is not null)
+        {
+            saveData_.Items[id] = count;
+        }
     }
 
     public void SetSaveDataWeapon(string id, int count)
     {
-        if (saveData_ is not null) saveData_.Weapons[id] = count;
+        if (saveData_ is not null)
+        {
+            saveData_.Weapons[id] = count;
+        }
     }
 
     public void SetSaveDataArmor(string id, int count)
     {
-        if (saveData_ is not null) saveData_.Armors[id] = count;
+        if (saveData_ is not null)
+        {
+            saveData_.Armors[id] = count;
+        }
     }
 
     private async Task LoadDataAsync()
@@ -134,86 +162,173 @@ public class ApplicationService
 
         IEnumerable<GameSwitch> GetGameSwitches()
         {
-            if (systemData_ is null || commonData_ is null) yield break;
+            if (systemData_ is null || commonData_ is null)
+            {
+                yield break;
+            }
+
             foreach (var sw in commonData_.GameSwitches)
             {
-                if (!int.TryParse(sw.Key, out var index)) continue;
-                if (string.IsNullOrEmpty(systemData_.Switches[index])) continue;
+                if (!int.TryParse(sw.Key, out var index))
+                {
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(systemData_.Switches[index]))
+                {
+                    continue;
+                }
+
                 yield return new(sw.Key, systemData_.Switches[index], sw.Value);
             }
         }
 
         IEnumerable<GameVariable> GetGameVariables()
         {
-            if (systemData_ is null || commonData_ is null) yield break;
+            if (systemData_ is null || commonData_ is null)
+            {
+                yield break;
+            }
+
             foreach (var va in commonData_.GameVariables)
             {
-                if (!int.TryParse(va.Key, out var index)) continue;
-                if (string.IsNullOrEmpty(systemData_.Variables[index])) continue;
+                if (!int.TryParse(va.Key, out var index))
+                {
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(systemData_.Variables[index]))
+                {
+                    continue;
+                }
+
                 yield return new(va.Key, systemData_.Variables[index], va.Value);
             }
         }
 
-        Parameters? GetParameters() => saveData_ is null ? null : new Parameters(saveData_.Parameters);
+        Parameters? GetParameters()
+        {
+            return saveData_ is null ? null : new Parameters(saveData_.Parameters);
+        }
 
         IEnumerable<Switch> GetSwitches()
         {
-            if (systemData_ is null || saveData_ is null) yield break;
+            if (systemData_ is null || saveData_ is null)
+            {
+                yield break;
+            }
+
             for (var i = 0; i < systemData_.Switches.Count; i++)
             {
-                if (string.IsNullOrEmpty(systemData_.Switches[i])) continue;
+                if (string.IsNullOrEmpty(systemData_.Switches[i]))
+                {
+                    continue;
+                }
+
                 yield return new(i, systemData_.Switches[i], i < saveData_.Switches.Count ? saveData_.Switches[i] : null);
             }
         }
 
         IEnumerable<Variable> GetVariables()
         {
-            if (systemData_ is null || saveData_ is null) yield break;
+            if (systemData_ is null || saveData_ is null)
+            {
+                yield break;
+            }
+
             for (var i = 0; i < systemData_.Variables.Count; i++)
             {
-                if (string.IsNullOrEmpty(systemData_.Variables[i])) continue;
+                if (string.IsNullOrEmpty(systemData_.Variables[i]))
+                {
+                    continue;
+                }
+
                 yield return new(i, systemData_.Variables[i], i < saveData_.Variables.Count ? saveData_.Variables[i] : null);
             }
         }
 
         IEnumerable<Item> GetItems()
         {
-            if (itemsData_ is null || saveData_ is null) yield break;
+            if (itemsData_ is null || saveData_ is null)
+            {
+                yield break;
+            }
+
             for (var i = 0; i < itemsData_.Count; i++)
             {
-                if (string.IsNullOrEmpty(itemsData_[i]?.Name)) continue;
-                if (!saveData_.Items.TryGetValue(i.ToString(), out var count)) count = 0;
+                if (string.IsNullOrEmpty(itemsData_[i]?.Name))
+                {
+                    continue;
+                }
+
+                if (!saveData_.Items.TryGetValue(i.ToString(), out var count))
+                {
+                    count = 0;
+                }
+
                 yield return new(i, itemsData_[i]?.Name ?? "", itemsData_[i]?.Description ?? "", count);
             }
         }
 
         IEnumerable<Weapon> GetWeapons()
         {
-            if (weaponsData_ is null || saveData_ is null) yield break;
+            if (weaponsData_ is null || saveData_ is null)
+            {
+                yield break;
+            }
+
             for (var i = 0; i < weaponsData_.Count; i++)
             {
-                if (string.IsNullOrEmpty(weaponsData_[i]?.Name)) continue;
-                if (!saveData_.Weapons.TryGetValue(i.ToString(), out var count)) count = 0;
+                if (string.IsNullOrEmpty(weaponsData_[i]?.Name))
+                {
+                    continue;
+                }
+
+                if (!saveData_.Weapons.TryGetValue(i.ToString(), out var count))
+                {
+                    count = 0;
+                }
+
                 yield return new(i, weaponsData_[i]?.Name ?? "", weaponsData_[i]?.Description ?? "", count);
             }
         }
 
         IEnumerable<Armor> GetArmors()
         {
-            if (armorsData_ is null || saveData_ is null) yield break;
+            if (armorsData_ is null || saveData_ is null)
+            {
+                yield break;
+            }
+
             for (var i = 0; i < armorsData_.Count; i++)
             {
-                if (string.IsNullOrEmpty(armorsData_[i]?.Name)) continue;
-                if (!saveData_.Armors.TryGetValue(i.ToString(), out var count)) count = 0;
+                if (string.IsNullOrEmpty(armorsData_[i]?.Name))
+                {
+                    continue;
+                }
+
+                if (!saveData_.Armors.TryGetValue(i.ToString(), out var count))
+                {
+                    count = 0;
+                }
+
                 yield return new(i, armorsData_[i]?.Name ?? "", armorsData_[i]?.Description ?? "", count);
             }
         }
         IEnumerable<Actor> GetActors()
         {
-            if (saveData_ is null) yield break;
+            if (saveData_ is null)
+            {
+                yield break;
+            }
+
             foreach (var actorData in saveData_.Actors)
             {
-                if (actorData is null || string.IsNullOrEmpty(actorData.Name)) continue;
+                if (actorData is null || string.IsNullOrEmpty(actorData.Name))
+                {
+                    continue;
+                }
+
                 yield return new(actorData);
             }
         }

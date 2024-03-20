@@ -3,28 +3,40 @@ using RpgTkoolMvSaveEditor.Domain.SaveDatas;
 
 namespace RpgTkoolMvSaveEditor.Infrastructure.SaveDatas;
 
-public class SaveDataLoader : ISaveDataLoader
+public class SaveDataLoader(ISaveDataCtrl saveDataCtrl) : ISaveDataLoader
 {
-    private readonly ISaveDataCtrl saveDataCtrl_;
-
-    public SaveDataLoader(ISaveDataCtrl saveDataCtrl)
-    {
-        saveDataCtrl_ = saveDataCtrl;
-    }
+    private readonly ISaveDataCtrl saveDataCtrl_ = saveDataCtrl;
 
     public async Task<SaveData?> LoadAsync(string path)
     {
-        if (!File.Exists(path)) return null;
+        if (!File.Exists(path))
+        {
+            return null;
+        }
 
         var rootNode = await saveDataCtrl_.LoadAsync(path);
 
         var switchesNode = rootNode["switches"];
-        if (switchesNode is not null) switchesNode = switchesNode["_data"];
-        if (switchesNode is not null) switchesNode = switchesNode["@a"];
+        if (switchesNode is not null)
+        {
+            switchesNode = switchesNode["_data"];
+        }
+
+        if (switchesNode is not null)
+        {
+            switchesNode = switchesNode["@a"];
+        }
 
         var variablesNode = rootNode["variables"];
-        if (variablesNode is not null) variablesNode = variablesNode["_data"];
-        if (variablesNode is not null) variablesNode = variablesNode["@a"];
+        if (variablesNode is not null)
+        {
+            variablesNode = variablesNode["_data"];
+        }
+
+        if (variablesNode is not null)
+        {
+            variablesNode = variablesNode["@a"];
+        }
 
         var partyNode = rootNode["party"];
         var itemsNode = partyNode?["_items"];
@@ -43,14 +55,22 @@ public class SaveDataLoader : ISaveDataLoader
 
         saveData.Parameters.GoldChanged += (s, gold) =>
        {
-           if (partyNode is null) return;
+           if (partyNode is null)
+           {
+               return;
+           }
+
            partyNode["_gold"] = gold;
            saveDataCtrl_.Save(path, rootNode);
        };
 
         saveData.Switches.ValueChanged += (s, e) =>
        {
-           if (switchesNode is null) return;
+           if (switchesNode is null)
+           {
+               return;
+           }
+
            var switchesArray = switchesNode.AsArray();
            var count = switchesArray.Count;
            if (e.index >= count)
@@ -66,7 +86,11 @@ public class SaveDataLoader : ISaveDataLoader
 
         saveData.Variables.ValueChanged += (s, e) =>
        {
-           if (variablesNode is null) return;
+           if (variablesNode is null)
+           {
+               return;
+           }
+
            var variablesArray = variablesNode.AsArray();
            var count = variablesArray.Count;
            if (e.index >= count)
@@ -91,21 +115,33 @@ public class SaveDataLoader : ISaveDataLoader
 
         saveData.Items.ValueChanged += (s, e) =>
        {
-           if (itemsNode is null) return;
+           if (itemsNode is null)
+           {
+               return;
+           }
+
            itemsNode[e.id] = e.value;
            saveDataCtrl_.Save(path, rootNode);
        };
 
         saveData.Weapons.ValueChanged += (s, e) =>
        {
-           if (weaponsNode is null) return;
+           if (weaponsNode is null)
+           {
+               return;
+           }
+
            weaponsNode[e.id] = e.value;
            saveDataCtrl_.Save(path, rootNode);
        };
 
         saveData.Armors.ValueChanged += (s, e) =>
        {
-           if (armorsNode is null) return;
+           if (armorsNode is null)
+           {
+               return;
+           }
+
            armorsNode[e.id] = e.value;
            saveDataCtrl_.Save(path, rootNode);
        };

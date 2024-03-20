@@ -1,15 +1,8 @@
 ﻿namespace RpgTkoolMvSaveEditor.Application;
 
-public class GameVariable
+public class GameVariable(string id, string name, object? value)
 {
-    public string Id { get; }
-    public string Name { get; }
-    public object? Value { get; }
-
-    public GameVariable(string id, string name, object? value)
-    {
-        Id = id;
-        Name = name;
-        Value = value;
-    }
+    public string Id { get; } = id;
+    public string Name { get; } = name;
+    public object? Value { get; } = value;
 }

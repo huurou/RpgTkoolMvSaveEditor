@@ -21,19 +21,27 @@ public class Variables : IVariables
                     list_.Add(null);
                 }
             }
-            if (list_[index] == value) return;
+            if (list_[index] == value)
+            {
+                return;
+            }
+
             list_[index] = value;
             ValueChanged?.Invoke(this, (index, value));
         }
     }
 
-    private readonly List<object?> list_ = new();
+    private readonly List<object?> list_ = [];
 
     public int Count => list_.Count;
 
     public Variables(JsonNode? node)
     {
-        if (node is null) return;
+        if (node is null)
+        {
+            return;
+        }
+
         var array = node.AsArray();
         list_.Capacity = array.Count;
         foreach (var item in array)

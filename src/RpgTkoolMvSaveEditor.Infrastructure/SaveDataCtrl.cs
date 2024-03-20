@@ -25,7 +25,10 @@ public class SaveDataCtrl : ISaveDataCtrl
             delayTimer_.Stop();
             delayTimer_.Start();
         }
-        else delayTimer_.Start();
+        else
+        {
+            delayTimer_.Start();
+        }
     }
 
     public async Task<JsonNode> LoadAsync(string path)
