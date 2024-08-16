@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <Title>RpgTkoolMvSaveEditor</Title>
+    <Company />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Dialogs\AboutDialog.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReactiveProperty.WPF" Version="9.6.0" />
+    <PackageReference Include="Wpf.Extensions.Hosting" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RpgTkoolMvSaveEditor.Model\RpgTkoolMvSaveEditor.Model.csproj" />
+    <ProjectReference Include="..\RpgTkoolMvSaveEditor.Util\RpgTkoolMvSaveEditor.Util.csproj" />
+  </ItemGroup>
+
+</Project>
