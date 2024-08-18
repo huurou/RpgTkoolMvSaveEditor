@@ -1,10 +1,10 @@
-﻿using RpgTkoolMvSaveEditor.Util.Events;
-
-namespace RpgTkoolMvSaveEditor.Model;
+﻿namespace RpgTkoolMvSaveEditor.Model;
 
 public class ApplicationService
 {
-    public Event<ErrorOccurredEventArgs> ErrorOccurred { get; } = new();
 }
 
-public record ErrorOccurredEventArgs(string Message);
+public class WwwContext
+{
+    public string WwwDirPath { get; set; } = "";
+}

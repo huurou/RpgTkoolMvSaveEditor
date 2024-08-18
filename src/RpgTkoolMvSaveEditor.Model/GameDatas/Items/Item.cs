@@ -2,7 +2,6 @@
 
 /// <summary>
 /// アイテム
-/// www/data/Items.Json の配列要素
 /// </summary>
 /// <param name="Id">アイテムID</param>
 /// <param name="Name">アイテム名</param>

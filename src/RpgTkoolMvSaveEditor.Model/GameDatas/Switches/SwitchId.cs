@@ -1,7 +1,7 @@
 ﻿namespace RpgTkoolMvSaveEditor.Model.Switches;
 
 /// <summary>
-/// スイッチのインデックス
+/// スイッチID
 /// </summary>
 /// <param name="Value">値</param>
-public record SwitchIndex(int Value);
+public record SwitchId(int Value);

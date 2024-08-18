@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using RpgTkoolMvSaveEditor.Model.Configs;
+﻿using RpgTkoolMvSaveEditor.Model.Configs;
+using System.Text.Json;
 
 namespace RpgTkoolMvSaveEditor.Model.Settings;
 

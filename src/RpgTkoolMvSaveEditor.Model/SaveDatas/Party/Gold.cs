@@ -1,4 +1,4 @@
-﻿namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
+﻿namespace RpgTkoolMvSaveEditor.Model.SaveDatas.Party;
 
 /// <summary>
 /// ゴールド

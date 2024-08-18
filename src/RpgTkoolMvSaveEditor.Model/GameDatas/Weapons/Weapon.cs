@@ -2,9 +2,8 @@
 
 /// <summary>
 /// 武器
-/// www/data/Weapons.Json の配列要素
 /// </summary>
-/// <param name="Id"></param>
-/// <param name="Name"></param>
-/// <param name="Description"></param>
+/// <param name="Id">武器ID</param>
+/// <param name="Name">武器名</param>
+/// <param name="Description">説明</param>
 public record Weapon(WeaponId Id, WeaponName Name, WeaponDescription Description);

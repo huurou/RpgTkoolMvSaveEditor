@@ -1,0 +1,13 @@
+[
+    null,
+    {
+        "id": 1,
+        "description": "武器1の説明",
+        "name": "武器1"
+    },
+    {
+        "id": 2,
+        "description": "武器2の説明",
+        "name": "武器2"
+    }
+]

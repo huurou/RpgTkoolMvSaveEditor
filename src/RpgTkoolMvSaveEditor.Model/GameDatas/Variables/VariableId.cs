@@ -1,7 +1,7 @@
 ﻿namespace RpgTkoolMvSaveEditor.Model.Variables;
 
 /// <summary>
-/// 変数のインデックス
+/// 変数ID
 /// </summary>
 /// <param name="Value">値</param>
-public record VariableIndex(int Value);
+public record VariableId(int Value);
