@@ -17,8 +17,8 @@ namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
 /// <param name="HeldWeapons">所持武器のリスト</param>
 /// <param name="HeldArmors">所持防具のリスト</param>
 public record SaveData(
-    ImmutableList<Switch?> Switches,
-    ImmutableList<Variable?> Variables,
+    ImmutableList<Switch> Switches,
+    ImmutableList<Variable> Variables,
     ImmutableList<Actor?> Actors,
     Gold Gold,
     ImmutableList<HeldItem> HeldItems,

@@ -1,4 +1,5 @@
 ﻿using LZStringCSharp;
+using Microsoft.Extensions.Options;
 using RpgTkoolMvSaveEditor.Model.Armors;
 using RpgTkoolMvSaveEditor.Model.GameDatas.Systems;
 using RpgTkoolMvSaveEditor.Model.Items;
@@ -23,6 +24,7 @@ public class SaveDataRepository(WwwContext wwwContext, ISystemLoader systemLoade
         var json = LZString.DecompressFromBase64(await File.ReadAllTextAsync(filePath));
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
         var rootNode = await JsonNode.ParseAsync(memoryStream);
+        if (rootNode is null) { return new Err<SaveData>($"{filePath}のパースに失敗しました。"); }
         if (rootNode?["switches"]?["_data"]?["@a"] is not JsonArray switchesJsonArray) { return new Err<SaveData>($"{filePath}にswitches配列が見つかりませんでした。"); }
         if (rootNode?["variables"]?["_data"]?["@a"] is not JsonArray variablesJsonArray) { return new Err<SaveData>($"{filePath}にvariables配列が見つかりませんでした。"); }
         if (rootNode?["actors"]?["_data"]?["@a"] is not JsonArray actorsJsonArray) { return new Err<SaveData>($"{filePath}にactors配列が見つかりませんでした。"); }
@@ -89,8 +91,64 @@ public class SaveDataRepository(WwwContext wwwContext, ISystemLoader systemLoade
         return new Ok<SaveData>(dto.ToModel(system, items, weapons, armors));
     }
 
-    public Task SaveAsync(SaveData saveData)
+    public async Task<Result> SaveAsync(SaveData saveData)
     {
-        throw new NotImplementedException();
+        var dto = SaveDataDataDto.FromModel(saveData);
+        var filePath = Path.Combine(wwwContext.WwwDirPath, "save", "file1.rpgsave");
+        if (!File.Exists(filePath)) { return new Err($"{filePath}が存在しません。"); }
+        var json = LZString.DecompressFromBase64(await File.ReadAllTextAsync(filePath));
+        using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        var rootNode = await JsonNode.ParseAsync(memoryStream);
+        if (rootNode is null) { return new Err($"{filePath}のパースに失敗しました。"); }
+        if (rootNode?["switches"]?["_data"]?["@a"] is not JsonArray switchesJsonArray) { return new Err($"{filePath}にswitches配列が見つかりませんでした。"); }
+        if (rootNode?["variables"]?["_data"]?["@a"] is not JsonArray variablesJsonArray) { return new Err($"{filePath}にvariables配列が見つかりませんでした。"); }
+        if (rootNode?["actors"]?["_data"]?["@a"] is not JsonArray actorsJsonArray) { return new Err($"{filePath}にactors配列が見つかりませんでした。"); }
+        if (rootNode?["party"]?["_gold"] is not JsonNode goldJsonNode) { return new Err($"{filePath}にgold要素が見つかりませんでした。"); }
+        if (rootNode?["party"]?["_items"] is not JsonObject heldItemsJsonObject) { return new Err($"{filePath}にitems配列が見つかりませんでした。"); }
+        if (rootNode?["party"]?["_weapons"] is not JsonObject heldWeaponsJsonObject) { return new Err($"{filePath}にweapons配列が見つかりませんでした。"); }
+        if (rootNode?["party"]?["_armors"] is not JsonObject heldArmorsJsonObject) { return new Err($"{filePath}にarmors配列が見つかりませんでした。"); }
+        for (var i = 0; i < dto.Switches.Count; i++)
+        {
+            if (i >= switchesJsonArray.Count)
+            {
+                switchesJsonArray.Add(null);
+            }
+            switchesJsonArray[i] = dto.Switches[i];
+        }
+        for (var i = 0; i < dto.Variables.Count; i++)
+        {
+            if (i >= variablesJsonArray.Count)
+            {
+                variablesJsonArray.Add(null);
+            }
+            variablesJsonArray[i] = JsonValue.Create(dto.Variables[i]);
+        }
+        for (var i = 0; i < dto.Actors.Count; i++)
+        {
+            if (actorsJsonArray[i] is JsonObject actorJsonObject && dto.Actors[i] is ActorDataDto actor)
+            {
+                actorJsonObject["_name"] = actor.Name;
+                actorJsonObject["_hp"] = actor.HP;
+                actorJsonObject["_mp"] = actor.MP;
+                actorJsonObject["_tp"] = actor.TP;
+                actorJsonObject["_level"] = actor.Level;
+                actorJsonObject["_exp"]!["1"] = actor.Exp;
+            }
+        }
+        goldJsonNode.AsValue().ReplaceWith(dto.Gold);
+        for(var i = 0; i < dto.HeldItems.Count; i++)
+        {
+            heldItemsJsonObject[dto.HeldItems[i].Id.ToString()] = dto.HeldItems[i].Count;
+        }
+        for(var i = 0; i < dto.HeldWeapons.Count; i++)
+        {
+            heldWeaponsJsonObject[dto.HeldWeapons[i].Id.ToString()] = dto.HeldWeapons[i].Count;
+        }
+        for(var i = 0; i < dto.HeldArmors.Count; i++)
+        {
+            heldArmorsJsonObject[dto.HeldArmors[i].Id.ToString()] = dto.HeldArmors[i].Count;
+        }
+        await File.WriteAllTextAsync(filePath, LZString.CompressToBase64(JsonSerializer.Serialize(rootNode)));
+        return new Ok();
     }
 }

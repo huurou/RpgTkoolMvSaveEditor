@@ -4,9 +4,12 @@ using RpgTkoolMvSaveEditor.Util.Events;
 
 namespace RpgTkoolMvSaveEditor.Util.LogDisplays;
 
-public partial class LogDisplay : ILogDisplay
+public class LogDisplay : ILogDisplay
 {
     public Event<ShowLogRequestedEventArgs> ShowLogRequested { get; } = new();
+#pragma warning disable SYSLIB1045 // 'GeneratedRegexAttribute' に変換します。
+    private readonly Regex indexFormatRegex_ = new(@"\{.*?\}");
+#pragma warning restore SYSLIB1045 // 'GeneratedRegexAttribute' に変換します。
 
     public void ShowLog(LogLevel logLevel, DateTime dateTime, string message, params object?[]? args)
     {
@@ -18,12 +21,9 @@ public partial class LogDisplay : ILogDisplay
     /// </summary>
     /// <param name="format">foramt</param>
     /// <returns></returns>
-    private static string ToIndexFormat(string format)
+    private string ToIndexFormat(string format)
     {
         var counter = 0;
-        return IndexFormatRegex().Replace(format, _ => $"{{{counter++}}}");
+        return indexFormatRegex_.Replace(format, _ => $"{{{counter++}}}");
     }
-
-    [GeneratedRegex(@"\{.*?\}")]
-    private static partial Regex IndexFormatRegex();
 }

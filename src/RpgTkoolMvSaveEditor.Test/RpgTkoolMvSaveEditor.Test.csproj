@@ -47,6 +47,12 @@
     <None Update="loadTestData\www\save\file1.rpgsave">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="saveTestData\www\save\file1.expected.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.original.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

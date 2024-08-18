@@ -1,0 +1,95 @@
+{
+  "switches": {
+    "_data": {
+      "@c": 71,
+      "@a": [
+        null,
+        false,
+        null,
+        true,
+        null,
+        false,
+        true
+      ]
+    },
+    "@c": 70,
+    "@": "Game_Switches"
+  },
+  "variables": {
+    "_data": {
+      "@c": 73,
+      "@a": [
+        null,
+        "a",
+        null,
+        1,
+        null,
+        true,
+        false
+      ]
+    },
+    "@c": 72,
+    "@": "Game_Variables"
+  },
+  "actors": {
+    "_data": {
+      "@c": 78,
+      "@a": [
+        null,
+        {
+          "_hp": 999,
+          "_mp": 999,
+          "_tp": 999,
+          "_name": "Alice",
+          "_level": 99,
+          "_exp": {
+            "1": 999999,
+            "@c": 94
+          },
+          "@c": 79,
+          "@": "Game_Actor"
+        },
+        null,
+        {
+          "_hp": 999,
+          "_mp": 999,
+          "_tp": 999,
+          "_name": "Michael",
+          "_level": 99,
+          "_exp": {
+            "1": 999999,
+            "@c": 119
+          },
+          "@c": 104,
+          "@": "Game_Actor"
+        }
+      ]
+    },
+    "@c": 77,
+    "@": "Game_Actors"
+  },
+  "party": {
+    "_gold": 999999,
+    "_items": {
+      "1": 99,
+      "2": 99,
+      "@c": 132,
+      "3": 99
+    },
+    "_weapons": {
+      "1": 99,
+      "2": 99,
+      "@c": 133,
+      "3": 99
+    },
+    "_armors": {
+      "1": 99,
+      "2": 99,
+      "@c": 134,
+      "3": 99
+    },
+    "@c": 129,
+    "@": "Game_Party"
+  },
+  "@c": 1
+}

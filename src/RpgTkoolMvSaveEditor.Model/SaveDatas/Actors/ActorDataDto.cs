@@ -12,6 +12,11 @@
 /// <param name="Exp">経験値 exp::"1"</param>
 public record ActorDataDto(string Name, int HP, int MP, int TP, int Level, int Exp)
 {
+    public static ActorDataDto FromModel(Actor model)
+    {
+        return new(model.Name, model.HP, model.MP, model.TP, model.Level, model.Exp);
+    }
+
     public Actor ToModel()
     {
         return new(Name, HP, MP, TP, Level, Exp);

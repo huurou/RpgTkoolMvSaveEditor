@@ -30,6 +30,21 @@ public record SaveDataDataDto(
     ImmutableList<HeldArmorDataDto> HeldArmors
 )
 {
+    public static SaveDataDataDto FromModel(SaveData saveData)
+    {
+        // 最初の要素は必ずnull ロード時に最初の要素を飛ばしているのでnullを先頭に追加する
+        IEnumerable<bool?> switches = [null, .. saveData.Switches.Select(x => x.Value.Value)];
+        // 最初の要素は必ずnull ロード時に最初の要素を飛ばしているのでnullを先頭に追加する
+        IEnumerable<object?> variables = [null, .. saveData.Variables.Select(x => x.Value.Value)];
+        // 最初の要素は必ずnull ロード時に最初の要素を飛ばしているのでnullを先頭に追加する
+        IEnumerable<ActorDataDto?> actors = [null, .. saveData.Actors.Select(x => x is not null ? ActorDataDto.FromModel(x) : null)];
+        var gold = saveData.Gold.Value;
+        var heldItems = saveData.HeldItems.Select(HeldItemDataDto.FromModel);
+        var heldWeapons = saveData.HeldWeapons.Select(HeldWeaponDataDto.FromModel);
+        var heldArmors = saveData.HeldArmors.Select(HeldArmorDataDto.FromModel);
+        return new([.. switches], [.. variables], [.. actors], gold, [.. heldItems], [.. heldWeapons], [.. heldArmors]);
+    }
+
     public SaveData ToModel(GameDatas.Systems.System system, List<Item> items, List<Weapon> weapons, List<Armor> armors)
     {
         // 全スイッチの数はSystemのスイッチ名配列から分かる 最初の要素は必ずnullなので飛ばす セーブする時にnullを先頭に追加する セーブデータのスイッチ配列に全スイッチの値が入っていないことがあるので長さをチェックする
@@ -39,9 +54,9 @@ public record SaveDataDataDto(
         // 最初の要素は必ずnullなので飛ばす セーブする時にnullを先頭に追加する
         var actors = Actors.Skip(1).Select(x => x?.ToModel());
         var gold = new Gold(Gold);
-        var heldItems = HeldItems.Select(x => new HeldItem(items.First(y => x.Id == y.Id.Value), x.Count));
-        var heldWeapons = HeldWeapons.Select(x => new HeldWeapon(weapons.First(y => x.Id == y.Id.Value), x.Count));
-        var heldArmors = HeldArmors.Select(x => new HeldArmor(armors.First(y => x.Id == y.Id.Value), x.Count));
+        var heldItems = HeldItems.Select(x => x.ToModel(items));
+        var heldWeapons = HeldWeapons.Select(x => x.ToModel(weapons));
+        var heldArmors = HeldArmors.Select(x => x.ToModel(armors));
         return new([.. switches], [.. variables], [.. actors], gold, [.. heldItems], [.. heldWeapons], [.. heldArmors]);
     }
 }

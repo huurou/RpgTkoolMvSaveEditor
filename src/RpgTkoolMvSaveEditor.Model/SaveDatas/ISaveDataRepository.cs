@@ -6,5 +6,5 @@ public interface ISaveDataRepository
 {
     Task<Result<SaveData>> LoadAsync();
 
-    Task SaveAsync(SaveData saveData);
+    Task<Result> SaveAsync(SaveData saveData);
 }
