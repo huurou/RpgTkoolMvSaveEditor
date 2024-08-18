@@ -1,4 +1,4 @@
-using RpgTkoolMvSaveEditor.Model;
+ï»¿using RpgTkoolMvSaveEditor.Model;
 using RpgTkoolMvSaveEditor.Model.Armors;
 using RpgTkoolMvSaveEditor.Model.GameDatas.Systems;
 using RpgTkoolMvSaveEditor.Model.Items;
@@ -17,7 +17,7 @@ public class LoadTest
     }
 
     [Fact]
-    public async Task ItemsJsonƒ[ƒh()
+    public async Task ItemsJsonãƒ­ãƒ¼ãƒ‰()
     {
         // Arrange
         var itemsLoader = new ItemsLoader(wwwContext_);
@@ -29,15 +29,15 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(new(1), new("ƒAƒCƒeƒ€1"), new("ƒAƒCƒeƒ€1‚Ìà–¾")),
-                new(new(2), new("ƒAƒCƒeƒ€2"), new("ƒAƒCƒeƒ€2‚Ìà–¾")),
+                new(new(1), new("ã‚¢ã‚¤ãƒ†ãƒ 1"), new("ã‚¢ã‚¤ãƒ†ãƒ 1ã®èª¬æ˜")),
+                new(new(2), new("ã‚¢ã‚¤ãƒ†ãƒ 2"), new("ã‚¢ã‚¤ãƒ†ãƒ 2ã®èª¬æ˜")),
             ],
             actual
         );
     }
 
     [Fact]
-    public async Task WeaponsJsonƒ[ƒh()
+    public async Task WeaponsJsonãƒ­ãƒ¼ãƒ‰()
     {
         // Arrange
         var weaponsLoader = new WeaponsLoader(wwwContext_);
@@ -49,15 +49,15 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(new(1), new("•Ší1"), new("•Ší1‚Ìà–¾")),
-                new(new(2), new("•Ší2"), new("•Ší2‚Ìà–¾")),
+                new(new(1), new("æ­¦å™¨1"), new("æ­¦å™¨1ã®èª¬æ˜")),
+                new(new(2), new("æ­¦å™¨2"), new("æ­¦å™¨2ã®èª¬æ˜")),
             ],
             actual
         );
     }
 
     [Fact]
-    public async Task ArmorsJsonƒ[ƒh()
+    public async Task ArmorsJsonãƒ­ãƒ¼ãƒ‰()
     {
         // Arrange
         var armorsLoader = new ArmorsLoader(wwwContext_);
@@ -69,15 +69,15 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(new(1), new("–h‹ï1"), new("–h‹ï1‚Ìà–¾")),
-                new(new(2), new("–h‹ï2"), new("–h‹ï2‚Ìà–¾")),
+                new(new(1), new("é˜²å…·1"), new("é˜²å…·1ã®èª¬æ˜")),
+                new(new(2), new("é˜²å…·2"), new("é˜²å…·2ã®èª¬æ˜")),
             ],
             actual
         );
     }
 
     [Fact]
-    public async Task SystemJsonƒ[ƒh()
+    public async Task SystemJsonãƒ­ãƒ¼ãƒ‰()
     {
         // Arrange
         var systemLoader = new SystemLoader(wwwContext_);
@@ -90,25 +90,25 @@ public class LoadTest
         Assert.Equal(
             [
                 new(""),
-                new("ƒXƒCƒbƒ`1"),
-                new("ƒXƒCƒbƒ`2"),
-                new("ƒXƒCƒbƒ`3")
+                new("ã‚¹ã‚¤ãƒƒãƒ1"),
+                new("ã‚¹ã‚¤ãƒƒãƒ2"),
+                new("ã‚¹ã‚¤ãƒƒãƒ3")
             ],
             actual.SwitchNames
         );
         Assert.Equal(
             [
                 new(""),
-                new("•Ï”1"),
-                new("•Ï”2"),
-                new("•Ï”3")
+                new("å¤‰æ•°1"),
+                new("å¤‰æ•°2"),
+                new("å¤‰æ•°3")
             ],
             actual.VariableNames
         );
     }
 
     [Fact]
-    public async Task SaveDataƒ[ƒh()
+    public async Task SaveDataãƒ­ãƒ¼ãƒ‰()
     {
         // Arrange
         var saveDataRepository = new SaveDataRepository(wwwContext_, new SystemLoader(wwwContext_), new ItemsLoader(wwwContext_), new WeaponsLoader(wwwContext_), new ArmorsLoader(wwwContext_));
@@ -120,17 +120,17 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(new(1), new("ƒXƒCƒbƒ`1"), new(true)),
-                new(new(2), new("ƒXƒCƒbƒ`2"), new(false)),
-                new(new(3), new("ƒXƒCƒbƒ`3"), new(null)),
+                new(new(1), new("ã‚¹ã‚¤ãƒƒãƒ1"), new(true)),
+                new(new(2), new("ã‚¹ã‚¤ãƒƒãƒ2"), new(false)),
+                new(new(3), new("ã‚¹ã‚¤ãƒƒãƒ3"), new(null)),
             ],
             actual.Switches
         );
         Assert.Equal(
             [
-                new(new(1), new("•Ï”1"), new(1)),
-                new(new(2), new("•Ï”2"), new("a")),
-                new(new(3), new("•Ï”3"), new(null)),
+                new(new(1), new("å¤‰æ•°1"), new(1)),
+                new(new(2), new("å¤‰æ•°2"), new("a")),
+                new(new(3), new("å¤‰æ•°3"), new(null)),
             ],
             actual.Variables
         );
@@ -145,22 +145,22 @@ public class LoadTest
         Assert.Equal(new(123456), actual.Gold);
         Assert.Equal(
             [
-                new(new(new(1), new("ƒAƒCƒeƒ€1"), new("ƒAƒCƒeƒ€1‚Ìà–¾")), 1),
-                new(new(new(2), new("ƒAƒCƒeƒ€2"), new("ƒAƒCƒeƒ€2‚Ìà–¾")), 2),
+                new(new(new(1), new("ã‚¢ã‚¤ãƒ†ãƒ 1"), new("ã‚¢ã‚¤ãƒ†ãƒ 1ã®èª¬æ˜")), 1),
+                new(new(new(2), new("ã‚¢ã‚¤ãƒ†ãƒ 2"), new("ã‚¢ã‚¤ãƒ†ãƒ 2ã®èª¬æ˜")), 2),
             ],
             actual.HeldItems
         );
         Assert.Equal(
             [
-                new(new(new(1), new("•Ší1"), new("•Ší1‚Ìà–¾")), 3),
-                new(new(new(2), new("•Ší2"), new("•Ší2‚Ìà–¾")), 4),
+                new(new(new(1), new("æ­¦å™¨1"), new("æ­¦å™¨1ã®èª¬æ˜")), 3),
+                new(new(new(2), new("æ­¦å™¨2"), new("æ­¦å™¨2ã®èª¬æ˜")), 4),
             ],
             actual.HeldWeapons
         );
         Assert.Equal(
             [
-                new(new(new(1), new("–h‹ï1"), new("–h‹ï1‚Ìà–¾")), 5),
-                new(new(new(2), new("–h‹ï2"), new("–h‹ï2‚Ìà–¾")), 6),
+                new(new(new(1), new("é˜²å…·1"), new("é˜²å…·1ã®èª¬æ˜")), 5),
+                new(new(new(2), new("é˜²å…·2"), new("é˜²å…·2ã®èª¬æ˜")), 6),
             ],
             actual.HeldArmors
         );
