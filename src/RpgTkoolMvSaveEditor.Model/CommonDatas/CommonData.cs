@@ -1,9 +1,7 @@
-﻿namespace RpgTkoolMvSaveEditor.Model.CommonDatas;
+﻿using RpgTkoolMvSaveEditor.Model.Switches;
+using RpgTkoolMvSaveEditor.Model.Variables;
+using System.Collections.Immutable;
 
-/// <summary>
-/// ゲーム共通データ
-/// www/save/common.rpgsave
-/// </summary>
-/// <param name="GameSwitches">ゲーム共通スイッチ</param>
-/// <param name="GameVariables">ゲーム共通変数</param>
-public record class CommonData(GameSwitches GameSwitches, GameVariables GameVariables);
+namespace RpgTkoolMvSaveEditor.Model.CommonDatas;
+
+public record CommonData(ImmutableList<Switch> GameSwitches, ImmutableList<Variable> GameVariables);

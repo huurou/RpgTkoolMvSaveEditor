@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace RpgTkoolMvSaveEditor.Model.Weapons;
 
-public class WeaponsLoader(WwwContext wwwContext) : IWeaponsLoader
+public class WeaponsLoader(Context context) : IWeaponsLoader
 {
     private readonly JsonSerializerOptions options_ = new(JsonSerializerDefaults.Web);
     private List<Weapon>? data_;
@@ -11,7 +11,8 @@ public class WeaponsLoader(WwwContext wwwContext) : IWeaponsLoader
     public async Task<Result<List<Weapon>>> LoadAsync()
     {
         if (data_ is not null) { return new Ok<List<Weapon>>(data_); }
-        var filePath = Path.Combine(wwwContext.WwwDirPath, "data", "Weapons.json");
+        if (context.WwwDirPath is null) { return new Err<List<Weapon>>("wwwフォルダが選択されていません。"); }
+        var filePath = Path.Combine(context.WwwDirPath, "data", "Weapons.json");
         if (!File.Exists(filePath)) { return new Err<List<Weapon>>($"{filePath}が存在しません。"); }
         using var fileStream = new FileStream(filePath, FileMode.Open);
         var dtos = await JsonSerializer.DeserializeAsync<List<WeaponDataDto?>>(fileStream, options_);

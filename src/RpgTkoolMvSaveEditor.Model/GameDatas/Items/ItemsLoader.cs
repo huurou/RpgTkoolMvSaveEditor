@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace RpgTkoolMvSaveEditor.Model.Items;
 
-public class ItemsLoader(WwwContext wwwContext) : IItemsLoader
+public class ItemsLoader(Context context) : IItemsLoader
 {
     private readonly JsonSerializerOptions options_ = new(JsonSerializerDefaults.Web);
     private List<Item>? data_;
@@ -11,7 +11,8 @@ public class ItemsLoader(WwwContext wwwContext) : IItemsLoader
     public async Task<Result<List<Item>>> LoadAsync()
     {
         if (data_ is not null) { return new Ok<List<Item>>(data_); }
-        var filePath = Path.Combine(wwwContext.WwwDirPath, "data", "Items.json");
+        if (context.WwwDirPath is null) { return new Err<List<Item>>("wwwフォルダが選択されていません。"); }
+        var filePath = Path.Combine(context.WwwDirPath, "data", "Items.json");
         if (!File.Exists(filePath)) { return new Err<List<Item>>($"{filePath}が存在しません。"); }
         using var fileStream = new FileStream(filePath, FileMode.Open);
         var dtos = await JsonSerializer.DeserializeAsync<List<ItemDataDto?>>(fileStream, options_);

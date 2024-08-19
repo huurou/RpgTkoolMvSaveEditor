@@ -9,7 +9,7 @@ namespace RpgTkoolMvSaveEditor.Test;
 
 public class LoadTest
 {
-    private readonly WwwContext wwwContext_ = new();
+    private readonly Context wwwContext_ = new();
 
     public LoadTest()
     {

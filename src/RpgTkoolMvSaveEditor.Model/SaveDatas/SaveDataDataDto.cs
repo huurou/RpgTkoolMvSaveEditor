@@ -13,8 +13,8 @@ namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
 /// セーブデータのデータ用DTO
 /// www/save/file1.rpgsave
 /// </summary>
-/// <param name="Switches">スイッチのリスト インデックス www/save/file1.rpgsave::switches::_data::@a</param>
-/// <param name="Variables">変数のリスト www/save/file1.rpgsave::variables::_data::@a</param>
+/// <param name="Switches">スイッチのリスト スイッチIDとインデックスは対応してる www/save/file1.rpgsave::switches::_data::@a</param>
+/// <param name="Variables">変数のリスト 変数IDとインデックスは対応している www/save/file1.rpgsave::variables::_data::@a</param>
 /// <param name="Gold">ゴールド www/save/file1.rpgsave::party::_gold</param>
 /// <param name="Actors">アクターのリスト www/save/file1.rpgsave::actors::_data::@a</param>
 /// <param name="HeldItems">所持アイテムのリスト www/save/file1.rpgsave::party::_items</param>
