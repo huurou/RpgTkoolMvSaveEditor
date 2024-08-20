@@ -13,7 +13,6 @@ public abstract record Result<T>
     /// <param name="value">ResultがOkの時持つ値 Errの時null</param>
     /// <param name="message">ResultがErrの時持つメッセージ Okの時null</param>
     /// <returns>Okの時true Errの時false</returns>
-    /// <exception cref="NotImplementedException"></exception>
     public bool Unwrap([NotNullWhen(true)] out T? value, [NotNullWhen(false)] out string? message)
     {
         if (this is Ok<T> ok)
@@ -31,6 +30,5 @@ public abstract record Result<T>
         else { throw new NotImplementedException(); }
     }
 }
-
 public record Ok<T>(T Value) : Result<T>;
 public record Err<T>(string Message = "") : Result<T>;

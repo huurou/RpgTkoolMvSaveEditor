@@ -16,16 +16,16 @@ public record CommonDataDataDto(Dictionary<string, bool?> GameSwitches, Dictiona
     public static CommonDataDataDto FromModel(CommonData model)
     {
         return new(
-            model.GameSwitches.ToDictionary(x => x.Id.Value.ToString(), x => x.Value.Value),
-            model.GameVariables.ToDictionary(x => x.Id.Value.ToString(), x => x.Value.Value)
+            model.GameSwitches.ToDictionary(x => x.Id.Value.ToString(), x => x.Value),
+            model.GameVariables.ToDictionary(x => x.Id.Value.ToString(), x => x.Value)
         );
     }
 
     public CommonData ToModel(GameDatas.Systems.System system)
     {
         return new(
-            [.. GameSwitches.Select(x => (Id: int.Parse(x.Key), x.Value)).Select(x => new Switch(new(x.Id), system.SwitchNames[x.Id], new(x.Value)))],
-            [.. GameVariables.Select(x => (Id: int.Parse(x.Key), x.Value)).Select(x => new Variable(new(x.Id), system.VariableNames[x.Id], new(x.Value)))]
+            [.. GameSwitches.Select(x => (Id: int.Parse(x.Key), x.Value)).Select(x => new Switch(new(x.Id), system.SwitchNames[x.Id], x.Value))],
+            [.. GameVariables.Select(x => (Id: int.Parse(x.Key), x.Value)).Select(x => new Variable(new(x.Id), system.VariableNames[x.Id], x.Value))]
         );
     }
 }

@@ -8,6 +8,6 @@ public record ArmorDataDto(int Id, string Name, string Description)
 {
     public Armor ToModel()
     {
-        return new(new(Id), new(Name), new(Description));
+        return new(new(Id), Name, Description);
     }
 }

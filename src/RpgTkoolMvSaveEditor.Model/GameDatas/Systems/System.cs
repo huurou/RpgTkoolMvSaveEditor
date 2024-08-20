@@ -10,4 +10,4 @@ namespace RpgTkoolMvSaveEditor.Model.GameDatas.Systems;
 /// </summary>
 /// <param name="SwitchNames">スイッチ名のリスト スイッチIDとインデックスが対応している</param>
 /// <param name="VariableNames">変数名のリスト 変数IDとインデックスが対応している</param>
-public record System(ImmutableList<SwitchName> SwitchNames, ImmutableList<VariableName> VariableNames);
+public record System(ImmutableList<string> SwitchNames, ImmutableList<string> VariableNames);

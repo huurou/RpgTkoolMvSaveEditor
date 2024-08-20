@@ -29,8 +29,8 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(new(1), new("アイテム1"), new("アイテム1の説明")),
-                new(new(2), new("アイテム2"), new("アイテム2の説明")),
+                new(new(1), "アイテム1", "アイテム1の説明"),
+                new(new(2), "アイテム2", "アイテム2の説明"),
             ],
             actual
         );
@@ -49,8 +49,8 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(new(1), new("武器1"), new("武器1の説明")),
-                new(new(2), new("武器2"), new("武器2の説明")),
+                new(new(1), "武器1", "武器1の説明"),
+                new(new(2), "武器2", "武器2の説明"),
             ],
             actual
         );
@@ -69,8 +69,8 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(new(1), new("防具1"), new("防具1の説明")),
-                new(new(2), new("防具2"), new("防具2の説明")),
+                new(new(1), "防具1", "防具1の説明"),
+                new(new(2), "防具2", "防具2の説明"),
             ],
             actual
         );
@@ -89,19 +89,19 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(""),
-                new("スイッチ1"),
-                new("スイッチ2"),
-                new("スイッチ3")
+                "",
+                "スイッチ1",
+                "スイッチ2",
+                "スイッチ3"
             ],
             actual.SwitchNames
         );
         Assert.Equal(
             [
-                new(""),
-                new("変数1"),
-                new("変数2"),
-                new("変数3")
+                "",
+                "変数1",
+                "変数2",
+                "変数3"
             ],
             actual.VariableNames
         );
@@ -120,17 +120,17 @@ public class LoadTest
         Assert.True(result.Unwrap(out var actual, out _));
         Assert.Equal(
             [
-                new(new(1), new("スイッチ1"), new(true)),
-                new(new(2), new("スイッチ2"), new(false)),
-                new(new(3), new("スイッチ3"), new(null)),
+                new(new(1), "スイッチ1", true),
+                new(new(2), "スイッチ2", false),
+                new(new(3), "スイッチ3", null),
             ],
             actual.Switches
         );
         Assert.Equal(
             [
-                new(new(1), new("変数1"), new(1)),
-                new(new(2), new("変数2"), new("a")),
-                new(new(3), new("変数3"), new(null)),
+                new(new(1), "変数1", 1),
+                new(new(2), "変数2", "a"),
+                new(new(3), "変数3", null),
             ],
             actual.Variables
         );
@@ -145,22 +145,22 @@ public class LoadTest
         Assert.Equal(new(123456), actual.Gold);
         Assert.Equal(
             [
-                new(new(new(1), new("アイテム1"), new("アイテム1の説明")), 1),
-                new(new(new(2), new("アイテム2"), new("アイテム2の説明")), 2),
+                new(new(new(1), "アイテム1", "アイテム1の説明"), 1),
+                new(new(new(2), "アイテム2", "アイテム2の説明"), 2),
             ],
             actual.HeldItems
         );
         Assert.Equal(
             [
-                new(new(new(1), new("武器1"), new("武器1の説明")), 3),
-                new(new(new(2), new("武器2"), new("武器2の説明")), 4),
+                new(new(new(1), "武器1", "武器1の説明"), 3),
+                new(new(new(2), "武器2", "武器2の説明"), 4),
             ],
             actual.HeldWeapons
         );
         Assert.Equal(
             [
-                new(new(new(1), new("防具1"), new("防具1の説明")), 5),
-                new(new(new(2), new("防具2"), new("防具2の説明")), 6),
+                new(new(new(1), "防具1", "防具1の説明"), 5),
+                new(new(new(2), "防具2", "防具2の説明"), 6),
             ],
             actual.HeldArmors
         );

@@ -28,20 +28,20 @@ public class SaveTest
         var saveDataRepository = new SaveDataRepository(wwwContext_, new SystemLoader(wwwContext_), new ItemsLoader(wwwContext_), new WeaponsLoader(wwwContext_), new ArmorsLoader(wwwContext_));
         var saveData = new SaveData(
             [
-                new(new(1), new(""), new(false)),
-                new(new(2), new(""), new(null)),
-                new(new(3), new(""), new(true)),
-                new(new(4), new(""), new(null)),
-                new(new(5), new(""), new(false)),
-                new(new(6), new(""), new(true)),
+                new(new(1), "", false),
+                new(new(2), "", null),
+                new(new(3), "", true),
+                new(new(4), "", null),
+                new(new(5), "", false),
+                new(new(6), "", true),
             ],
             [
-                new(new(1), new(""), new("a")),
-                new(new(2), new(""), new(null)),
-                new(new(3), new(""), new(1)),
-                new(new(4), new(""), new(null)),
-                new(new(5), new(""), new(true)),
-                new(new(6), new(""), new(false)),
+                new(new(1), "", "a"),
+                new(new(2), "", null),
+                new(new(3), "", 1),
+                new(new(4), "", null),
+                new(new(5), "", true),
+                new(new(6), "", false),
             ],
             [
                 new("Alice", 999, 999, 999, 99, 999999),
@@ -50,19 +50,19 @@ public class SaveTest
             ],
             new(999999),
             [
-                new(new(new(1), new(""), new("")), 99),
-                new(new(new(2), new(""), new("")), 99),
-                new(new(new(3), new(""), new("")), 99),
+                new(new(new(1), "", ""), 99),
+                new(new(new(2), "", ""), 99),
+                new(new(new(3), "", ""), 99),
             ],
             [
-                new(new(new(1), new(""), new("")), 99),
-                new(new(new(2), new(""), new("")), 99),
-                new(new(new(3), new(""), new("")), 99),
+                new(new(new(1), "", ""), 99),
+                new(new(new(2), "", ""), 99),
+                new(new(new(3), "", ""), 99),
             ],
             [
-                new(new(new(1), new(""), new("")), 99),
-                new(new(new(2), new(""), new("")), 99),
-                new(new(new(3), new(""), new("")), 99),
+                new(new(new(1), "", ""), 99),
+                new(new(new(2), "", ""), 99),
+                new(new(new(3), "", ""), 99),
             ]
         );
 
@@ -90,15 +90,15 @@ public class SaveTest
         var commonDataRepository = new CommonDataRepository(wwwContext_, new SystemLoader(wwwContext_));
         var commonData = new CommonData(
             [
-                new(new(1), new(""), new(false)),
-                new(new(2), new(""), new(null)),
-                new(new(3), new(""), new(true)),
+                new(new(1), "", false),
+                new(new(2), "", null),
+                new(new(3), "", true),
             ],
             [
-                new(new(1), new(""), new("a")),
-                new(new(2), new(""), new(true)),
-                new(new(3), new(""), new(null)),
-                new(new(4), new(""), new(1)),
+                new(new(1), "", "a"),
+                new(new(2), "", true),
+                new(new(3), "", null),
+                new(new(4), "", 1),
             ]
         );
 

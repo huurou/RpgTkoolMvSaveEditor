@@ -33,9 +33,9 @@ public record SaveDataDataDto(
     public static SaveDataDataDto FromModel(SaveData saveData)
     {
         // 最初の要素は必ずnull ロード時に最初の要素を飛ばしているのでnullを先頭に追加する
-        IEnumerable<bool?> switches = [null, .. saveData.Switches.Select(x => x.Value.Value)];
+        IEnumerable<bool?> switches = [null, .. saveData.Switches.Select(x => x.Value)];
         // 最初の要素は必ずnull ロード時に最初の要素を飛ばしているのでnullを先頭に追加する
-        IEnumerable<object?> variables = [null, .. saveData.Variables.Select(x => x.Value.Value)];
+        IEnumerable<object?> variables = [null, .. saveData.Variables.Select(x => x.Value)];
         // 最初の要素は必ずnull ロード時に最初の要素を飛ばしているのでnullを先頭に追加する
         IEnumerable<ActorDataDto?> actors = [null, .. saveData.Actors.Select(x => x is not null ? ActorDataDto.FromModel(x) : null)];
         var gold = saveData.Gold.Value;
@@ -48,9 +48,9 @@ public record SaveDataDataDto(
     public SaveData ToModel(GameDatas.Systems.System system, List<Item> items, List<Weapon> weapons, List<Armor> armors)
     {
         // 全スイッチの数はSystemのスイッチ名配列から分かる 最初の要素は必ずnullなので飛ばす セーブする時にnullを先頭に追加する セーブデータのスイッチ配列に全スイッチの値が入っていないことがあるので長さをチェックする
-        var switches = system.SwitchNames.Select((x, i) => (Index: i, Name: x)).Skip(1).Select(x => new Switch(new(x.Index), x.Name, new(x.Index < Switches.Count ? Switches[x.Index] : null)));
+        var switches = system.SwitchNames.Select((x, i) => (Index: i, Name: x)).Skip(1).Select(x => new Switch(new(x.Index), x.Name, x.Index < Switches.Count ? Switches[x.Index] : null));
         // 全変数の数はSystemの変数名配列から分かる 最初の要素は必ずnullなので飛ばす セーブする時にnullを先頭に追加する セーブデータの変数配列に全変数の値が入っていないことがあるので長さをチェックする
-        var variables = system.VariableNames.Select((x, i) => (Index: i, Name: x)).Skip(1).Select(x => new Variable(new(x.Index), x.Name, new(x.Index < Variables.Count ? Variables[x.Index] : null)));
+        var variables = system.VariableNames.Select((x, i) => (Index: i, Name: x)).Skip(1).Select(x => new Variable(new(x.Index), x.Name, x.Index < Variables.Count ? Variables[x.Index] : null));
         // 最初の要素は必ずnullなので飛ばす セーブする時にnullを先頭に追加する
         var actors = Actors.Skip(1).Select(x => x?.ToModel());
         var gold = new Gold(Gold);
