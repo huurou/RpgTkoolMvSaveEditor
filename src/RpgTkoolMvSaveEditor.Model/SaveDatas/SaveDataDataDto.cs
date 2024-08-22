@@ -39,9 +39,9 @@ public record SaveDataDataDto(
         // 最初の要素は必ずnull ロード時に最初の要素を飛ばしているのでnullを先頭に追加する
         IEnumerable<ActorDataDto?> actors = [null, .. saveData.Actors.Select(x => x is not null ? ActorDataDto.FromModel(x) : null)];
         var gold = saveData.Gold.Value;
-        var heldItems = saveData.HeldItems.Select(HeldItemDataDto.FromModel);
-        var heldWeapons = saveData.HeldWeapons.Select(HeldWeaponDataDto.FromModel);
-        var heldArmors = saveData.HeldArmors.Select(HeldArmorDataDto.FromModel);
+        var heldItems = saveData.HeldItems.Where(x => x.Count != 0).Select(HeldItemDataDto.FromModel);
+        var heldWeapons = saveData.HeldWeapons.Where(x => x.Count != 0).Select(HeldWeaponDataDto.FromModel);
+        var heldArmors = saveData.HeldArmors.Where(x => x.Count != 0).Select(HeldArmorDataDto.FromModel);
         return new([.. switches], [.. variables], [.. actors], gold, [.. heldItems], [.. heldWeapons], [.. heldArmors]);
     }
 
@@ -57,6 +57,6 @@ public record SaveDataDataDto(
         var heldItems = HeldItems.Select(x => x.ToModel(items));
         var heldWeapons = HeldWeapons.Select(x => x.ToModel(weapons));
         var heldArmors = HeldArmors.Select(x => x.ToModel(armors));
-        return new([.. switches], [.. variables], [.. actors], gold, [.. heldItems], [.. heldWeapons], [.. heldArmors]);
+        return new([.. switches], [.. variables], gold, [.. actors], [.. heldItems], [.. heldWeapons], [.. heldArmors]);
     }
 }

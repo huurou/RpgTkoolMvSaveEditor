@@ -19,8 +19,8 @@ namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
 public record SaveData(
     ImmutableList<Switch> Switches,
     ImmutableList<Variable> Variables,
-    ImmutableList<Actor?> Actors,
     Gold Gold,
+    ImmutableList<Actor?> Actors,
     ImmutableList<HeldItem> HeldItems,
     ImmutableList<HeldWeapon> HeldWeapons,
     ImmutableList<HeldArmor> HeldArmors

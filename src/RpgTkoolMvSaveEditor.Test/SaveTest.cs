@@ -43,12 +43,12 @@ public class SaveTest
                 new(new(5), "", true),
                 new(new(6), "", false),
             ],
+            new(999999),
             [
                 new("Alice", 999, 999, 999, 99, 999999),
                 null,
                 new("Michael", 999, 999, 999, 99, 999999),
             ],
-            new(999999),
             [
                 new(new(new(1), "", ""), 99),
                 new(new(new(2), "", ""), 99),

@@ -17,7 +17,6 @@ builder.Services.AddTransient<AboutDialogViewModel>();
 builder.Services.AddSingleton<DialogService<AboutDialog, AboutDialogViewModel>>();
 builder.Services.AddSingleton<ApplicationService>();
 builder.Services.AddSingleton<ISettingRepository, SettingRepository>();
-builder.Services.AddSingleton<ILogDisplay, LogDisplay>();
 builder.Services.AddLogging(b => NLogConfiguration.Configure(Paths.LogsDir, b));
 
 var app = builder.Build();

@@ -10,7 +10,6 @@ public class MainWindowViewModel : ViewModelBase
 {
     public ReactivePropertySlim<string> Title { get; } = new(AppInfo.Name);
 
-    public ReactiveCommand LoadedCmd { get; } = new();
     public ReactiveCommand ShowAboutDialogCmd { get; } = new();
 
     public MainWindowViewModel(DialogService<AboutDialog, AboutDialogViewModel> aboutDialogService, ApplicationService appService)
