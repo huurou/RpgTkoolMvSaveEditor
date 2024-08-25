@@ -1,13 +1,13 @@
 [
-    null,
-    {
-        "id": 1,
-        "description": "防具1の説明",
-        "name": "防具1"
-    },
-    {
-        "id": 2,
-        "description": "防具2の説明",
-        "name": "防具2"
-    }
+  null,
+  {
+    "id": 1,
+    "description": "防具1の説明",
+    "name": "防具1"
+  },
+  {
+    "id": 2,
+    "description": "防具2の説明",
+    "name": "防具2"
+  }
 ]

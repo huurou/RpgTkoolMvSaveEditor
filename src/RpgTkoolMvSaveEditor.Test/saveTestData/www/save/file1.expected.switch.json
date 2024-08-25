@@ -4,9 +4,10 @@
       "@c": 71,
       "@a": [
         null,
+        false,
         true,
         false,
-        null
+        true
       ]
     },
     "@c": 70,
@@ -19,7 +20,7 @@
         null,
         1,
         "a",
-        true
+        null
       ]
     },
     "@c": 72,

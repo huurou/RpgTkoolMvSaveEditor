@@ -44,16 +44,49 @@
     <None Update="loadTestData\www\data\Weapons.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="loadTestData\www\save\common.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="loadTestData\www\save\file1.rpgsave">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="saveTestData\www\save\common.expected.rpgsave">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="saveTestData\www\save\common.expected.switch.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\common.expected.variable.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="saveTestData\www\save\common.original.rpgsave">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="saveTestData\www\save\file1.expected.rpgsave">
+    <None Update="saveTestData\www\save\file1.expected.actor.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.expected.armor.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.expected.gold.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.expected.item.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.expected.item1.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.expected.item2.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.expected.switch.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.expected.variable.rpgsave">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="saveTestData\www\save\file1.expected.weapon.rpgsave">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="saveTestData\www\save\file1.original.rpgsave">

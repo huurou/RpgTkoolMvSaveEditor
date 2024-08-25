@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Text.RegularExpressions;
 using RpgTkoolMvSaveEditor.Util.Events;
+using System.Text.RegularExpressions;
 
 namespace RpgTkoolMvSaveEditor.Util.LogDisplays;
 

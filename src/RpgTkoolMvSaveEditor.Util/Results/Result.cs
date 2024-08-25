@@ -1,7 +1,23 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 namespace RpgTkoolMvSaveEditor.Util.Results;
-public abstract record Result;
+public abstract record Result
+{
+    public bool Unwrap([NotNullWhen(false)] out string? message)
+    {
+        if (this is Ok)
+        {
+            message = null;
+            return true;
+        }
+        else if (this is Err err)
+        {
+            message = err.Message;
+            return false;
+        }
+        else { throw new NotImplementedException(); }
+    }
+}
 public record Ok : Result;
 public record Err(string Message = "") : Result;
 
