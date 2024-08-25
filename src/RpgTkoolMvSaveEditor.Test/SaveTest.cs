@@ -1,6 +1,8 @@
 ﻿using LZStringCSharp;
+using Microsoft.Extensions.DependencyInjection;
 using RpgTkoolMvSaveEditor.Model;
 using RpgTkoolMvSaveEditor.Model.Commands;
+using RpgTkoolMvSaveEditor.Model.Commands.Common;
 using RpgTkoolMvSaveEditor.Model.CommonSaveDatas;
 using RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
 
@@ -8,15 +10,26 @@ namespace RpgTkoolMvSaveEditor.Test;
 
 public class SaveTest
 {
-    private readonly Context context_;
-    private readonly SaveDataJsonNodeStore saveDataJsonNodeStore_;
-    private readonly CommonSaveDataJsonNodeStore commonSaveDataJsonNodeStore_;
+    private readonly IServiceCollection services_;
+    private readonly IServiceProvider provider_;
 
     public SaveTest()
     {
-        context_ = new Context { WwwDirPath = Path.Combine("saveTestData", "www") };
-        saveDataJsonNodeStore_ = new();
-        commonSaveDataJsonNodeStore_ = new();
+        services_ = new ServiceCollection();
+        services_.AddSingleton<ICommandHandler<UpdateSwitchCommand>, UpdateSwitchCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateVariableCommand>, UpdateVariableCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateActorCommand>, UpdateActorCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateGoldCommand>, UpdateGoldCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateItemCommand>, UpdateItemCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateWeaponCommand>, UpdateWeaponCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateArmorCommand>, UpdateArmorCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateCommonSwitchCommand>, UpdateCommonSwitchCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateCommonVariableCommand>, UpdateCommonVariableCommandHandler>();
+        services_.AddSingleton<Context>(_ => new([Path.Combine("saveTestData", "www")]));
+        services_.AddSingleton<SaveDataJsonNodeStore>();
+        services_.AddSingleton<CommonSaveDataJsonNodeStore>();
+
+        provider_ = services_.BuildServiceProvider();
     }
 
     // file1.rpgsave.originalをコピーしてfile1.rpgsaveを作成し、file1.rpgsaveを編集して保存後各expectedファイルと比較する
@@ -25,7 +38,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
-        var handler = new UpdateSwitchCommandHandler(context_, saveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateSwitchCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateSwitchCommand(1, false));
@@ -51,7 +64,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
-        var handler = new UpdateVariableCommandHandler(context_, saveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateVariableCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateVariableCommand(1, "a"));
@@ -77,7 +90,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
-        var handler = new UpdateActorCommandHandler(context_, saveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateActorCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateActorCommand(1, "Alice", 999, 999, 999, 99, 999999));
@@ -101,7 +114,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
-        var handler = new UpdateGoldCommandHandler(context_, saveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateGoldCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateGoldCommand(999999));
@@ -124,7 +137,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
-        var handler = new UpdateItemCommandHandler(context_, saveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateItemCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateItemCommand(1, 99));
@@ -150,7 +163,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
-        var handler = new UpdateWeaponCommandHandler(context_, saveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateWeaponCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateWeaponCommand(1, 99));
@@ -176,7 +189,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
-        var handler = new UpdateArmorCommandHandler(context_, saveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateArmorCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateArmorCommand(1, 99));
@@ -203,7 +216,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "common.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "common.rpgsave"), true);
-        var handler = new UpdateCommonSwitchCommandHandler(context_, commonSaveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateCommonSwitchCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateCommonSwitchCommand(1, false));
@@ -229,7 +242,7 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "common.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "common.rpgsave"), true);
-        var handler = new UpdateCommonVariableCommandHandler(context_, commonSaveDataJsonNodeStore_);
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateCommonVariableCommand>>();
 
         // Action
         await handler.HandleAsync(new UpdateCommonVariableCommand(1, "a"));

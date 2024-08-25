@@ -1,22 +1,38 @@
-﻿using RpgTkoolMvSaveEditor.Model;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using RpgTkoolMvSaveEditor.Model;
+using RpgTkoolMvSaveEditor.Model.CommonSaveDatas;
+using RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
 using RpgTkoolMvSaveEditor.Model.Queries;
+using RpgTkoolMvSaveEditor.Model.Queries.Common;
 
 namespace RpgTkoolMvSaveEditor.Test;
 
 public class LoadTest
 {
-    private readonly Context context_ = new();
+    private readonly IServiceCollection services_;
+    private readonly IServiceProvider provider_;
 
     public LoadTest()
     {
-        context_.WwwDirPath = Path.Combine("loadTestData", "www");
+        services_ = new ServiceCollection();
+        services_.AddSingleton<IQueryHandler<GetSaveDataQuery, SaveDataViewDto>, GetSaveDataQueryHandler>();
+        services_.AddSingleton<Context>(_ => new([Path.Combine("loadTestData", "www")]));
+        services_.AddSingleton<SaveDataJsonNodeStore>();
+        services_.AddSingleton<SystemDataLoader>();
+        services_.AddSingleton<IQueryHandler<GetCommonSaveDataQuery, CommonSaveDataViewDto>, GetCommonSaveDataQueryHandler>();
+        services_.AddSingleton<CommonSaveDataJsonNodeStore>();
+        services_.AddLogging(b => b.AddProvider(NullLoggerProvider.Instance));
+
+        provider_ = services_.BuildServiceProvider();
     }
 
     [Fact]
     public async Task SaveDataロード()
     {
         // Arrange
-        var handler = new GetSaveDataQueryHandler(context_, new(), new(context_));
+        var handler = provider_.GetRequiredService<IQueryHandler<GetSaveDataQuery, SaveDataViewDto>>();
 
         // Action
         var result = await handler.HandleAsync(new());
@@ -53,21 +69,21 @@ public class LoadTest
                 new(1, "アイテム1", "アイテム1の説明", 1),
                 new(2, "アイテム2", "アイテム2の説明", 2),
             ],
-            actual.HeldItems
+            actual.Items
         );
         Assert.Equal(
             [
                 new(1, "武器1", "武器1の説明", 3),
                 new(2, "武器2", "武器2の説明", 4),
             ],
-            actual.HeldWeapons
+            actual.Weapons
         );
         Assert.Equal(
             [
                 new(1, "防具1", "防具1の説明", 5),
                 new(2, "防具2", "防具2の説明", 6),
             ],
-            actual.HeldArmors
+            actual.Armors
         );
     }
 
@@ -75,7 +91,7 @@ public class LoadTest
     public async Task CommonSaveDataロード()
     {
         // Arrange
-        var handler = new GetCommonSaveDataQueryHandler(context_, new(), new SystemDataLoader(context_));
+        var handler = provider_.GetRequiredService<IQueryHandler<GetCommonSaveDataQuery, CommonSaveDataViewDto>>();
 
         // Action
         var result = await handler.HandleAsync(new());
