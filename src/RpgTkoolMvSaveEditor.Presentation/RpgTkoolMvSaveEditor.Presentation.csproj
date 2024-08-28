@@ -7,8 +7,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
-    <Title>RpgTkoolMvSaveEditor</Title>
+    <Title>$(AssemblyName)</Title>
     <Company />
+    <PackageId>$(AssemblyName)</PackageId>
+    <Product>RPGTkoolMV Save Editor</Product>
+    <Copyright>© T.Kitada</Copyright>
+    <Description>RPGツクールMVのセーブデータを編集します。</Description>
   </PropertyGroup>
 
   <ItemGroup>

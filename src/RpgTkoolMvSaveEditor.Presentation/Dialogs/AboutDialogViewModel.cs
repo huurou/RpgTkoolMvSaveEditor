@@ -17,9 +17,13 @@ public class AboutDialogViewModel : ViewModelBase
     public AboutDialogViewModel()
     {
         var versionInfo = FileVersionInfo.GetVersionInfo(Environment.GetCommandLineArgs()[0]);
+        // パッケージ::製品
         ProductName.Value = versionInfo.ProductName ?? "";
+        // パッケージ::パッケージバージョン
         ProductVersion.Value = $"Version: {versionInfo.ProductVersion}";
+        // パッケージ::著作権
         LegalCopyright.Value = versionInfo.LegalCopyright ?? "";
+        // パッケージ::説明
         Description.Value = versionInfo.Comments ?? "";
 
         OkCmd.Subscribe(() => DialogResult.Value = true);

@@ -2,15 +2,23 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:rp="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
         xmlns:local="clr-namespace:RpgTkoolMvSaveEditor.Presentation"
         xmlns:spacinggrids="clr-namespace:RpgTkoolMvSaveEditor.Presentation.Controls.SpacingGrids"
+        xmlns:spacingstackpanels="clr-namespace:RpgTkoolMvSaveEditor.Presentation.Controls.SpacingStackPanels"
         d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="{Binding Title.Value}" Height="450" Width="800">
+        Title="{Binding Title.Value}" Width="1920" Height="1080" MinWidth="300" MinHeight="200">
     <Window.Resources>
         <ResourceDictionary Source="./ResourceDictionary.xaml" />
     </Window.Resources>
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <rp:EventToReactiveCommand Command="{Binding LoadedCmd}" />
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
     <spacinggrids:SpacingGrid RowSpacing="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -23,5 +31,113 @@
                 <MenuItem Header="Version Information(_A)" Command="{Binding ShowAboutDialogCmd}" />
             </MenuItem>
         </Menu>
+        <spacingstackpanels:SpacingStackPanel Grid.Row="1" Orientation="Horizontal" Spacing="4">
+            <GroupBox Header="Common">
+                <spacinggrids:SpacingGrid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.Row="0" Header="GameSwitches">
+                        <DataGrid ItemsSource="{Binding GameSwiches.Value}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
+                                <DataGridCheckBoxColumn Header="Value" Binding="{Binding Value.Value, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                    <GroupBox Grid.Row="1" Header="GameVariables">
+                        <DataGrid ItemsSource="{Binding GameVariables.Value}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Value" Binding="{Binding Value.Value, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </spacinggrids:SpacingGrid>
+            </GroupBox>
+            <GroupBox Header="SaveData">
+                <spacingstackpanels:SpacingStackPanel Orientation="Horizontal">
+                    <GroupBox Header="Switches" HorizontalAlignment="Stretch">
+                        <DataGrid ItemsSource="{Binding Swiches.Value}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
+                                <DataGridCheckBoxColumn Header="Value" Binding="{Binding Value.Value, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                    <GroupBox Header="Variavles">
+                        <DataGrid ItemsSource="{Binding Variables.Value}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Value" Binding="{Binding Value.Value, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                    <GroupBox Header="Items">
+                        <DataGrid ItemsSource="{Binding Items.Value}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="ToolTip" Value="{Binding Description}" />
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Count" Binding="{Binding Count.Value, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                    <GroupBox Header="Weapons">
+                        <DataGrid ItemsSource="{Binding Weapons.Value}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="ToolTip" Value="{Binding Description}" />
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Count" Binding="{Binding Count.Value, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                    <GroupBox Header="Armors">
+                        <DataGrid ItemsSource="{Binding Armors.Value}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="ToolTip" Value="{Binding Description}" />
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Count" Binding="{Binding Count.Value, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                    <spacinggrids:SpacingGrid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <spacingstackpanels:SpacingStackPanel Grid.Row="0" Orientation="Horizontal">
+                            <Label>Gold</Label>
+                            <TextBox Text="{Binding Gold.Value, UpdateSourceTrigger=PropertyChanged}" />
+                        </spacingstackpanels:SpacingStackPanel>
+                        <GroupBox Grid.Row="1" Header="Actros">
+                            <TabControl />
+                        </GroupBox>
+                    </spacinggrids:SpacingGrid>
+                </spacingstackpanels:SpacingStackPanel>
+            </GroupBox>
+        </spacingstackpanels:SpacingStackPanel>
     </spacinggrids:SpacingGrid>
 </Window>

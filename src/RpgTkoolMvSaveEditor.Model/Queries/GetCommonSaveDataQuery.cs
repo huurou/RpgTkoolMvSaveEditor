@@ -1,4 +1,5 @@
-﻿using RpgTkoolMvSaveEditor.Model.CommonSaveDatas;
+﻿using Microsoft.Extensions.Logging;
+using RpgTkoolMvSaveEditor.Model.CommonSaveDatas;
 using RpgTkoolMvSaveEditor.Model.GameData.Switches;
 using RpgTkoolMvSaveEditor.Model.GameData.Variables;
 using RpgTkoolMvSaveEditor.Model.Queries.Common;
@@ -10,10 +11,11 @@ namespace RpgTkoolMvSaveEditor.Model.Queries;
 
 public record GetCommonSaveDataQuery() : IQuery;
 
-public class GetCommonSaveDataQueryHandler(Context context, CommonSaveDataJsonNodeStore commonSaveDataStore, SystemDataLoader systemDataLoader) : IQueryHandler<GetCommonSaveDataQuery, CommonSaveDataViewDto>
+public class GetCommonSaveDataQueryHandler(Context context, CommonSaveDataJsonNodeStore commonSaveDataStore, SystemDataLoader systemDataLoader, ILogger<GetCommonSaveDataQueryHandler> logger) : IQueryHandler<GetCommonSaveDataQuery, CommonSaveDataViewDto>
 {
     public async Task<Result<CommonSaveDataViewDto>> HandleAsync(GetCommonSaveDataQuery query)
     {
+        logger.LogInformation("Load CommonSaveData");
         if (context.WwwDirPath is null) { return new Err<CommonSaveDataViewDto>("wwwフォルダが選択されていません。"); }
         if (!(await commonSaveDataStore.LoadAsync(context.WwwDirPath)).Unwrap(out var rootNode, out var message)) { return new Err<CommonSaveDataViewDto>(message); }
         if (rootNode["gameSwitches"] is not JsonObject gameSwitchesJsonObject) { return new Err<CommonSaveDataViewDto>("セーブデータにgameSwitchesが見つかりませんでした。"); }

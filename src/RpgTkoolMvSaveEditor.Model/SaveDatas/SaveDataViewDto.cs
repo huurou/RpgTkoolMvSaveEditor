@@ -13,7 +13,7 @@ public record SaveDataViewDto(
     ImmutableList<VariableViewDto> Variables,
     int Gold,
     ImmutableList<ActorViewDto?> Actors,
-    ImmutableList<HeldItemViewDto> HeldItems,
-    ImmutableList<HeldWeaponViewDto> HeldWeapons,
-    ImmutableList<HeldArmorViewDto> HeldArmors
+    ImmutableList<ItemViewDto> Items,
+    ImmutableList<WeaponViewDto> Weapons,
+    ImmutableList<ArmorViewDto> Armors
 );

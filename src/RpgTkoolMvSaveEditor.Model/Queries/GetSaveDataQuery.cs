@@ -1,4 +1,5 @@
-﻿using RpgTkoolMvSaveEditor.Model.GameData.Actors;
+﻿using Microsoft.Extensions.Logging;
+using RpgTkoolMvSaveEditor.Model.GameData.Actors;
 using RpgTkoolMvSaveEditor.Model.GameData.Armors;
 using RpgTkoolMvSaveEditor.Model.GameData.Items;
 using RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
@@ -14,7 +15,7 @@ namespace RpgTkoolMvSaveEditor.Model.Queries;
 
 public record GetSaveDataQuery() : IQuery;
 
-public class GetSaveDataQueryHandler(Context context, SaveDataJsonNodeStore saveDataJsonNodeStore, SystemDataLoader systemDataLoader) : IQueryHandler<GetSaveDataQuery, SaveDataViewDto>
+public class GetSaveDataQueryHandler(Context context, SaveDataJsonNodeStore saveDataJsonNodeStore, SystemDataLoader systemDataLoader, ILogger<GetSaveDataQueryHandler> logger) : IQueryHandler<GetSaveDataQuery, SaveDataViewDto>
 {
     private IEnumerable<ItemDataDto>? items_;
     private IEnumerable<WeaponDataDto>? weapons_;
@@ -23,6 +24,7 @@ public class GetSaveDataQueryHandler(Context context, SaveDataJsonNodeStore save
 
     public async Task<Result<SaveDataViewDto>> HandleAsync(GetSaveDataQuery query)
     {
+        logger.LogInformation("Load SaveData");
         if (context.WwwDirPath is null) { return new Err<SaveDataViewDto>("wwwフォルダが選択されていません。"); }
         if (!(await saveDataJsonNodeStore.LoadAsync(context.WwwDirPath)).Unwrap(out var rootNode, out var message)) { return new Err<SaveDataViewDto>(message); }
         if (rootNode["switches"]?["_data"]?["@a"] is not JsonArray switchValuesJsonArray) { return new Err<SaveDataViewDto>("セーブデータにswitches::_data::@aが見つかりませんでした。"); }
@@ -37,7 +39,7 @@ public class GetSaveDataQueryHandler(Context context, SaveDataJsonNodeStore save
         if (!(await LoadWeaponsAsync(context.WwwDirPath)).Unwrap(out var weapons, out message)) { return new Err<SaveDataViewDto>(message); }
         if (!(await LoadArmorsAsync(context.WwwDirPath)).Unwrap(out var armors, out message)) { return new Err<SaveDataViewDto>(message); }
         var switchValues = switchValuesJsonArray.Select(y => y?.GetValue<bool?>()).ToList();
-        var switches = systemData.Switches.Select((x, i) => (Id: i, Name: x)).Skip(1).Select(x => new SwitchViewDto(x.Id, x.Name, switchValues[x.Id]));
+        var switches = systemData.Switches.Select((x, i) => (Id: i, Name: x)).Skip(1).Select(x => new SwitchViewDto(x.Id, x.Name, x.Id < switchValues.Count ? switchValues[x.Id] : null));
         var variableValues = variableValuesJsonArray.Select(
             x => x?.GetValueKind() switch
             {
@@ -49,7 +51,7 @@ public class GetSaveDataQueryHandler(Context context, SaveDataJsonNodeStore save
                 _ => (object?)x,
             }
         ).ToList();
-        var variables = systemData.Variables.Select((x, i) => (Id: i, Name: x)).Skip(1).Select(x => new VariableViewDto(x.Id, x.Name, variableValues[x.Id]));
+        var variables = systemData.Variables.Select((x, i) => (Id: i, Name: x)).Skip(1).Select(x => new VariableViewDto(x.Id, x.Name, x.Id < variableValues.Count ? variableValues[x.Id] : null));
         var actors = actorsJsonArray.Select((x, i) => (Id: i, Value: x)).Skip(1).Select(
             x => x.Value is not null
                 ? new ActorViewDto(
@@ -65,19 +67,19 @@ public class GetSaveDataQueryHandler(Context context, SaveDataJsonNodeStore save
         );
         var gold = goldJsonNode.GetValue<int>();
         var heldItems = items.Select((x, i) => (Id: i, Item: x)).Skip(1).Select(
-            x => new HeldItemViewDto(
+            x => new ItemViewDto(
                 x.Item.Id, x.Item.Name, x.Item.Description,
                 heldItemsJsonObject.TryGetPropertyValue(x.Id.ToString(), out var countNode) && countNode is not null ? countNode.GetValue<int>() : 0
             )
         );
         var heldWeapons = weapons.Select((x, i) => (Id: i, Weapon: x)).Skip(1).Select(
-            x => new HeldWeaponViewDto(
+            x => new WeaponViewDto(
                 x.Weapon.Id, x.Weapon.Name, x.Weapon.Description,
                 heldWeaponsJsonObject.TryGetPropertyValue(x.Id.ToString(), out var countNode) && countNode is not null ? countNode.GetValue<int>() : 0
             )
         );
         var heldArmors = armors.Select((x, i) => (Id: i, Armor: x)).Skip(1).Select(
-            x => new HeldArmorViewDto(
+            x => new ArmorViewDto(
                 x.Armor.Id, x.Armor.Name, x.Armor.Description,
                 heldArmorsJsonObject.TryGetPropertyValue(x.Id.ToString(), out var countNode) && countNode is not null ? countNode.GetValue<int>() : 0
             )

@@ -23,8 +23,8 @@ public class SaveTest
         services_.AddSingleton<ICommandHandler<UpdateItemCommand>, UpdateItemCommandHandler>();
         services_.AddSingleton<ICommandHandler<UpdateWeaponCommand>, UpdateWeaponCommandHandler>();
         services_.AddSingleton<ICommandHandler<UpdateArmorCommand>, UpdateArmorCommandHandler>();
-        services_.AddSingleton<ICommandHandler<UpdateCommonSwitchCommand>, UpdateCommonSwitchCommandHandler>();
-        services_.AddSingleton<ICommandHandler<UpdateCommonVariableCommand>, UpdateCommonVariableCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateGameSwitchCommand>, UpdateGameSwitchCommandHandler>();
+        services_.AddSingleton<ICommandHandler<UpdateGameVariableCommand>, UpdateGameVariableCommandHandler>();
         services_.AddSingleton<Context>(_ => new([Path.Combine("saveTestData", "www")]));
         services_.AddSingleton<SaveDataJsonNodeStore>();
         services_.AddSingleton<CommonSaveDataJsonNodeStore>();
@@ -41,10 +41,10 @@ public class SaveTest
         var handler = provider_.GetRequiredService<ICommandHandler<UpdateSwitchCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateSwitchCommand(1, false));
-        await handler.HandleAsync(new UpdateSwitchCommand(2, true));
-        await handler.HandleAsync(new UpdateSwitchCommand(3, false));
-        await handler.HandleAsync(new UpdateSwitchCommand(4, true));
+        await handler.HandleAsync(new(1, false));
+        await handler.HandleAsync(new(2, true));
+        await handler.HandleAsync(new(3, false));
+        await handler.HandleAsync(new(4, true));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "file1.expected.switch.rpgsave");
@@ -67,10 +67,10 @@ public class SaveTest
         var handler = provider_.GetRequiredService<ICommandHandler<UpdateVariableCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateVariableCommand(1, "a"));
-        await handler.HandleAsync(new UpdateVariableCommand(2, 1));
-        await handler.HandleAsync(new UpdateVariableCommand(3, null));
-        await handler.HandleAsync(new UpdateVariableCommand(4, false));
+        await handler.HandleAsync(new(1, "a"));
+        await handler.HandleAsync(new(2, 1));
+        await handler.HandleAsync(new(3, null));
+        await handler.HandleAsync(new(4, false));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "file1.expected.variable.rpgsave");
@@ -93,8 +93,8 @@ public class SaveTest
         var handler = provider_.GetRequiredService<ICommandHandler<UpdateActorCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateActorCommand(1, "Alice", 999, 999, 999, 99, 999999));
-        await handler.HandleAsync(new UpdateActorCommand(3, "Michael", 999, 999, 999, 99, 999999));
+        await handler.HandleAsync(new(1, "Alice", 999, 999, 999, 99, 999999));
+        await handler.HandleAsync(new(3, "Michael", 999, 999, 999, 99, 999999));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "file1.expected.actor.rpgsave");
@@ -117,7 +117,7 @@ public class SaveTest
         var handler = provider_.GetRequiredService<ICommandHandler<UpdateGoldCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateGoldCommand(999999));
+        await handler.HandleAsync(new(999999));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "file1.expected.gold.rpgsave");
@@ -140,10 +140,10 @@ public class SaveTest
         var handler = provider_.GetRequiredService<ICommandHandler<UpdateItemCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateItemCommand(1, 99));
-        await handler.HandleAsync(new UpdateItemCommand(2, 99));
-        await handler.HandleAsync(new UpdateItemCommand(3, 99));
-        await handler.HandleAsync(new UpdateItemCommand(4, 99));
+        await handler.HandleAsync(new(1, 99));
+        await handler.HandleAsync(new(2, 99));
+        await handler.HandleAsync(new(3, 99));
+        await handler.HandleAsync(new(4, 99));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "file1.expected.item.rpgsave");
@@ -166,10 +166,10 @@ public class SaveTest
         var handler = provider_.GetRequiredService<ICommandHandler<UpdateWeaponCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateWeaponCommand(1, 99));
-        await handler.HandleAsync(new UpdateWeaponCommand(2, 99));
-        await handler.HandleAsync(new UpdateWeaponCommand(3, 99));
-        await handler.HandleAsync(new UpdateWeaponCommand(4, 99));
+        await handler.HandleAsync(new(1, 99));
+        await handler.HandleAsync(new(2, 99));
+        await handler.HandleAsync(new(3, 99));
+        await handler.HandleAsync(new(4, 99));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "file1.expected.weapon.rpgsave");
@@ -192,10 +192,10 @@ public class SaveTest
         var handler = provider_.GetRequiredService<ICommandHandler<UpdateArmorCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateArmorCommand(1, 99));
-        await handler.HandleAsync(new UpdateArmorCommand(2, 99));
-        await handler.HandleAsync(new UpdateArmorCommand(3, 99));
-        await handler.HandleAsync(new UpdateArmorCommand(4, 99));
+        await handler.HandleAsync(new(1, 99));
+        await handler.HandleAsync(new(2, 99));
+        await handler.HandleAsync(new(3, 99));
+        await handler.HandleAsync(new(4, 99));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "file1.expected.armor.rpgsave");
@@ -216,13 +216,13 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "common.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "common.rpgsave"), true);
-        var handler = provider_.GetRequiredService<ICommandHandler<UpdateCommonSwitchCommand>>();
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateGameSwitchCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateCommonSwitchCommand(1, false));
-        await handler.HandleAsync(new UpdateCommonSwitchCommand(2, true));
-        await handler.HandleAsync(new UpdateCommonSwitchCommand(3, false));
-        await handler.HandleAsync(new UpdateCommonSwitchCommand(4, true));
+        await handler.HandleAsync(new(1, false));
+        await handler.HandleAsync(new(2, true));
+        await handler.HandleAsync(new(3, false));
+        await handler.HandleAsync(new(4, true));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "common.expected.switch.rpgsave");
@@ -242,14 +242,14 @@ public class SaveTest
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "common.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "common.rpgsave"), true);
-        var handler = provider_.GetRequiredService<ICommandHandler<UpdateCommonVariableCommand>>();
+        var handler = provider_.GetRequiredService<ICommandHandler<UpdateGameVariableCommand>>();
 
         // Action
-        await handler.HandleAsync(new UpdateCommonVariableCommand(1, "a"));
-        await handler.HandleAsync(new UpdateCommonVariableCommand(2, 1));
-        await handler.HandleAsync(new UpdateCommonVariableCommand(3, "b"));
-        await handler.HandleAsync(new UpdateCommonVariableCommand(4, 2));
-        await handler.HandleAsync(new UpdateCommonVariableCommand(5, false));
+        await handler.HandleAsync(new(1, "a"));
+        await handler.HandleAsync(new(2, 1));
+        await handler.HandleAsync(new(3, "b"));
+        await handler.HandleAsync(new(4, 2));
+        await handler.HandleAsync(new(5, false));
 
         // Assert
         var expectedFile = Path.Combine("saveTestData", "www", "save", "common.expected.variable.rpgsave");

@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 
 namespace RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
 
-public class SaveDataJsonNodeStore
+public class SaveDataJsonNodeStore(Context context)
 {
     public async Task<Result<JsonNode>> LoadAsync(string wwwDirPath)
     {
@@ -28,6 +28,7 @@ public class SaveDataJsonNodeStore
         using var jsonMemoryStreamReader = new StreamReader(jsonMemoryStream);
         var json = await jsonMemoryStreamReader.ReadToEndAsync();
         await File.WriteAllTextAsync(filePath, LZString.CompressToBase64(json));
+        context.SaveDataLoadSuppressed = true;
         return new Ok();
     }
 }
