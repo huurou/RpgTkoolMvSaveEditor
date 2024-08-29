@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows;
-using RpgTkoolMvSaveEditor;
+﻿using RpgTkoolMvSaveEditor;
 using RpgTkoolMvSaveEditor.Model;
 using RpgTkoolMvSaveEditor.Model.Configs;
 using RpgTkoolMvSaveEditor.Model.Settings;
@@ -9,6 +7,8 @@ using RpgTkoolMvSaveEditor.Presentation.Dialogs;
 using RpgTkoolMvSaveEditor.Presentation.Dialogs.Common;
 using RpgTkoolMvSaveEditor.Util;
 using RpgTkoolMvSaveEditor.Util.LogDisplays;
+using System.Diagnostics;
+using System.Windows;
 
 var builder = WpfApplication<App, MainWindow>.CreateBuilder(args);
 builder.Services.AddSingleton<MainWindowViewModel>();
