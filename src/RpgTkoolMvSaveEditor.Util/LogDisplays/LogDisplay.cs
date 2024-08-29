@@ -1,19 +1,19 @@
 ﻿using Microsoft.Extensions.Logging;
-using RpgTkoolMvSaveEditor.Util.Events;
 using System.Text.RegularExpressions;
 
 namespace RpgTkoolMvSaveEditor.Util.LogDisplays;
 
 public class LogDisplay : ILogDisplay
 {
-    public Event<ShowLogRequestedEventArgs> ShowLogRequested { get; } = new();
+    public event EventHandler<ShowLogRequestedEventArgs>? ShowLogRequested;
+
 #pragma warning disable SYSLIB1045 // 'GeneratedRegexAttribute' に変換します。
     private readonly Regex indexFormatRegex_ = new(@"\{.*?\}");
 #pragma warning restore SYSLIB1045 // 'GeneratedRegexAttribute' に変換します。
 
     public void ShowLog(LogLevel logLevel, DateTime dateTime, string message, params object?[]? args)
     {
-        ShowLogRequested.Publish(new(logLevel, dateTime, string.Format(ToIndexFormat(message), args ?? [])));
+        ShowLogRequested?.Invoke(this, new(logLevel, dateTime, string.Format(ToIndexFormat(message), args ?? [])));
     }
 
     /// <summary>

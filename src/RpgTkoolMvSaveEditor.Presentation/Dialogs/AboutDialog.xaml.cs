@@ -9,7 +9,7 @@ public partial class AboutDialog : Window
 {
     public AboutDialog(AboutDialogViewModel viewModel)
     {
-        InitializeComponent();
         DataContext = viewModel;
+        InitializeComponent();
     }
 }

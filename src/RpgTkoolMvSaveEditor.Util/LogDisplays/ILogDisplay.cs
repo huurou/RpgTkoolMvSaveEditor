@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using RpgTkoolMvSaveEditor.Util.Events;
 
 namespace RpgTkoolMvSaveEditor.Util.LogDisplays;
 
@@ -8,7 +7,7 @@ namespace RpgTkoolMvSaveEditor.Util.LogDisplays;
 /// </summary>
 public interface ILogDisplay
 {
-    Event<ShowLogRequestedEventArgs> ShowLogRequested { get; }
+    event EventHandler<ShowLogRequestedEventArgs>? ShowLogRequested;
 
     void ShowLog(LogLevel logLevel, DateTime dateTime, string message, params object?[]? args);
 }

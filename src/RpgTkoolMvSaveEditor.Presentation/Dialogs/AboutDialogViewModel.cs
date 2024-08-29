@@ -1,31 +1,41 @@
-﻿using Reactive.Bindings;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
 
 namespace RpgTkoolMvSaveEditor.Presentation.Dialogs;
 
-public class AboutDialogViewModel : ViewModelBase
+public partial class AboutDialogViewModel : ObservableObject
 {
-    public ReactivePropertySlim<string> Title { get; } = new("Version Information");
-    public ReactivePropertySlim<bool?> DialogResult { get; } = new();
-    public ReactivePropertySlim<string> ProductName { get; } = new("");
-    public ReactivePropertySlim<string> ProductVersion { get; } = new("");
-    public ReactivePropertySlim<string> LegalCopyright { get; } = new("");
-    public ReactivePropertySlim<string> Description { get; } = new("");
+    [ObservableProperty]
+    private bool? dialogResult;
+    [ObservableProperty]
+    private string title = "Version Information";
+    [ObservableProperty]
+    private string? productName;
+    [ObservableProperty]
+    private string? productVersion;
+    [ObservableProperty]
+    private string? legalCopyright;
+    [ObservableProperty]
+    private string? description;
 
-    public ReactiveCommand OkCmd { get; } = new();
+    [RelayCommand]
+    public void Ok()
+    {
+        DialogResult = true;
+    }
 
-    public AboutDialogViewModel()
+    [RelayCommand]
+    public void Loaded()
     {
         var versionInfo = FileVersionInfo.GetVersionInfo(Environment.GetCommandLineArgs()[0]);
         // パッケージ::製品
-        ProductName.Value = versionInfo.ProductName ?? "";
+        ProductName = versionInfo.ProductName;
         // パッケージ::パッケージバージョン
-        ProductVersion.Value = $"Version: {versionInfo.ProductVersion}";
+        ProductVersion = $"Version: {versionInfo.ProductVersion}";
         // パッケージ::著作権
-        LegalCopyright.Value = versionInfo.LegalCopyright ?? "";
+        LegalCopyright = versionInfo.LegalCopyright ?? "<<LegalCopyright>>";
         // パッケージ::説明
-        Description.Value = versionInfo.Comments ?? "";
-
-        OkCmd.Subscribe(() => DialogResult.Value = true);
+        Description = versionInfo.Comments;
     }
 }

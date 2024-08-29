@@ -1,7 +1,7 @@
-﻿using RpgTkoolMvSaveEditor.Presentation.Controls.ConsoleTextViews.ConsoleTextItems;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using RpgTkoolMvSaveEditor.Presentation.Controls.ConsoleTextViews.ConsoleTextItems;
 
 namespace RpgTkoolMvSaveEditor.Presentation.Controls.ConsoleTextViews;
 

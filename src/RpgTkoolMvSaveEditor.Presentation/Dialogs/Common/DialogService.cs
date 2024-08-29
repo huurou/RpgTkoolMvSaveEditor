@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 
-namespace RpgTkoolMvSaveEditor.Presentation.Dialogs.Services;
+namespace RpgTkoolMvSaveEditor.Presentation.Dialogs.Common;
 
 public class DialogService<TDialog>(IServiceProvider provider) where TDialog : Window
 {

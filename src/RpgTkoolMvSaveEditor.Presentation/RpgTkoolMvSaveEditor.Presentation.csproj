@@ -7,12 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
-    <Title>$(AssemblyName)</Title>
+    <Title>RpgTkoolMvSaveEditor</Title>
     <Company />
-    <PackageId>$(AssemblyName)</PackageId>
-    <Product>RPGTkoolMV Save Editor</Product>
-    <Copyright>© T.Kitada</Copyright>
-    <Description>RPGツクールMVのセーブデータを編集します。</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveProperty.WPF" Version="9.6.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
     <PackageReference Include="Wpf.Extensions.Hosting" Version="1.2.0" />
   </ItemGroup>
 
