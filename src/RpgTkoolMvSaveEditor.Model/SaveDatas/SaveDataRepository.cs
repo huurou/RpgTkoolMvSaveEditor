@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 
 namespace RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
 
-public class SaveDataRepository(Context context, ILogger<SaveDataRepository> logger) : ISaveDataRepository
+public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectProvider saveDataJsonObjectProvider, ILogger<SaveDataRepository> logger) : ISaveDataRepository
 {
     private JsonArray? switchNamesJsonArray_; // ["switch1",]
     private JsonArray? variableNamesJsonArray_; // ["variable1",]
@@ -18,24 +18,23 @@ public class SaveDataRepository(Context context, ILogger<SaveDataRepository> log
     public async Task<Result<SaveData>> LoadAsync()
     {
         logger.LogInformation("Load SaveData");
-        if (context.WwwDirPath is null) { return new Err<SaveData>("wwwフォルダが選択されていません。"); }
-        var filePath = Path.Combine(context.WwwDirPath, "save", "file1.rpgsave");
+        if (pathProvider.WwwDirPath is null) { return new Err<SaveData>("wwwフォルダが選択されていません。"); }
+        var filePath = Path.Combine(pathProvider.WwwDirPath, "save", "file1.rpgsave");
         if (!File.Exists(filePath)) { return new Err<SaveData>($"{filePath}が存在しません。"); }
         var json = LZString.DecompressFromBase64(await File.ReadAllTextAsync(filePath));
         using var jsonMemoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
-        var rootNode = await JsonNode.ParseAsync(jsonMemoryStream);
-        if (rootNode is null) { return new Err<SaveData>($"{filePath}のパースに失敗しました。"); }
-        if (rootNode["switches"]?["_data"]?["@a"] is not JsonArray switchValuesJsonArray) { return new Err<SaveData>("セーブデータにswitches::_data::@aが見つかりませんでした。"); }
-        if (rootNode["variables"]?["_data"]?["@a"] is not JsonArray variableValuesJsonArray) { return new Err<SaveData>("セーブデータにvariables::_data::@aが見つかりませんでした。"); }
-        if (rootNode["actors"]?["_data"]?["@a"] is not JsonArray actorsJsonArray) { return new Err<SaveData>("セーブデータにactors::_data::@aが見つかりませんでした。"); }
-        if (rootNode["party"]?["_gold"] is not JsonValue goldJsonValue) { return new Err<SaveData>("セーブデータにparty::_goldが見つかりませんでした。"); }
-        if (rootNode["party"]?["_items"] is not JsonObject heldItemsJsonObject) { return new Err<SaveData>("セーブデータにparty::_itemsが見つかりませんでした。"); }
-        if (rootNode["party"]?["_weapons"] is not JsonObject heldWeaponsJsonObject) { return new Err<SaveData>("セーブデータにparty::_weaponsが見つかりませんでした。"); }
-        if (rootNode["party"]?["_armors"] is not JsonObject heldArmorsJsonObject) { return new Err<SaveData>("セーブデータにparty::_armorsが見つかりませんでした。"); }
-        context.saveDataRootNode_ = rootNode;
+        if (!(await saveDataJsonObjectProvider.GetAsync()).Unwrap(out var rootObject, out var message)) { return new Err<SaveData>(message); }
+        if (rootObject is null) { return new Err<SaveData>($"{filePath}のパースに失敗しました。"); }
+        if (rootObject["switches"]?["_data"]?["@a"] is not JsonArray switchValuesJsonArray) { return new Err<SaveData>("セーブデータにswitches::_data::@aが見つかりませんでした。"); }
+        if (rootObject["variables"]?["_data"]?["@a"] is not JsonArray variableValuesJsonArray) { return new Err<SaveData>("セーブデータにvariables::_data::@aが見つかりませんでした。"); }
+        if (rootObject["actors"]?["_data"]?["@a"] is not JsonArray actorsJsonArray) { return new Err<SaveData>("セーブデータにactors::_data::@aが見つかりませんでした。"); }
+        if (rootObject["party"]?["_gold"] is not JsonValue goldJsonValue) { return new Err<SaveData>("セーブデータにparty::_goldが見つかりませんでした。"); }
+        if (rootObject["party"]?["_items"] is not JsonObject heldItemsJsonObject) { return new Err<SaveData>("セーブデータにparty::_itemsが見つかりませんでした。"); }
+        if (rootObject["party"]?["_weapons"] is not JsonObject heldWeaponsJsonObject) { return new Err<SaveData>("セーブデータにparty::_weaponsが見つかりませんでした。"); }
+        if (rootObject["party"]?["_armors"] is not JsonObject heldArmorsJsonObject) { return new Err<SaveData>("セーブデータにparty::_armorsが見つかりませんでした。"); }
         if (switchNamesJsonArray_ is null || variableNamesJsonArray_ is null)
         {
-            var systemFilePath = Path.Combine(context.WwwDirPath, "data", "System.json");
+            var systemFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "System.json");
             if (!File.Exists(systemFilePath)) { return new Err<SaveData>($"{systemFilePath}が存在しません。"); }
             using var fileStream = new FileStream(systemFilePath, FileMode.Open);
             var systemJsonObject = await JsonSerializer.DeserializeAsync<JsonObject>(fileStream);
@@ -45,7 +44,7 @@ public class SaveDataRepository(Context context, ILogger<SaveDataRepository> log
         }
         if (itemDataJsonArray_ is null)
         {
-            var itemsFilePath = Path.Combine(context.WwwDirPath, "data", "Items.json");
+            var itemsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Items.json");
             if (!File.Exists(itemsFilePath)) { return new Err<SaveData>($"{itemsFilePath}が存在しません。"); }
             using var fileStream = new FileStream(itemsFilePath, FileMode.Open);
             itemDataJsonArray_ = await JsonSerializer.DeserializeAsync<JsonArray>(fileStream);
@@ -53,7 +52,7 @@ public class SaveDataRepository(Context context, ILogger<SaveDataRepository> log
         }
         if (weaponDataJsonArray_ is null)
         {
-            var weaponsFilePath = Path.Combine(context.WwwDirPath, "data", "Weapons.json");
+            var weaponsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Weapons.json");
             if (!File.Exists(weaponsFilePath)) { return new Err<SaveData>($"{weaponsFilePath}が存在しません。"); }
             using var fileStream = new FileStream(weaponsFilePath, FileMode.Open);
             weaponDataJsonArray_ = await JsonSerializer.DeserializeAsync<JsonArray>(fileStream);
@@ -61,7 +60,7 @@ public class SaveDataRepository(Context context, ILogger<SaveDataRepository> log
         }
         if (armorDataJsonArray_ is null)
         {
-            var armorsFilePath = Path.Combine(context.WwwDirPath, "data", "Armors.json");
+            var armorsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Armors.json");
             if (!File.Exists(armorsFilePath)) { return new Err<SaveData>($"{armorsFilePath}が存在しません。"); }
             using var fileStream = new FileStream(armorsFilePath, FileMode.Open);
             armorDataJsonArray_ = await JsonSerializer.DeserializeAsync<JsonArray>(fileStream);
@@ -127,17 +126,17 @@ public class SaveDataRepository(Context context, ILogger<SaveDataRepository> log
     public async Task<Result> SaveAsync(SaveData saveData)
     {
         logger.LogInformation("Save SaveData");
-        if (context.WwwDirPath is null) { return new Err("wwwフォルダが選択されていません。"); }
-        if (context.saveDataRootNode_ is null) { return new Err("セーブデータが未ロードです。"); }
-        var filePath = Path.Combine(context.WwwDirPath, "save", "file1.rpgsave");
+        if (pathProvider.WwwDirPath is null) { return new Err("wwwフォルダが選択されていません。"); }
+        var filePath = Path.Combine(pathProvider.WwwDirPath, "save", "file1.rpgsave");
         if (!File.Exists(filePath)) { return new Err($"{filePath}が存在しません。"); }
-        if (context.saveDataRootNode_["switches"]?["_data"]?["@a"] is not JsonArray switchValuesJsonArray) { return new Err("セーブデータにswitches::_data::@aが見つかりませんでした。"); }
-        if (context.saveDataRootNode_["variables"]?["_data"]?["@a"] is not JsonArray variableValuesJsonArray) { return new Err("セーブデータにvariables::_data::@aが見つかりませんでした。"); }
-        if (context.saveDataRootNode_["actors"]?["_data"]?["@a"] is not JsonArray actorsJsonArray) { return new Err("セーブデータにactors::_data::@aが見つかりませんでした。"); }
-        if (context.saveDataRootNode_["party"]?["_gold"] is not JsonValue goldJsonValue) { return new Err("セーブデータにparty::_goldが見つかりませんでした。"); }
-        if (context.saveDataRootNode_["party"]?["_items"] is not JsonObject heldItemsJsonObject) { return new Err("セーブデータにparty::_itemsが見つかりませんでした。"); }
-        if (context.saveDataRootNode_["party"]?["_weapons"] is not JsonObject heldWeaponsJsonObject) { return new Err("セーブデータにparty::_weaponsが見つかりませんでした。"); }
-        if (context.saveDataRootNode_["party"]?["_armors"] is not JsonObject heldArmorsJsonObject) { return new Err("セーブデータにparty::_armorsが見つかりませんでした。"); }
+        if (!(await saveDataJsonObjectProvider.GetAsync()).Unwrap(out var rootObject, out var message)) { return new Err(message); }
+        if (rootObject["switches"]?["_data"]?["@a"] is not JsonArray switchValuesJsonArray) { return new Err("セーブデータにswitches::_data::@aが見つかりませんでした。"); }
+        if (rootObject["variables"]?["_data"]?["@a"] is not JsonArray variableValuesJsonArray) { return new Err("セーブデータにvariables::_data::@aが見つかりませんでした。"); }
+        if (rootObject["actors"]?["_data"]?["@a"] is not JsonArray actorsJsonArray) { return new Err("セーブデータにactors::_data::@aが見つかりませんでした。"); }
+        if (rootObject["party"]?["_gold"] is not JsonValue goldJsonValue) { return new Err("セーブデータにparty::_goldが見つかりませんでした。"); }
+        if (rootObject["party"]?["_items"] is not JsonObject heldItemsJsonObject) { return new Err("セーブデータにparty::_itemsが見つかりませんでした。"); }
+        if (rootObject["party"]?["_weapons"] is not JsonObject heldWeaponsJsonObject) { return new Err("セーブデータにparty::_weaponsが見つかりませんでした。"); }
+        if (rootObject["party"]?["_armors"] is not JsonObject heldArmorsJsonObject) { return new Err("セーブデータにparty::_armorsが見つかりませんでした。"); }
         foreach (var @switch in saveData.Switches)
         {
             // セーブデータのスイッチ配列は要素数が全スイッチ数より少ないことがあるので足りない分だけ増やす
@@ -181,7 +180,7 @@ public class SaveDataRepository(Context context, ILogger<SaveDataRepository> log
             heldArmorsJsonObject[armor.Id.ToString()] = armor.Count;
         }
         using var jsonMemoryStream = new MemoryStream();
-        await JsonSerializer.SerializeAsync(jsonMemoryStream, context.saveDataRootNode_);
+        await JsonSerializer.SerializeAsync(jsonMemoryStream, rootObject);
         jsonMemoryStream.Position = 0;
         using var jsonMemoryStreamReader = new StreamReader(jsonMemoryStream);
         var json = await jsonMemoryStreamReader.ReadToEndAsync();

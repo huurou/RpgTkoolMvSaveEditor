@@ -9,7 +9,7 @@ namespace RpgTkoolMvSaveEditor.Presentation;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private readonly Context context_;
+    private readonly PathProvider context_;
     private readonly DialogService<AboutDialog, AboutDialogViewModel> aboutDialogService_;
     private readonly ApplicationService appService_;
 
@@ -30,9 +30,9 @@ public partial class MainWindowViewModel : ObservableObject
         aboutDialogService_.ShowDialog();
     }
 
-    public MainWindowViewModel(Context context, DialogService<AboutDialog, AboutDialogViewModel> aboutDialogService, ApplicationService appService)
+    public MainWindowViewModel(PathProvider pathProvider, DialogService<AboutDialog, AboutDialogViewModel> aboutDialogService, ApplicationService appService)
     {
-        context_ = context;
+        context_ = pathProvider;
         aboutDialogService_ = aboutDialogService;
         appService_ = appService;
     }

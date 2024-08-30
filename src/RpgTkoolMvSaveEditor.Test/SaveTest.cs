@@ -15,9 +15,11 @@ public class SaveTest
 
     public SaveTest()
     {
-        services_.AddSingleton<Context>(_ => new([Path.Combine("saveTestData", "www")]));
+        services_.AddSingleton<PathProvider>(_ => new([Path.Combine("saveTestData", "www")]));
         services_.AddSingleton<ISaveDataRepository, SaveDataRepository>();
+        services_.AddSingleton<SaveDataJsonObjectProvider>();
         services_.AddSingleton<ICommonSaveDataRepository, CommonSaveDataRepository>();
+        services_.AddSingleton<CommonSaveDataJsonObjectProvider>();
         services_.AddLogging(b => b.AddProvider(NullLoggerProvider.Instance));
 
         provider_ = services_.BuildServiceProvider();
