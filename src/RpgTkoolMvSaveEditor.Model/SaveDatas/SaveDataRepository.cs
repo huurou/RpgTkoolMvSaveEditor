@@ -9,12 +9,6 @@ namespace RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
 
 public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectProvider saveDataJsonObjectProvider, ILogger<SaveDataRepository> logger) : ISaveDataRepository
 {
-    private JsonArray? switchNamesJsonArray_; // ["switch1",]
-    private JsonArray? variableNamesJsonArray_; // ["variable1",]
-    private JsonArray? itemDataJsonArray_; // [{id,name,description}]
-    private JsonArray? weaponDataJsonArray_; // [{id,name,description}]
-    private JsonArray? armorDataJsonArray_; // [{id,name,description}]
-
     public async Task<Result<SaveData>> LoadAsync()
     {
         logger.LogInformation("Load SaveData");
@@ -32,41 +26,29 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
         if (rootObject["party"]?["_items"] is not JsonObject heldItemsJsonObject) { return new Err<SaveData>("セーブデータにparty::_itemsが見つかりませんでした。"); }
         if (rootObject["party"]?["_weapons"] is not JsonObject heldWeaponsJsonObject) { return new Err<SaveData>("セーブデータにparty::_weaponsが見つかりませんでした。"); }
         if (rootObject["party"]?["_armors"] is not JsonObject heldArmorsJsonObject) { return new Err<SaveData>("セーブデータにparty::_armorsが見つかりませんでした。"); }
-        if (switchNamesJsonArray_ is null || variableNamesJsonArray_ is null)
-        {
-            var systemFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "System.json");
-            if (!File.Exists(systemFilePath)) { return new Err<SaveData>($"{systemFilePath}が存在しません。"); }
-            using var fileStream = new FileStream(systemFilePath, FileMode.Open);
-            var systemJsonObject = await JsonSerializer.DeserializeAsync<JsonObject>(fileStream);
-            if (systemJsonObject is null) { return new Err<SaveData>($"{systemFilePath}のロードに失敗しました。"); }
-            switchNamesJsonArray_ = systemJsonObject["switches"]!.AsArray();
-            variableNamesJsonArray_ = systemJsonObject["variables"]!.AsArray();
-        }
-        if (itemDataJsonArray_ is null)
-        {
-            var itemsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Items.json");
-            if (!File.Exists(itemsFilePath)) { return new Err<SaveData>($"{itemsFilePath}が存在しません。"); }
-            using var fileStream = new FileStream(itemsFilePath, FileMode.Open);
-            itemDataJsonArray_ = await JsonSerializer.DeserializeAsync<JsonArray>(fileStream);
-            if (itemDataJsonArray_ is null) { return new Err<SaveData>($"{itemsFilePath}のロードに失敗しました。"); }
-        }
-        if (weaponDataJsonArray_ is null)
-        {
-            var weaponsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Weapons.json");
-            if (!File.Exists(weaponsFilePath)) { return new Err<SaveData>($"{weaponsFilePath}が存在しません。"); }
-            using var fileStream = new FileStream(weaponsFilePath, FileMode.Open);
-            weaponDataJsonArray_ = await JsonSerializer.DeserializeAsync<JsonArray>(fileStream);
-            if (weaponDataJsonArray_ is null) { return new Err<SaveData>($"{weaponsFilePath}のロードに失敗しました。"); }
-        }
-        if (armorDataJsonArray_ is null)
-        {
-            var armorsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Armors.json");
-            if (!File.Exists(armorsFilePath)) { return new Err<SaveData>($"{armorsFilePath}が存在しません。"); }
-            using var fileStream = new FileStream(armorsFilePath, FileMode.Open);
-            armorDataJsonArray_ = await JsonSerializer.DeserializeAsync<JsonArray>(fileStream);
-            if (armorDataJsonArray_ is null) { return new Err<SaveData>($"{armorsFilePath}のロードに失敗しました。"); }
-        }
-        var switches = switchNamesJsonArray_
+        var systemFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "System.json");
+        if (!File.Exists(systemFilePath)) { return new Err<SaveData>($"{systemFilePath}が存在しません。"); }
+        using var systemFileStream = new FileStream(systemFilePath, FileMode.Open);
+        var systemJsonObject = await JsonSerializer.DeserializeAsync<JsonObject>(systemFileStream);
+        if (systemJsonObject is null) { return new Err<SaveData>($"{systemFilePath}のロードに失敗しました。"); }
+        var switchNamesJsonArray = systemJsonObject["switches"]!.AsArray();
+        var variableNamesJsonArray = systemJsonObject["variables"]!.AsArray();
+        var itemsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Items.json");
+        if (!File.Exists(itemsFilePath)) { return new Err<SaveData>($"{itemsFilePath}が存在しません。"); }
+        using var itemsFileStream = new FileStream(itemsFilePath, FileMode.Open);
+        var itemDataJsonArray = await JsonSerializer.DeserializeAsync<JsonArray>(itemsFileStream);
+        if (itemDataJsonArray is null) { return new Err<SaveData>($"{itemsFilePath}のロードに失敗しました。"); }
+        var weaponsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Weapons.json");
+        if (!File.Exists(weaponsFilePath)) { return new Err<SaveData>($"{weaponsFilePath}が存在しません。"); }
+        using var weaponsFileStream = new FileStream(weaponsFilePath, FileMode.Open);
+        var weaponDataJsonArray = await JsonSerializer.DeserializeAsync<JsonArray>(weaponsFileStream);
+        if (weaponDataJsonArray is null) { return new Err<SaveData>($"{weaponsFilePath}のロードに失敗しました。"); }
+        var armorsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Armors.json");
+        if (!File.Exists(armorsFilePath)) { return new Err<SaveData>($"{armorsFilePath}が存在しません。"); }
+        using var armorsFileStream = new FileStream(armorsFilePath, FileMode.Open);
+        var armorDataJsonArray = await JsonSerializer.DeserializeAsync<JsonArray>(armorsFileStream);
+        if (armorDataJsonArray is null) { return new Err<SaveData>($"{armorsFilePath}のロードに失敗しました。"); }
+        var switches = switchNamesJsonArray
             .Select((x, i) => (Id: i, Name: x!.GetValue<string>())).Skip(1)
             .Select(x => new Switch(x.Id, x.Name, x.Id < switchValuesJsonArray.Count ? switchValuesJsonArray[x.Id]?.GetValue<bool?>() : null));
         var variableValues = variableValuesJsonArray.Select(
@@ -80,7 +62,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
                 _ => (object?)x,
             }
         ).ToList();
-        var variables = variableNamesJsonArray_
+        var variables = variableNamesJsonArray
             .Select((x, i) => (Id: i, Name: x!.GetValue<string>())).Skip(1)
             .Select(x => new Variable(x.Id, x.Name, x.Id < variableValues.Count ? variableValues[x.Id] : null));
         var gold = goldJsonValue!.GetValue<int>();
@@ -95,7 +77,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
                 x.Value?["_exp"]?["1"]?.GetValue<int>() ?? default
             )
         );
-        var items = itemDataJsonArray_.OfType<JsonNode>().Select(
+        var items = itemDataJsonArray.OfType<JsonNode>().Select(
             x => new Item(
                 x!["id"]!.GetValue<int>(),
                 x["name"]!.GetValue<string>(),
@@ -103,7 +85,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
                 heldItemsJsonObject.TryGetPropertyValue(x["id"]!.GetValue<int>().ToString(), out var countJsonNode) ? countJsonNode!.GetValue<int>() : 0
             )
         );
-        var weapons = weaponDataJsonArray_.OfType<JsonNode>().Select(
+        var weapons = weaponDataJsonArray.OfType<JsonNode>().Select(
             x => new Weapon(
                 x!["id"]!.GetValue<int>(),
                 x["name"]!.GetValue<string>(),
@@ -111,7 +93,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
                 heldWeaponsJsonObject.TryGetPropertyValue(x["id"]!.GetValue<int>().ToString(), out var countJsonNode) ? countJsonNode!.GetValue<int>() : 0
             )
         );
-        var armors = armorDataJsonArray_.OfType<JsonNode>().Select(
+        var armors = armorDataJsonArray.OfType<JsonNode>().Select(
             x => new Armor(
                 x!["id"]!.GetValue<int>(),
                 x["name"]!.GetValue<string>(),
