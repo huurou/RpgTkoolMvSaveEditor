@@ -1,4 +1,4 @@
-using LZStringCSharp;
+ï»¿using LZStringCSharp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -24,12 +24,12 @@ public class SaveTest
     }
 
     [Fact]
-    public async Task ƒZ[ƒuƒf[ƒ^ƒZ[ƒuAsync()
+    public async Task ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚»ãƒ¼ãƒ–Async()
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
         var saveDataRepository = provider_.GetRequiredService<ISaveDataRepository>();
-        // æ‚ÉrootNode‚ğƒ[ƒh‚·‚é ‚ ‚ç‚©‚¶‚ßƒ[ƒh‚³‚ê‚½rootNode‚Ìˆê•”‚ğ‘‚«Š·‚¦‚éŒ`‚ÅƒZ[ƒu‚·‚é‚½‚ß
+        // å…ˆã«rootNodeã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ ã‚ã‚‰ã‹ã˜ã‚ãƒ­ãƒ¼ãƒ‰ã•ã‚ŒãŸrootNodeã®ä¸€éƒ¨ã‚’æ›¸ãæ›ãˆã‚‹å½¢ã§ã‚»ãƒ¼ãƒ–ã™ã‚‹ãŸã‚
         await saveDataRepository.LoadAsync();
         var saveData = new SaveData(
             [
@@ -89,12 +89,12 @@ public class SaveTest
     }
 
     [Fact]
-    public async Task ‹¤’ÊƒZ[ƒuƒf[ƒ^ƒZ[ƒuAsync()
+    public async Task å…±é€šã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚»ãƒ¼ãƒ–Async()
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "common.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "common.rpgsave"), true);
         var commonSaveDataRepository = provider_.GetRequiredService<ICommonSaveDataRepository>();
-        // æ‚ÉrootNode‚ğƒ[ƒh‚·‚é ‚ ‚ç‚©‚¶‚ßƒ[ƒh‚³‚ê‚½rootNode‚Ìˆê•”‚ğ‘‚«Š·‚¦‚éŒ`‚ÅƒZ[ƒu‚·‚é‚½‚ß
+        // å…ˆã«rootNodeã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ ã‚ã‚‰ã‹ã˜ã‚ãƒ­ãƒ¼ãƒ‰ã•ã‚ŒãŸrootNodeã®ä¸€éƒ¨ã‚’æ›¸ãæ›ãˆã‚‹å½¢ã§ã‚»ãƒ¼ãƒ–ã™ã‚‹ãŸã‚
         await commonSaveDataRepository.LoadAsync();
         var commonSaveData = new CommonSaveData(
             [
