@@ -6,7 +6,6 @@ namespace RpgTkoolMvSaveEditor.Model.CommonSaveDatas;
 public class CommonSaveDataLoader(PathProvider pathProvider, ICommonSaveDataRepository commonSaveDataRepository, ILogger<CommonSaveDataLoader> logger)
 {
     public event EventHandler<CommonSaveDataLoadedEventArgs>? CommonSaveDataLoaded;
-    public event EventHandler<ErrorOccurredEventArgs>? ErrorOccurred;
 
     public bool LoadSuppressed { private get; set; }
 
@@ -15,13 +14,27 @@ public class CommonSaveDataLoader(PathProvider pathProvider, ICommonSaveDataRepo
 
     public async Task LoadAsync()
     {
-        StartWatcher();
+        if (!StartWatcher()) { return; }
         await LoadInnerAsync();
     }
 
-    private void StartWatcher()
+    private bool StartWatcher()
     {
-        if (commonSaveDataWather_?.EnableRaisingEvents == true || pathProvider.WwwDirPath is null) { return; }
+        if (pathProvider.WwwDirPath is null)
+        {
+            logger.LogError("wwwフォルダが選択されていません。");
+            return false;
+        }
+        if (!Directory.Exists(Path.Combine(pathProvider.WwwDirPath, "save")))
+        {
+            logger.LogError("{}が存在しません。", Path.Combine(pathProvider.WwwDirPath, "save"));
+            return false;
+        }
+        if (commonSaveDataWather_?.EnableRaisingEvents == true)
+        {
+            commonSaveDataWather_.EnableRaisingEvents = false;
+            commonSaveDataWather_.Dispose();
+        }
         commonSaveDataWather_ = new FileSystemWatcher(Path.Combine(pathProvider.WwwDirPath, "save"), "common.rpgsave");
         commonSaveDataWather_.Changed +=
             async (s, e) =>
@@ -40,6 +53,7 @@ public class CommonSaveDataLoader(PathProvider pathProvider, ICommonSaveDataRepo
                 }
             };
         commonSaveDataWather_.EnableRaisingEvents = true;
+        return true;
     }
 
     private async Task LoadInnerAsync()
@@ -56,7 +70,8 @@ public class CommonSaveDataLoader(PathProvider pathProvider, ICommonSaveDataRepo
         }
         else
         {
-            ErrorOccurred?.Invoke(this, new(message));
+            logger.LogError("{}", message);
+            logger.LogError("共通セーブデータのロードに失敗しました。");
         }
     }
 }

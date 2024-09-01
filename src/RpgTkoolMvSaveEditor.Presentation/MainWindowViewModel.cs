@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Win32;
 using RpgTkoolMvSaveEditor.Model;
 using RpgTkoolMvSaveEditor.Model.Configs;
 using RpgTkoolMvSaveEditor.Presentation.Dialogs;
@@ -32,6 +33,16 @@ public partial class MainWindowViewModel : ObservableObject
     public async Task Loaded()
     {
         await appService_.LoadDataAsync();
+    }
+
+    [RelayCommand]
+    public async Task OpenWwwDirSelectDialog()
+    {
+        var wwwDirSelectDialog = new OpenFolderDialog { Title = "wwwフォルダを選択してください。", };
+        if (wwwDirSelectDialog.ShowDialog() == true)
+        {
+            await appService_.SelectWwwDirAsync(wwwDirSelectDialog.FolderName);
+        }
     }
 
     [RelayCommand]
@@ -92,19 +103,6 @@ public partial class MainWindowViewModel : ObservableObject
                 Gold = e.SaveData.Gold;
                 Actors = [.. e.SaveData.Actors.Select(x => new ActorViewModel(x))];
                 ActorsSelectedIndex = 0;
-            };
-        appService.ErrorOccurred +=
-            (s, e) =>
-            {
-                MessageBox.Show(e.Message, "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
-                if (s is not null)
-                {
-                    loggerFactory.CreateLogger(s.GetType()).LogError("{}", e.Message);
-                }
-                else
-                {
-                    loggerFactory.CreateLogger<MainWindowViewModel>().LogError("{}", e.Message);
-                }
             };
 
         WeakReferenceMessenger.Default.Register<CommonSaveDataChangedMessage>(

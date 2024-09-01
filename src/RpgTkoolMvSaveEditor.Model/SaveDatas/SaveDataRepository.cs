@@ -56,7 +56,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
             x => x?.GetValueKind() switch
             {
                 JsonValueKind.String => x.GetValue<string>(),
-                JsonValueKind.Number => x.GetValue<int>(),
+                JsonValueKind.Number => x.GetValue<double>(),
                 JsonValueKind.True or JsonValueKind.False => x.GetValue<bool>(),
                 JsonValueKind.Null => null,
                 // いずれにも一致しない場合は元のJsonNodeを返す

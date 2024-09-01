@@ -6,7 +6,6 @@ namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
 public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveDataRepository, ILogger<SaveDataLoader> logger)
 {
     public event EventHandler<SaveDataLoadedEventArgs>? SaveDataLoaded;
-    public event EventHandler<ErrorOccurredEventArgs>? ErrorOccurred;
 
     public bool LoadSuppressed { get; set; }
 
@@ -15,13 +14,27 @@ public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveD
 
     public async Task LoadAsync()
     {
-        StartWatcher();
+        if (!StartWatcher()) { return; }
         await LoadInnerAsync();
     }
 
-    private void StartWatcher()
+    private bool StartWatcher()
     {
-        if (saveDataWather_?.EnableRaisingEvents == true || pathProvider.WwwDirPath is null) { return; }
+        if (pathProvider.WwwDirPath is null)
+        {
+            logger.LogError("wwwフォルダが選択されていません。");
+            return false;
+        }
+        if (!Directory.Exists(Path.Combine(pathProvider.WwwDirPath, "save")))
+        {
+            logger.LogError("{}が存在しません。", Path.Combine(pathProvider.WwwDirPath, "save"));
+            return false;
+        }
+        if (saveDataWather_?.EnableRaisingEvents == true)
+        {
+            saveDataWather_.EnableRaisingEvents = false;
+            saveDataWather_.Dispose();
+        }
         saveDataWather_ = new FileSystemWatcher(Path.Combine(pathProvider.WwwDirPath, "save"), "file1.rpgsave");
         saveDataWather_.Changed +=
             async (s, e) =>
@@ -40,6 +53,7 @@ public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveD
                 }
             };
         saveDataWather_.EnableRaisingEvents = true;
+        return true;
     }
 
     private async Task LoadInnerAsync()
@@ -56,7 +70,8 @@ public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveD
         }
         else
         {
-            ErrorOccurred?.Invoke(this, new(message));
+            logger.LogError("{}", message);
+            logger.LogError("セーブデータのロードに失敗しました。");
         }
     }
 }

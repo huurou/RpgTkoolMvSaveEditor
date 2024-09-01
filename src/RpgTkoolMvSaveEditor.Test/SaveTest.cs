@@ -26,7 +26,7 @@ public class SaveTest
     }
 
     [Fact]
-    public async Task セーブデータセーブAsync()
+    public async Task セーブデータセーブ()
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "file1.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "file1.rpgsave"), true);
@@ -91,7 +91,7 @@ public class SaveTest
     }
 
     [Fact]
-    public async Task 共通セーブデータセーブAsync()
+    public async Task 共通セーブデータセーブ()
     {
         // Arrange
         File.Copy(Path.Combine("saveTestData", "www", "save", "common.original.rpgsave"), Path.Combine("saveTestData", "www", "save", "common.rpgsave"), true);

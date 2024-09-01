@@ -8,7 +8,6 @@ public class ApplicationService
 {
     public event EventHandler<CommonSaveDataLoadedEventArgs>? CommonSaveDataLoaded;
     public event EventHandler<SaveDataLoadedEventArgs>? SaveDataLoaded;
-    public event EventHandler<ErrorOccurredEventArgs>? ErrorOccurred;
 
     private readonly PathProvider pathProvider_;
     private readonly CommonSaveDataLoader commonSaveDataLoader_;
@@ -31,9 +30,7 @@ public class ApplicationService
         saveDataSaver_ = saveDataSaver;
 
         commonSaveDataLoader.CommonSaveDataLoaded += (s, e) => CommonSaveDataLoaded?.Invoke(s, e);
-        commonSaveDataLoader.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
         saveDataLoader.SaveDataLoaded += (s, e) => SaveDataLoaded?.Invoke(s, e);
-        saveDataLoader.ErrorOccurred += (s, e) => ErrorOccurred?.Invoke(s, e);
     }
 
     public async Task LoadDataAsync()
@@ -41,6 +38,12 @@ public class ApplicationService
         if (pathProvider_.WwwDirPath is null) { return; }
         await commonSaveDataLoader_.LoadAsync();
         await saveDataLoader_.LoadAsync();
+    }
+
+    public async Task SelectWwwDirAsync(string path)
+    {
+        pathProvider_.WwwDirPath = path;
+        await LoadDataAsync();
     }
 
     public async Task UpdateCommonSaveDataAsync(CommonSaveData commonSaveData)

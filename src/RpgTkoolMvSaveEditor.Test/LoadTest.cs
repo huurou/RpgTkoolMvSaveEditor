@@ -25,7 +25,7 @@ public class LoadTest
     }
 
     [Fact]
-    public async Task セーブデータロードAsync()
+    public async Task セーブデータロード()
     {
         // Arrange
         var saveDataRepository = provider_.GetRequiredService<ISaveDataRepository>();
@@ -45,7 +45,7 @@ public class LoadTest
         );
         Assert.Equal(
             [
-                new(1, "変数1", 1),
+                new(1, "変数1", 1.0), // Number型の値をdoubleでパースしているのでdouble型でないと一致しない
                 new(2, "変数2", "a"),
                 new(3, "変数3", true),
             ],
@@ -83,7 +83,7 @@ public class LoadTest
     }
 
     [Fact]
-    public async Task 共通セーブデータロードAsync()
+    public async Task 共通セーブデータロード()
     {
         // Arrange
         var commonSaveDataRepository = provider_.GetRequiredService<ICommonSaveDataRepository>();
@@ -103,7 +103,7 @@ public class LoadTest
         );
         Assert.Equal(
             [
-                new(1, "変数1", 1),
+                new(1, "変数1", 1.0), // Number型の値をdoubleでパースしているのでdouble型でないと一致しない
                 new(2, "変数2", "a"),
                 new(3, "変数3", true),
             ],

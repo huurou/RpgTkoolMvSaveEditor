@@ -32,7 +32,7 @@ public class CommonSaveDataRepository(PathProvider pathProvider, CommonSaveDataJ
                 Value: x.Value?.GetValueKind() switch
                 {
                     JsonValueKind.String => x.Value.GetValue<string>(),
-                    JsonValueKind.Number => x.Value.GetValue<int>(),
+                    JsonValueKind.Number => x.Value.GetValue<double>(),
                     JsonValueKind.True or JsonValueKind.False => x.Value.GetValue<bool>(),
                     JsonValueKind.Null => null,
                     // いずれにも一致しない場合は元のJsonNodeを返す
