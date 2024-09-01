@@ -11,7 +11,7 @@ public class CommonSaveDataRepository(PathProvider pathProvider, CommonSaveDataJ
 {
     public async Task<Result<CommonSaveData>> LoadAsync()
     {
-        logger.LogDebug("共通セーブデータをロードしています。");
+        logger.LogInformation("共通セーブデータをロードしています。");
         if (pathProvider.WwwDirPath is null) { return new Err<CommonSaveData>("wwwフォルダが選択されていません。"); }
         if (!(await commonSaveDataJsonObjectProvider.GetAsync()).Unwrap(out var rootObject, out var message)) { return new Err<CommonSaveData>(message); }
         if (rootObject["gameSwitches"] is not JsonObject gameSwitchesJsonObject) { return new Err<CommonSaveData>("セーブデータにgameSwitchesが見つかりませんでした。"); }

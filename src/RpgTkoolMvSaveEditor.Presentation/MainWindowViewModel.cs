@@ -19,8 +19,11 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private List<SwitchViewModel> switches = [];
     [ObservableProperty] private List<VariableViewModel> variables = [];
     [ObservableProperty] private List<ItemViewModel> items = [];
+    [ObservableProperty] private List<ItemViewModel> selectedItems = [];
     [ObservableProperty] private List<WeaponViewModel> weapons = [];
+    [ObservableProperty] private List<WeaponViewModel> selectedWeapons = [];
     [ObservableProperty] private List<ArmorViewModel> armors = [];
+    [ObservableProperty] private List<ArmorViewModel> selectedArmors = [];
     [ObservableProperty] private int gold;
     [ObservableProperty] private List<ActorViewModel> actors = [];
     [ObservableProperty] private int actorsSelectedIndex = -1;
@@ -35,6 +38,33 @@ public partial class MainWindowViewModel : ObservableObject
     public void ShowAboutDialog()
     {
         aboutDialogService_.ShowDialog();
+    }
+
+    [RelayCommand]
+    public void Set99Items()
+    {
+        foreach (var item in SelectedItems)
+        {
+            item.Count = 99;
+        }
+    }
+
+    [RelayCommand]
+    public void Set99Weapons()
+    {
+        foreach (var weapon in SelectedWeapons)
+        {
+            weapon.Count = 99;
+        }
+    }
+
+    [RelayCommand]
+    public void Set99Armors()
+    {
+        foreach (var armor in SelectedArmors)
+        {
+            armor.Count = 99;
+        }
     }
 
     private readonly DialogService<AboutDialog, AboutDialogViewModel> aboutDialogService_;

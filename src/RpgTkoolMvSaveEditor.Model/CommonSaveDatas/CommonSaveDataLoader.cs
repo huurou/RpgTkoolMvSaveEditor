@@ -26,7 +26,7 @@ public class CommonSaveDataLoader(PathProvider pathProvider, ICommonSaveDataRepo
         commonSaveDataWather_.Changed +=
             async (s, e) =>
             {
-                logger.LogDebug("共通セーブデータに変更あり changeType:{changeType} name:{name} fullPath:{fullPath}", e.ChangeType, e.Name, e.FullPath);
+                logger.LogInformation("共通セーブデータに変更あり changeType:{changeType} name:{name} fullPath:{fullPath}", e.ChangeType, e.Name, e.FullPath);
                 cancellationTokenSource_?.Cancel();
                 cancellationTokenSource_ = new();
                 try
@@ -36,7 +36,7 @@ public class CommonSaveDataLoader(PathProvider pathProvider, ICommonSaveDataRepo
                 }
                 catch (OperationCanceledException)
                 {
-                    logger.LogDebug("共通セーブデータのロードがキャンセルされました。");
+                    logger.LogInformation("共通セーブデータのロードがキャンセルされました。");
                 }
             };
         commonSaveDataWather_.EnableRaisingEvents = true;
@@ -46,7 +46,7 @@ public class CommonSaveDataLoader(PathProvider pathProvider, ICommonSaveDataRepo
     {
         if (LoadSuppressed)
         {
-            logger.LogDebug("共通セーブデータのロードが抑制されました。");
+            logger.LogInformation("共通セーブデータのロードが抑制されました。");
             LoadSuppressed = false;
             return;
         }

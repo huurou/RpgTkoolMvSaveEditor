@@ -26,7 +26,7 @@ public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveD
         saveDataWather_.Changed +=
             async (s, e) =>
             {
-                logger.LogDebug("セーブデータに変更あり changeType:{changeType} name:{name} fullPath:{fullPath}", e.ChangeType, e.Name, e.FullPath);
+                logger.LogInformation("セーブデータに変更あり changeType:{changeType} name:{name} fullPath:{fullPath}", e.ChangeType, e.Name, e.FullPath);
                 cancellationTokenSource_?.Cancel();
                 cancellationTokenSource_ = new();
                 try
@@ -36,7 +36,7 @@ public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveD
                 }
                 catch (OperationCanceledException)
                 {
-                    logger.LogDebug("セーブデータのロードがキャンセルされました。");
+                    logger.LogInformation("セーブデータのロードがキャンセルされました。");
                 }
             };
         saveDataWather_.EnableRaisingEvents = true;
@@ -46,7 +46,7 @@ public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveD
     {
         if (LoadSuppressed)
         {
-            logger.LogDebug("セーブデータのロードが抑制されました。");
+            logger.LogInformation("セーブデータのロードが抑制されました。");
             LoadSuppressed = false;
             return;
         }

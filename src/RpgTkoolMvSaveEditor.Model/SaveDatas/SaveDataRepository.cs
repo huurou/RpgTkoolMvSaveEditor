@@ -12,7 +12,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
 {
     public async Task<Result<SaveData>> LoadAsync()
     {
-        logger.LogDebug("セーブデータをロードしています。");
+        logger.LogInformation("セーブデータをロードしています。");
         if (pathProvider.WwwDirPath is null) { return new Err<SaveData>("wwwフォルダが選択されていません。"); }
         var filePath = Path.Combine(pathProvider.WwwDirPath, "save", "file1.rpgsave");
         if (!File.Exists(filePath)) { return new Err<SaveData>($"{filePath}が存在しません。"); }
@@ -109,7 +109,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
 
     public async Task<Result> SaveAsync(SaveData saveData)
     {
-        logger.LogDebug("セーブデータをセーブしています。");
+        logger.LogInformation("セーブデータをセーブしています。");
         if (pathProvider.WwwDirPath is null) { return new Err("wwwフォルダが選択されていません。"); }
         var filePath = Path.Combine(pathProvider.WwwDirPath, "save", "file1.rpgsave");
         if (!File.Exists(filePath)) { return new Err($"{filePath}が存在しません。"); }

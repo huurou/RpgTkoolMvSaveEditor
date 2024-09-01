@@ -9,7 +9,7 @@ public class CommonSaveDataSaver(CommonSaveDataLoader commonSaveDataLoader, ICom
 
     public async Task SaveAsync(CommonSaveData commonSaveData)
     {
-        logger.LogDebug("共通セーブデータのセーブが要求されました。");
+        logger.LogInformation("共通セーブデータのセーブが要求されました。");
         cancellationTokenSource_.Cancel();
         cancellationTokenSource_ = new();
         try
@@ -20,7 +20,7 @@ public class CommonSaveDataSaver(CommonSaveDataLoader commonSaveDataLoader, ICom
         }
         catch (OperationCanceledException)
         {
-            logger.LogDebug("共通セーブデータのセーブがキャンセルされました。");
+            logger.LogInformation("共通セーブデータのセーブがキャンセルされました。");
         }
     }
 }

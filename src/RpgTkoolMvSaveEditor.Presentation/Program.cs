@@ -30,6 +30,7 @@ builder.Services.AddSingleton<ISaveDataRepository, SaveDataRepository>();
 builder.Services.AddSingleton<ISettingRepository, SettingRepository>();
 builder.Services.AddSingleton<ILogDisplay, LogDisplay>();
 builder.Services.AddLogging(b => NLogConfiguration.Configure(Paths.LogsDir, b));
+builder.Services.AddSingleton<ILoggerProvider, LogDisplayLoggerProvider>();
 
 var app = builder.Build();
 

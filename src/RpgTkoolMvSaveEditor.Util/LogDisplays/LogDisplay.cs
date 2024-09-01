@@ -11,7 +11,7 @@ public class LogDisplay : ILogDisplay
     private readonly Regex indexFormatRegex_ = new(@"\{.*?\}");
 #pragma warning restore SYSLIB1045 // 'GeneratedRegexAttribute' に変換します。
 
-    public void ShowLog(LogLevel logLevel, DateTime dateTime, string message, params object?[]? args)
+    public void Log(LogLevel logLevel, DateTime dateTime, string message, params object?[]? args)
     {
         ShowLogRequested?.Invoke(this, new(logLevel, dateTime, string.Format(ToIndexFormat(message), args ?? [])));
     }
