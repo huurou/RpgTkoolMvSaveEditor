@@ -64,9 +64,9 @@ public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveD
             LoadSuppressed = false;
             return;
         }
-        if ((await saveDataRepository.LoadAsync()).Unwrap(out var commonSaveData, out var message))
+        if ((await saveDataRepository.LoadAsync()).Unwrap(out var saveData, out var message))
         {
-            SaveDataLoaded?.Invoke(this, new(commonSaveData));
+            SaveDataLoaded?.Invoke(this, new(saveData));
         }
         else
         {

@@ -61,20 +61,20 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void Set99Weapons()
+    public void Set1Weapons()
     {
         foreach (var weapon in SelectedWeapons)
         {
-            weapon.Count = 99;
+            weapon.Count = 1;
         }
     }
 
     [RelayCommand]
-    public void Set99Armors()
+    public void Set1Armors()
     {
         foreach (var armor in SelectedArmors)
         {
-            armor.Count = 99;
+            armor.Count = 1;
         }
     }
 

@@ -50,7 +50,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
         var armorDataJsonArray = await JsonSerializer.DeserializeAsync<JsonArray>(armorsFileStream);
         if (armorDataJsonArray is null) { return new Err<SaveData>($"{armorsFilePath}のロードに失敗しました。"); }
         var switches = switchNamesJsonArray
-            .Select((x, i) => (Id: i, Name: x!.GetValue<string>())).Skip(1)
+            .Select((x, i) => (Id: i, Name: x!.GetValue<string>())).Skip(1).Where(x=>!string.IsNullOrEmpty(x.Name))
             .Select(x => new Switch(x.Id, x.Name, x.Id < switchValuesJsonArray.Count ? switchValuesJsonArray[x.Id]?.GetValue<bool?>() : null));
         var variableValues = variableValuesJsonArray.Select(
             x => x?.GetValueKind() switch
@@ -64,10 +64,10 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
             }
         ).ToList();
         var variables = variableNamesJsonArray
-            .Select((x, i) => (Id: i, Name: x!.GetValue<string>())).Skip(1)
+            .Select((x, i) => (Id: i, Name: x!.GetValue<string>())).Skip(1).Where(x => !string.IsNullOrEmpty(x.Name))
             .Select(x => new Variable(x.Id, x.Name, x.Id < variableValues.Count ? variableValues[x.Id] : null));
         var gold = goldJsonValue!.GetValue<int>();
-        var actors = actorsJsonArray.Select((x, i) => (Id: i, Value: x)).Where(x => x.Value is not null).Select(
+        var actors = actorsJsonArray.Select((x, i) => (Id: i, Value: x)).Where(x => !string.IsNullOrEmpty(x.Value?["_name"]?.GetValue<string>())).Where(x => x.Value is not null).Select(
             x => new Actor(
                 x.Id,
                 x.Value?["_name"]?.GetValue<string>() ?? "",
@@ -78,7 +78,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
                 x.Value?["_exp"]?["1"]?.GetValue<int>() ?? default
             )
         );
-        var items = itemDataJsonArray.OfType<JsonNode>().Select(
+        var items = itemDataJsonArray.OfType<JsonNode>().Where(x => !string.IsNullOrEmpty(x?["name"]?.GetValue<string>())).Select(
             x => new Item(
                 x!["id"]!.GetValue<int>(),
                 x["name"]!.GetValue<string>(),
@@ -86,7 +86,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
                 heldItemsJsonObject.TryGetPropertyValue(x["id"]!.GetValue<int>().ToString(), out var countJsonNode) ? countJsonNode!.GetValue<int>() : 0
             )
         );
-        var weapons = weaponDataJsonArray.OfType<JsonNode>().Select(
+        var weapons = weaponDataJsonArray.OfType<JsonNode>().Where(x => !string.IsNullOrEmpty(x?["name"]?.GetValue<string>())).Select(
             x => new Weapon(
                 x!["id"]!.GetValue<int>(),
                 x["name"]!.GetValue<string>(),
@@ -94,7 +94,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
                 heldWeaponsJsonObject.TryGetPropertyValue(x["id"]!.GetValue<int>().ToString(), out var countJsonNode) ? countJsonNode!.GetValue<int>() : 0
             )
         );
-        var armors = armorDataJsonArray.OfType<JsonNode>().Select(
+        var armors = armorDataJsonArray.OfType<JsonNode>().Where(x => !string.IsNullOrEmpty(x?["name"]?.GetValue<string>())).Select(
             x => new Armor(
                 x!["id"]!.GetValue<int>(),
                 x["name"]!.GetValue<string>(),
