@@ -106,6 +106,6 @@
         </Setter>
     </Style>
     <Style TargetType="Menu">
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="Background" Value="White" />
     </Style>
 </ResourceDictionary>

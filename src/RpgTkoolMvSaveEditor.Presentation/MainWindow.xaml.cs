@@ -1,5 +1,6 @@
-﻿using RpgTkoolMvSaveEditor.Presentation.Controls.ConsoleTextViews.ConsoleTextItems;
-using RpgTkoolMvSaveEditor.Util.LogDisplays;
+﻿using RpgTkoolMvSaveEditor.Presentation.Controls.ConsoleTextViews;
+using RpgTkoolMvSaveEditor.Presentation.Controls.ConsoleTextViews.ConsoleTextItems;
+using RpgTkoolMvSaveEditor.Presentation.Controls.ConsoleTextViews.Logging;
 using System.Windows;
 
 namespace RpgTkoolMvSaveEditor.Presentation;
@@ -9,12 +10,12 @@ namespace RpgTkoolMvSaveEditor.Presentation;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public MainWindow(MainWindowViewModel viewModel, ILogDisplay logDisplay)
+    public MainWindow(MainWindowViewModel viewModel)
     {
         DataContext = viewModel;
         InitializeComponent();
 
-        logDisplay.ShowLogRequested +=
+        ConsoleTextViewLogger.LoggingRequested +=
             (s, e) => Application.Current?.Dispatcher.Invoke(
                 () => ConsoleTextView.AppendConsoleItem(ConsoleTextItemProvider.Create(e.LogLevel, e.DateTime, e.Message))
             );

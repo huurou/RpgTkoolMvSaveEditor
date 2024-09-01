@@ -6,18 +6,19 @@ public static class ConsoleTextItemProvider
     {
         return logLevel switch
         {
+            LogLevel.Trace => Detail(eventTime, consoleText),
             LogLevel.Debug => Detail(eventTime, consoleText),
             LogLevel.Information => Info(eventTime, consoleText),
             LogLevel.Warning => Warn(eventTime, consoleText),
             LogLevel.Error => Error(eventTime, consoleText),
             LogLevel.Critical => Fatal(eventTime, consoleText),
-            _ => Fatal(eventTime, consoleText),
+            _ => Detail(eventTime, consoleText),
         };
     }
 
     private static string Format(DateTime eventTime, string consoleText)
     {
-        return $"{eventTime:yyyy-MM-dd HH:mm:ss.fff} {consoleText}";
+        return $"[{eventTime:yyyy-MM-dd HH:mm:ss.fff}] {consoleText}";
     }
 
     public static ConsoleTextItem Fatal(DateTime eventTime, string consoleText)

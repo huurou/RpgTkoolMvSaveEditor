@@ -26,7 +26,7 @@ public class CommonSaveDataLoader(PathProvider pathProvider, ICommonSaveDataRepo
         commonSaveDataWather_.Changed +=
             async (s, e) =>
             {
-                logger.LogInformation("共通セーブデータに変更あり changeType:{changeType} name:{name} fullPath:{fullPath}", e.ChangeType, e.Name, e.FullPath);
+                logger.LogInformation("共通セーブデータに変更あり");
                 cancellationTokenSource_?.Cancel();
                 cancellationTokenSource_ = new();
                 try

@@ -1,8 +1,7 @@
 {
   "profiles": {
     "RpgTkoolMvSaveEditor.Presentation": {
-      "commandName": "Project",
-      "commandLineArgs": "D:\\archive\\egame\\これが泡姫学園の文化祭です！\\www"
+      "commandName": "Project"
     }
   }
 }

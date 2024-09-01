@@ -34,7 +34,7 @@
         </Menu>
         <spacinggrids:SpacingGrid Grid.Row="1" ColumnSpacing="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <spacingstackpanels:SpacingStackPanel Grid.Column="0" Orientation="Horizontal">
@@ -123,6 +123,11 @@
                                     </DataGridTextColumn>
                                     <DataGridTextColumn Header="Count" Binding="{Binding Count, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataGrid.Columns>
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="選択行を99個にする" Command="{Binding Set99WeaponsCommand}" />
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
                             </DataGrid>
                         </GroupBox>
                         <GroupBox Header="Armors">
@@ -141,6 +146,11 @@
                                     </DataGridTextColumn>
                                     <DataGridTextColumn Header="Count" Binding="{Binding Count, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataGrid.Columns>
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="選択行を99個にする" Command="{Binding Set99ArmorsCommand}" />
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
                             </DataGrid>
                         </GroupBox>
                         <spacinggrids:SpacingGrid>
@@ -175,15 +185,15 @@
                                                     <ColumnDefinition />
                                                 </Grid.ColumnDefinitions>
                                                 <Label Grid.Row="0" Grid.Column="0">HP</Label>
-                                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding HP}" />
+                                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding HP, UpdateSourceTrigger=PropertyChanged}" />
                                                 <Label Grid.Row="1" Grid.Column="0">MP</Label>
-                                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MP}" />
+                                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MP, UpdateSourceTrigger=PropertyChanged}" />
                                                 <Label Grid.Row="2" Grid.Column="0">TP</Label>
-                                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TP}" />
+                                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TP, UpdateSourceTrigger=PropertyChanged}" />
                                                 <Label Grid.Row="3" Grid.Column="0">Level</Label>
-                                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Level}" />
+                                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Level, UpdateSourceTrigger=PropertyChanged}" />
                                                 <Label Grid.Row="4" Grid.Column="0">Exp</Label>
-                                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Exp}" />
+                                                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Exp, UpdateSourceTrigger=PropertyChanged}" />
                                             </Grid>
                                         </ItemContainerTemplate>
                                     </TabControl.ContentTemplate>

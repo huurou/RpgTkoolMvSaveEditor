@@ -5,10 +5,10 @@ using RpgTkoolMvSaveEditor.Model.Configs;
 using RpgTkoolMvSaveEditor.Model.SaveDatas;
 using RpgTkoolMvSaveEditor.Model.Settings;
 using RpgTkoolMvSaveEditor.Presentation;
+using RpgTkoolMvSaveEditor.Presentation.Controls.ConsoleTextViews.Logging;
 using RpgTkoolMvSaveEditor.Presentation.Dialogs;
 using RpgTkoolMvSaveEditor.Presentation.Dialogs.Common;
 using RpgTkoolMvSaveEditor.Util;
-using RpgTkoolMvSaveEditor.Util.LogDisplays;
 using System.Diagnostics;
 using System.Windows;
 
@@ -28,9 +28,10 @@ builder.Services.AddSingleton<SaveDataSaver>();
 builder.Services.AddSingleton<SaveDataJsonObjectProvider>();
 builder.Services.AddSingleton<ISaveDataRepository, SaveDataRepository>();
 builder.Services.AddSingleton<ISettingRepository, SettingRepository>();
-builder.Services.AddSingleton<ILogDisplay, LogDisplay>();
-builder.Services.AddLogging(b => NLogConfiguration.Configure(Paths.LogsDir, b));
-builder.Services.AddSingleton<ILoggerProvider, LogDisplayLoggerProvider>();
+builder.Configuration.AddSettingsJsonForDebug();
+builder.Logging.ClearProviders();
+builder.Logging.AddCustomNLog(Paths.LogsDir);
+builder.Logging.AddConsoleTextView();
 
 var app = builder.Build();
 

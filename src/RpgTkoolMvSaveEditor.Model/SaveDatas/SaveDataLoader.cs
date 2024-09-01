@@ -22,11 +22,11 @@ public class SaveDataLoader(PathProvider pathProvider, ISaveDataRepository saveD
     private void StartWatcher()
     {
         if (saveDataWather_?.EnableRaisingEvents == true || pathProvider.WwwDirPath is null) { return; }
-        saveDataWather_ = new FileSystemWatcher(Path.Combine(pathProvider.WwwDirPath, "save"), "file.rpgsave");
+        saveDataWather_ = new FileSystemWatcher(Path.Combine(pathProvider.WwwDirPath, "save"), "file1.rpgsave");
         saveDataWather_.Changed +=
             async (s, e) =>
             {
-                logger.LogInformation("セーブデータに変更あり changeType:{changeType} name:{name} fullPath:{fullPath}", e.ChangeType, e.Name, e.FullPath);
+                logger.LogInformation("セーブデータに変更あり");
                 cancellationTokenSource_?.Cancel();
                 cancellationTokenSource_ = new();
                 try

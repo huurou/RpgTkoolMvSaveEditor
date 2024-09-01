@@ -1,11 +1,14 @@
-﻿namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
+﻿using Microsoft.Extensions.Logging;
 
-public class SaveDataSaver(SaveDataLoader saveDataLoader, ISaveDataRepository saveDataRepository)
+namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
+
+public class SaveDataSaver(SaveDataLoader saveDataLoader, ISaveDataRepository saveDataRepository, ILogger<SaveDataSaver> logger)
 {
     private CancellationTokenSource? cancellationTokenSource_;
 
     public async Task SaveAsync(SaveData saveData)
     {
+        logger.LogInformation("セーブデータのセーブが要求されました。");
         cancellationTokenSource_?.Cancel();
         cancellationTokenSource_ = new();
         try
@@ -14,6 +17,9 @@ public class SaveDataSaver(SaveDataLoader saveDataLoader, ISaveDataRepository sa
             await saveDataRepository.SaveAsync(saveData);
             saveDataLoader.LoadSuppressed = true;
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException)
+        {
+            logger.LogInformation("セーブデータのセーブがキャンセルされました。");
+        }
     }
 }
