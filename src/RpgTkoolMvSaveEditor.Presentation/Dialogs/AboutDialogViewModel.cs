@@ -6,18 +6,12 @@ namespace RpgTkoolMvSaveEditor.Presentation.Dialogs;
 
 public partial class AboutDialogViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private bool? dialogResult;
-    [ObservableProperty]
-    private string title = "Version Information";
-    [ObservableProperty]
-    private string? productName;
-    [ObservableProperty]
-    private string? productVersion;
-    [ObservableProperty]
-    private string? legalCopyright;
-    [ObservableProperty]
-    private string? description;
+    [ObservableProperty] private bool? dialogResult;
+    [ObservableProperty] private string title = "Version Information";
+    [ObservableProperty] private string? productName;
+    [ObservableProperty] private string? productVersion;
+    [ObservableProperty] private string? legalCopyright;
+    [ObservableProperty] private string? description;
 
     [RelayCommand]
     public void Ok()

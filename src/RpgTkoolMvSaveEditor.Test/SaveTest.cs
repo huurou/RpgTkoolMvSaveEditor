@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using RpgTkoolMvSaveEditor.Model;
 using RpgTkoolMvSaveEditor.Model.CommonSaveDatas;
-using RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
+using RpgTkoolMvSaveEditor.Model.SaveDatas;
 
 namespace RpgTkoolMvSaveEditor.Test;
 

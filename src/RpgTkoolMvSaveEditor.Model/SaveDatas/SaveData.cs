@@ -1,6 +1,7 @@
-﻿using System.Collections.Immutable;
+﻿using RpgTkoolMvSaveEditor.Model.GameData;
+using System.Collections.Immutable;
 
-namespace RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
+namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
 
 public record SaveData(
     ImmutableList<Switch> Switches,

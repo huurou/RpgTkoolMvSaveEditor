@@ -38,7 +38,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <GroupBox Grid.Row="0" Header="GameSwitches">
-                        <DataGrid ItemsSource="{Binding GameSwiches}">
+                        <DataGrid ItemsSource="{Binding GameSwitches}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
@@ -60,7 +60,7 @@
             <GroupBox Header="SaveData">
                 <spacingstackpanels:SpacingStackPanel Orientation="Horizontal">
                     <GroupBox Header="Switches" HorizontalAlignment="Stretch">
-                        <DataGrid ItemsSource="{Binding Swiches}">
+                        <DataGrid ItemsSource="{Binding Switches}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" IsReadOnly="True" />
                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
@@ -132,7 +132,41 @@
                             <TextBox Text="{Binding Gold, UpdateSourceTrigger=PropertyChanged}" />
                         </spacingstackpanels:SpacingStackPanel>
                         <GroupBox Grid.Row="1" Header="Actros">
-                            <TabControl />
+                            <TabControl ItemsSource="{Binding Actors}" SelectedIndex="{Binding ActorsSelectedIndex}">
+                                <TabControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </TabControl.ItemTemplate>
+                                <TabControl.ContentTemplate>
+                                    <ItemContainerTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Row="0" Grid.Column="0">HP</Label>
+                                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding HP}" />
+                                            <Label Grid.Row="1" Grid.Column="0">MP</Label>
+                                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MP}" />
+                                            <Label Grid.Row="2" Grid.Column="0">TP</Label>
+                                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TP}" />
+                                            <Label Grid.Row="3" Grid.Column="0">Level</Label>
+                                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Level}" />
+                                            <Label Grid.Row="4" Grid.Column="0">Exp</Label>
+                                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Exp}" />
+                                        </Grid>
+                                    </ItemContainerTemplate>
+                                </TabControl.ContentTemplate>
+                            </TabControl>
                         </GroupBox>
                     </spacinggrids:SpacingGrid>
                 </spacingstackpanels:SpacingStackPanel>

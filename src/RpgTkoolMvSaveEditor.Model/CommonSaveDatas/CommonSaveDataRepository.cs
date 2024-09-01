@@ -1,7 +1,6 @@
 ﻿using LZStringCSharp;
 using Microsoft.Extensions.Logging;
 using RpgTkoolMvSaveEditor.Model.GameData;
-using RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
 using RpgTkoolMvSaveEditor.Util.Results;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -12,14 +11,14 @@ public class CommonSaveDataRepository(PathProvider pathProvider, CommonSaveDataJ
 {
     public async Task<Result<CommonSaveData>> LoadAsync()
     {
-        logger.LogInformation("Load CommonSaveData");
+        logger.LogDebug("共通セーブデータをロードしています。");
         if (pathProvider.WwwDirPath is null) { return new Err<CommonSaveData>("wwwフォルダが選択されていません。"); }
         if (!(await commonSaveDataJsonObjectProvider.GetAsync()).Unwrap(out var rootObject, out var message)) { return new Err<CommonSaveData>(message); }
         if (rootObject["gameSwitches"] is not JsonObject gameSwitchesJsonObject) { return new Err<CommonSaveData>("セーブデータにgameSwitchesが見つかりませんでした。"); }
         if (rootObject["gameVariables"] is not JsonObject gameVariablesJsonObject) { return new Err<CommonSaveData>("セーブデータにgameVariablesが見つかりませんでした。"); }
         var systemFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "System.json");
         if (!File.Exists(systemFilePath)) { return new Err<CommonSaveData>($"{systemFilePath}が存在しません。"); }
-        using var systemFileStream = new FileStream(systemFilePath, FileMode.Open);
+        using var systemFileStream = new FileStream(systemFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         var systemJsonObject = await JsonSerializer.DeserializeAsync<JsonObject>(systemFileStream);
         if (systemJsonObject is null) { return new Err<CommonSaveData>($"{systemFilePath}のロードに失敗しました。"); }
         var switchNamesJsonArray = systemJsonObject["switches"]!.AsArray();
@@ -42,11 +41,13 @@ public class CommonSaveDataRepository(PathProvider pathProvider, CommonSaveDataJ
             )
         );
         var gameVariables = gameVariableValues.Select(x => new Variable(x.Id, variableNamesJsonArray[x.Id]!.GetValue<string>(), x.Value));
+        logger.LogInformation("共通セーブデータがロードされました。");
         return new Ok<CommonSaveData>(new([.. gameSwitches], [.. gameVariables]));
     }
 
     public async Task<Result> SaveAsync(CommonSaveData commonSaveData)
     {
+        logger.LogInformation("共通セーブデータをセーブしています。");
         if (pathProvider.WwwDirPath is null) { return new Err("wwwフォルダが選択されていません。"); }
         var filePath = Path.Combine(pathProvider.WwwDirPath, "save", "common.rpgsave");
         if (!File.Exists(filePath)) { return new Err($"{filePath}が存在しません。"); }
@@ -67,6 +68,7 @@ public class CommonSaveDataRepository(PathProvider pathProvider, CommonSaveDataJ
         using var jsonMemoryStreamReader = new StreamReader(jsonMemoryStream);
         var json = await jsonMemoryStreamReader.ReadToEndAsync();
         await File.WriteAllTextAsync(filePath, LZString.CompressToBase64(json));
+        logger.LogInformation("共通セーブデータがセーブされました。");
         return new Ok();
     }
 }

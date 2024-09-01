@@ -1,17 +1,18 @@
 ﻿using LZStringCSharp;
 using Microsoft.Extensions.Logging;
+using RpgTkoolMvSaveEditor.Model.GameData;
 using RpgTkoolMvSaveEditor.Util.Results;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace RpgTkoolMvSaveEditor.Model.GameData.SaveDatas;
+namespace RpgTkoolMvSaveEditor.Model.SaveDatas;
 
 public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectProvider saveDataJsonObjectProvider, ILogger<SaveDataRepository> logger) : ISaveDataRepository
 {
     public async Task<Result<SaveData>> LoadAsync()
     {
-        logger.LogInformation("Load SaveData");
+        logger.LogDebug("セーブデータをロードしています。");
         if (pathProvider.WwwDirPath is null) { return new Err<SaveData>("wwwフォルダが選択されていません。"); }
         var filePath = Path.Combine(pathProvider.WwwDirPath, "save", "file1.rpgsave");
         if (!File.Exists(filePath)) { return new Err<SaveData>($"{filePath}が存在しません。"); }
@@ -28,24 +29,24 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
         if (rootObject["party"]?["_armors"] is not JsonObject heldArmorsJsonObject) { return new Err<SaveData>("セーブデータにparty::_armorsが見つかりませんでした。"); }
         var systemFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "System.json");
         if (!File.Exists(systemFilePath)) { return new Err<SaveData>($"{systemFilePath}が存在しません。"); }
-        using var systemFileStream = new FileStream(systemFilePath, FileMode.Open);
+        using var systemFileStream = new FileStream(systemFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         var systemJsonObject = await JsonSerializer.DeserializeAsync<JsonObject>(systemFileStream);
         if (systemJsonObject is null) { return new Err<SaveData>($"{systemFilePath}のロードに失敗しました。"); }
         var switchNamesJsonArray = systemJsonObject["switches"]!.AsArray();
         var variableNamesJsonArray = systemJsonObject["variables"]!.AsArray();
         var itemsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Items.json");
         if (!File.Exists(itemsFilePath)) { return new Err<SaveData>($"{itemsFilePath}が存在しません。"); }
-        using var itemsFileStream = new FileStream(itemsFilePath, FileMode.Open);
+        using var itemsFileStream = new FileStream(itemsFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         var itemDataJsonArray = await JsonSerializer.DeserializeAsync<JsonArray>(itemsFileStream);
         if (itemDataJsonArray is null) { return new Err<SaveData>($"{itemsFilePath}のロードに失敗しました。"); }
         var weaponsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Weapons.json");
         if (!File.Exists(weaponsFilePath)) { return new Err<SaveData>($"{weaponsFilePath}が存在しません。"); }
-        using var weaponsFileStream = new FileStream(weaponsFilePath, FileMode.Open);
+        using var weaponsFileStream = new FileStream(weaponsFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         var weaponDataJsonArray = await JsonSerializer.DeserializeAsync<JsonArray>(weaponsFileStream);
         if (weaponDataJsonArray is null) { return new Err<SaveData>($"{weaponsFilePath}のロードに失敗しました。"); }
         var armorsFilePath = Path.Combine(pathProvider.WwwDirPath, "data", "Armors.json");
         if (!File.Exists(armorsFilePath)) { return new Err<SaveData>($"{armorsFilePath}が存在しません。"); }
-        using var armorsFileStream = new FileStream(armorsFilePath, FileMode.Open);
+        using var armorsFileStream = new FileStream(armorsFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         var armorDataJsonArray = await JsonSerializer.DeserializeAsync<JsonArray>(armorsFileStream);
         if (armorDataJsonArray is null) { return new Err<SaveData>($"{armorsFilePath}のロードに失敗しました。"); }
         var switches = switchNamesJsonArray
@@ -102,12 +103,13 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
             )
         );
         var saveData = new SaveData([.. switches], [.. variables], gold, [.. actors], [.. items], [.. weapons], [.. armors]);
+        logger.LogInformation("セーブデータがロードされました。");
         return new Ok<SaveData>(saveData);
     }
 
     public async Task<Result> SaveAsync(SaveData saveData)
     {
-        logger.LogInformation("Save SaveData");
+        logger.LogDebug("セーブデータをセーブしています。");
         if (pathProvider.WwwDirPath is null) { return new Err("wwwフォルダが選択されていません。"); }
         var filePath = Path.Combine(pathProvider.WwwDirPath, "save", "file1.rpgsave");
         if (!File.Exists(filePath)) { return new Err($"{filePath}が存在しません。"); }
@@ -167,6 +169,7 @@ public class SaveDataRepository(PathProvider pathProvider, SaveDataJsonObjectPro
         using var jsonMemoryStreamReader = new StreamReader(jsonMemoryStream);
         var json = await jsonMemoryStreamReader.ReadToEndAsync();
         await File.WriteAllTextAsync(filePath, LZString.CompressToBase64(json));
+        logger.LogInformation("セーブデータがセーブされました。");
         return new Ok();
     }
 }
