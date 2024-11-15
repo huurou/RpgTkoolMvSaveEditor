@@ -165,7 +165,7 @@
                                 </Grid.RowDefinitions>
                                 <spacingstackpanels:SpacingStackPanel Grid.Row="0" Orientation="Horizontal">
                                     <Label>Gold</Label>
-                                    <TextBox Text="{Binding Gold, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox Text="{Binding Gold.Value, UpdateSourceTrigger=PropertyChanged}" />
                                 </spacingstackpanels:SpacingStackPanel>
                                 <GroupBox Grid.Row="1" Header="Actros">
                                     <TabControl ItemsSource="{Binding Actors}" SelectedIndex="{Binding ActorsSelectedIndex}">

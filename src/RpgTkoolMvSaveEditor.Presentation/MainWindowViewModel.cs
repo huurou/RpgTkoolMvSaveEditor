@@ -8,7 +8,6 @@ using RpgTkoolMvSaveEditor.Presentation.Dialogs;
 using RpgTkoolMvSaveEditor.Presentation.Dialogs.Common;
 using RpgTkoolMvSaveEditor.Presentation.Messages;
 using RpgTkoolMvSaveEditor.Presentation.ViewModels;
-using System.Windows;
 
 namespace RpgTkoolMvSaveEditor.Presentation;
 
@@ -25,7 +24,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] private List<WeaponViewModel> selectedWeapons = [];
     [ObservableProperty] private List<ArmorViewModel> armors = [];
     [ObservableProperty] private List<ArmorViewModel> selectedArmors = [];
-    [ObservableProperty] private int gold;
+    [ObservableProperty] private GoldViewModel gold = new();
     [ObservableProperty] private List<ActorViewModel> actors = [];
     [ObservableProperty] private int actorsSelectedIndex = -1;
 
@@ -100,7 +99,7 @@ public partial class MainWindowViewModel : ObservableObject
                 Items = [.. e.SaveData.Items.Select(x => new ItemViewModel(x))];
                 Weapons = [.. e.SaveData.Weapons.Select(x => new WeaponViewModel(x))];
                 Armors = [.. e.SaveData.Armors.Select(x => new ArmorViewModel(x))];
-                Gold = e.SaveData.Gold;
+                Gold.Value = e.SaveData.Gold;
                 Actors = [.. e.SaveData.Actors.Select(x => new ActorViewModel(x))];
                 ActorsSelectedIndex = 0;
             };
@@ -120,7 +119,7 @@ public partial class MainWindowViewModel : ObservableObject
                 new(
                     [.. Switches.Select(x => x.ToModel())],
                     [.. Variables.Select(x => x.ToModel())],
-                    Gold,
+                    Gold.Value,
                     [.. Actors.Select(x => x.ToModel())],
                     [.. Items.Select(x => x.ToModel())],
                     [.. Weapons.Select(x => x.ToModel())],
